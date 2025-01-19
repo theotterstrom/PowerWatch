@@ -1,0 +1,219 @@
+body {
+  margin: 0;
+  font-family: andale mono, monospace !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: overlay;
+  
+}
+html {
+  overflow: overlay;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+.power, .savings, .prices{
+  color: white;
+}
+
+.backgroundBlock{
+  background-color: rgba(0, 14, 43, 0.6);
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+}
+
+.savingsText{
+  margin-top: -50px;
+
+}
+.fillCol{
+  display: none;
+}
+
+.schedueleContainer{
+
+}
+
+.schedueleOptionsContainer{
+  justify-content: start;
+}
+
+.powerHourWindow{
+  background-color: rgba(0, 0, 0, 0.9);
+  color: white;
+  position: fixed;
+  border-radius: 20px;
+  top: 10vh;
+  z-index: 100;
+}
+
+.powerHourInput{
+  height: 20px;
+}
+
+.fa-times{
+  font-size: 30px;
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  cursor: pointer;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Loading circle */
+.loading-circle {
+  width: 100px;
+  height: 100px;
+  border: 10px solid #ccc;
+  border-top: 10px solid #3498db; /* Color of the spinning section */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+.custom-dropdown .dropdown-menu {
+  background-color: rgb(0, 34, 102);
+  border: none; /* Optional: Remove border if not needed */
+}
+
+.custom-dropdown .dropdown-item {
+  background-color: rgb(0, 34, 102);
+  color: white;
+
+}
+
+.custom-dropdown .dropdown-item:hover {
+  background-color: rgb(0, 34, 102); /* Optional: Add hover effect */
+}
+
+/* Spin animation */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .power, .savings, .prices{
+    background-color: transparent;
+  }
+  .pageOptions{
+    font-size: 20px;
+    
+  }
+
+
+  body{
+    padding-bottom: 60vh;
+  }
+  .mainContainer{
+    overflow-x: hidden !important;
+  }
+  .dateToggles{
+    height: 30px;
+    font-size: 20px;
+  }
+  .savingsHolder{
+    justify-content: center;
+  }
+  .navBarOpts{
+    color: white;
+    font-size: 25px;
+  }
+
+  .checkContainer{
+    font-size: 24px;
+  }
+
+  .chartContainer{
+    width: 100vw;
+    position: absolute;
+    
+    height: 60vh;
+    left: 5vw;
+
+  }
+  .savingsChartContainer{
+    width: 100vw;
+    position: absolute;
+
+    height: 60vh;
+    left: 5vw;
+
+
+  }
+  .title{
+    font-size: 45px;
+  
+    padding-left: 10vw;
+    padding-right: 10vw;
+    text-align: center;
+  }
+  .savingsText{
+    text-align: right;
+
+  }
+  .fillCol{
+    display: block;
+  }
+  .schedueleOptionsContainer{
+    justify-content: center;
+  }
+}
+
+@media (max-width: 767px) {
+  .allDatesPowerTitle{
+    position: absolute;
+  }
+  .powerHourWindow{
+    top: 1vh;
+  }
+  .power, .savings, .prices{
+    background-color: transparent;
+  }
+  .chartContainer{
+    width: 120vw;
+    height: 500px;
+    left: -100px;
+  }
+  .savingsChartContainer{
+    width: 120vw;
+    height: 500px;
+    left: -100px;
+  }
+  .title{
+    width: 100vw;
+    padding-left: 10vw;
+    padding-right: 10vw;
+    text-align: center;
+  }
+  .savingsText{
+    text-align: right;
+
+  }
+  .fillCol{
+    display: block;
+  }
+  .schedueleOptionsContainer{
+    justify-content: center;
+    width: 103vw;
+  }
+  .savingsHolder{
+    justify-content: center;
+    width: 103vw;
+  }
+  .schedueleHolder{
+    width: 103vw;
+  }
+}

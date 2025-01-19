@@ -1,0 +1,7 @@
+{
+    "scripts": {
+        "start": "concurrently \"npm run start-client\" \"npm run start-backend\"",
+        "start-client": "npm start --prefix client",
+        "start-backend": "node backend/server.js"
+    }
+}
