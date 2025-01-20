@@ -36,8 +36,8 @@ app.use(cors(corsOptions));
 app.use(cookieParser());
 
 const httpsOptions = process.env.NODE_ENV === "development" ? {
-  key: fs.readFileSync('./ssl/localhost.key'),
-  cert: fs.readFileSync('./ssl/localhost.crt')
+  key: fs.readFileSync('./ssl-dev/localhost.key'),
+  cert: fs.readFileSync('./ssl-dev/localhost.crt')
 } : {
 
 };
