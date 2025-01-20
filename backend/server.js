@@ -43,15 +43,12 @@ const httpsOptions = process.env.NODE_ENV === "development" ? {
 };
 
 let server;
-// Start the server
+
 initializeDatabase().then(() => {
   app.use(routes(db));
   server = https.createServer(httpsOptions, app).listen(PORT, async () => {
     console.log(`Backend running on https://localhost:${PORT}`);
   });
-/*   app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-  }); */
 });
 
 module.exports = server;

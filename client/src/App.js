@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from './Pages/Home';
-import About from './Pages/About';
+import EnergyWatch from './Pages/EnergyWatch';
 import NotFound from './Pages/NotFound';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ProtectedRoute from "./Components/Helpers/ProtectedRoute";
@@ -11,9 +11,9 @@ const App = () => {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/about" element={
+        <Route path="/energywatch" element={
           <ProtectedRoute>
-            <About />
+            <EnergyWatch />
           </ProtectedRoute>
         } />
         <Route path="*" element={<NotFound />} /> {/* Handle 404s */}

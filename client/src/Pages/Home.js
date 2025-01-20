@@ -3,11 +3,12 @@ import { Container, Row, Col, Form, Button, Tabs, Tab } from "react-bootstrap";
 import '../Styles/Home.css';
 import requestMaker from "../Components/Helpers/MakeRequest";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-function Home() {
+const Home = () => {
 
   const [key, setKey] = useState('login');
-  const [inKey, setInKey] = useState('content');
+  const [inKey, setInKey] = useState('purpose');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const [login1, setLogin1] = useState('');
@@ -15,6 +16,8 @@ function Home() {
 
   const [create1, setCreate1] = useState('')
   const [create2, setCreate2] = useState('')
+
+  const navigate = useNavigate();
 
   const handleLoginSubmit = async (event) => {
     event.preventDefault()
@@ -24,6 +27,7 @@ function Home() {
     }, 'login', 'post');
     if (response?.data) {
       alert("Login successful!")
+      window.location.reload();
     } else {
       alert("Login failed")
     };
@@ -53,7 +57,7 @@ function Home() {
         return;
       };
 
-      if (response.data.authenticated) {
+      if (response.status === 200) {
         setIsAuthenticated(true);  // User is authenticated
       } else {
         setIsAuthenticated(false);  // User is not authenticated
@@ -64,14 +68,10 @@ function Home() {
     }
   };
 
-
-  const handleLogout = async (event) => {
-    event.preventDefault();
-    const response = await requestMaker({}, 'logout', 'post');
-    setIsAuthenticated(false);
-    window.location.reload();
+  const redirect = (e) => {
+    e.preventDefault();
+    navigate("/energywatch");
   };
-
 
   useEffect(() => {
     checkAuth();
@@ -79,7 +79,7 @@ function Home() {
 
   return (
     <Container className="mt-5">
-      <h2 className="text-center">Welcome to Our App</h2>
+      <h2 className="text-center">Welcome to EnergyWatch</h2>
       <Row className="justify-content-center">
         <Col md={6} className="form-container">
 
@@ -97,7 +97,7 @@ function Home() {
                     <Form.Control type="password" placeholder="Password" required onChange={(e) => setLogin2(e.target.value)} />
                   </Form.Group>
 
-                  <Button variant="primary" type="submit" className="submit-btn">
+                  <Button variant="primary" type="submit" className="submit-btn mt-3">
                     Log In
                   </Button>
                 </Form>
@@ -115,27 +115,29 @@ function Home() {
                     <Form.Control type="password" placeholder="Password" required onChange={(e) => setCreate2(e.target.value)} />
                   </Form.Group>
 
-                  <Button variant="primary" type="submit" className="submit-btn">
+                  <Button variant="primary" type="submit" className="submit-btn mt-3">
                     Register
                   </Button>
                 </Form>
               </Tab>
             </Tabs>
           ) : (
-            <Tabs activeKey={inKey} onSelect={(k) => setInKey(k)} className="mb-3">
-              <Tab eventKey="content" title="Content" className="tab-content">
-                <Form className="mt-4" onSubmit={() => { }}>
-                  <Button variant="primary" type="submit" className="submit-btn">Get content</Button>
-                </Form>
+            <Tabs activeKey={inKey} onSelect={(k) => setInKey(k)}>
+              <Tab eventKey="purpose" title="Purpose" className="tab-content">
+                The purpose of this website is to track the energyconsumption of our houses in Mörtvik, Sweden.
               </Tab>
-              <Tab eventKey="logout" title="Log Out" className="tab-content">
-                <Form className="mt-4" onSubmit={handleLogout}>
-                  <Button variant="primary" type="submit" className="submit-btn">Log out</Button>
-                </Form>
+              <Tab eventKey="technology" title="Technology" className="tab-content">
+                On every large power-consuming device, we've installed a <a href="https://www.shelly.com/products/shelly-plus-1-x1">shelly-switch</a> that 
+                tracks and controls the power consumption of that device.
+                <Row className="mt-3"></Row>
+                Furthermore, this application scrapes the web for the power prices of tomorrow, 
+                checks the cheapest hours and sets a scheduele for each device depending on the cheapest hours.
+                <Row className="mt-3"></Row>
+                In summary, this application saves money, displays power consumption and savings and controls the devices mentioned above.
               </Tab>
-              <Tab eventKey="mypage" title="My Page" className="tab-content">
-                <Form className="mt-4" onSubmit={() => { }}>
-                  <Button variant="primary" type="submit" className="submit-btn">My Page</Button>
+              <Tab eventKey="project" title="Project" className="tab-content">
+                <Form onSubmit={redirect}>
+                  <Button variant="primary" type="submit" className="submit-btn">EnergyWatch</Button>
                 </Form>
               </Tab>
             </Tabs>
@@ -144,6 +146,6 @@ function Home() {
       </Row>
     </Container>
   );
-}
+};
 
 export default Home;

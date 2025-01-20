@@ -3,8 +3,8 @@ const express = require('express');
 const deviceIds = require('./data/deviceIds.json');
 const axios = require('axios');
 const router = express.Router();
-const app = express();
 const fs = require('fs');
+const path = require('path');
 const { getKey, checkKeyRouteCredentials, requestDecrypter } = require('./server-scripts/KeyController');
 const UserController = require('./server-scripts/UserController');
 const jwt = require('jsonwebtoken');
@@ -184,7 +184,8 @@ module.exports = (db) => {
             return res.status(verificationResult.status).json({ message: verificationResult.message });
         };
         try {
-            const fileContents = JSON.parse(fs.readFileSync('./data/drivecontrol.json'))
+            const filePath = path.join(__dirname, 'data', 'drivecontrol.json');
+            const fileContents = JSON.parse(fs.readFileSync(filePath, 'utf8'));
             res.json(fileContents)
         } catch (e) {
             console.log(e)
