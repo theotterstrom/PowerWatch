@@ -36,22 +36,19 @@ app.use(cors(corsOptions));
 app.use(cookieParser());
 
 const httpsOptions = process.env.NODE_ENV === "development" ? {
-  key: fs.readFileSync('./ssl/localhost.key'),
-  cert: fs.readFileSync('./ssl/localhost.crt')
+  key: fs.readFileSync('./ssl-dev/localhost.key'),
+  cert: fs.readFileSync('./ssl-dev/localhost.crt')
 } : {
 
 };
 
 let server;
-// Start the server
+
 initializeDatabase().then(() => {
   app.use(routes(db));
   server = https.createServer(httpsOptions, app).listen(PORT, async () => {
     console.log(`Backend running on https://localhost:${PORT}`);
   });
-/*   app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-  }); */
 });
 
 module.exports = server;

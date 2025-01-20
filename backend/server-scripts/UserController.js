@@ -20,8 +20,6 @@ const login = async (data, db) => {
     if (!isMatch) {
         return { status: 400, message: 'Invalid credentials', token: null };
     };
-
-    // Create and send JWT
     const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET, { expiresIn: '10h' });
     return { status: 200, message: 'Login successful', token };
 };

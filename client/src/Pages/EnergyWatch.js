@@ -8,6 +8,8 @@ import Savings from "../Components/Children/Savings";
 import Scheduele from "../Components/Children/Scheduele";
 import PowerHour from "../Components/Children/PowerHour";
 import apiUrl from '../Components/Helpers/APIWrapper'
+import MakeRequest from "../Components/Helpers/MakeRequest";
+import LogOut from "../Components/Children/LogOut";
 
 const PowerChild = React.memo(({ readings, temps }) => {
   const initData = useMemo(() => ({ readings, temps }), [readings, temps])
@@ -29,10 +31,16 @@ const PowerHourChild = React.memo(({ powerhour, togglePowerHour }) => {
   return <PowerHour initData={initData} />
 });
 
-const About = () => {
+const LogOutChild = React.memo(({ logout, togglelogout }) => {
+  const initData = useMemo(() => ({ logout, togglelogout }));
+  return <LogOut initData={initData} />
+});
+
+const EnergyWatch = () => {
   const [expanded, setExpanded] = useState(false);
   const [currentPage, setCurrentPage] = useState("power");
   const [showPowerHour, setShowPowerHour] = useState(false);
+  const [showLogOut, setShowLogOut] = useState(false);
 
   const [savings, setSavings] = useState([]);
   const [prices, setPrices] = useState([]);
@@ -62,6 +70,11 @@ const About = () => {
   const showPowerHourFunc = useCallback(() => {
     setExpanded(false);
     setShowPowerHour(true);
+  });
+
+  const handleLogout = useCallback(() => {
+    setExpanded(false);
+    setShowLogOut(true)
   });
 
   useEffect(() => {
@@ -208,6 +221,9 @@ const About = () => {
                 <NavDropdown.Item style={{ backgroundColor: "#002266", color: "white" }} onClick={() => showPowerHourFunc()}>
                   Set power hours
                 </NavDropdown.Item>
+                <NavDropdown.Item style={{ backgroundColor: "#002266", color: "white" }} onClick={() => handleLogout()}>
+                  Log Out
+                </NavDropdown.Item>
               </NavDropdown>
             </Nav>
           </Navbar.Collapse>
@@ -222,9 +238,10 @@ const About = () => {
         {currentPage === "savings" && <SavingsChild savings={apiData.savingsState} />}
         {currentPage === "scheduele" && <SchedueleChild schedueles={apiData.scheduelesState} prices={apiData.pricesState} devicestatuses={apiData.devicestatusesState} />}
         {showPowerHour && <PowerHourChild powerhour={apiData.powerhour} togglePowerHour={setShowPowerHour} />}
+        {showLogOut && <LogOutChild logout={showLogOut} togglelogout={setShowLogOut} />}
       </main>
     </div>
   );
 };
 
-export default About;
+export default EnergyWatch;

@@ -31,7 +31,7 @@ export default ({ initData }) => {
         }));
       };
     return (
-        <Container className="container-fluid d-flex justify-content-center align-items-center bg-danger">
+        <Container className="container-fluid d-flex justify-content-center align-items-center">
             <Col xl={8} xs={11} className="powerHourWindow p-5">
                 <i onClick={() => togglePowerHour(false)} className="fa fa-times"></i>
                 <Form>

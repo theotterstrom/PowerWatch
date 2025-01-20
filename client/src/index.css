@@ -34,10 +34,6 @@ code {
   display: none;
 }
 
-.schedueleContainer{
-
-}
-
 .schedueleOptionsContainer{
   justify-content: start;
 }
@@ -49,6 +45,16 @@ code {
   border-radius: 20px;
   top: 10vh;
   z-index: 100;
+}
+
+.logOutWindow{
+  background-color: rgba(0, 0, 0, 0.97);
+  color: white;
+  position: fixed;
+  border-radius: 20px;
+  top: 10vh;
+  z-index: 100;
+  font-size: 18px;
 }
 
 .powerHourInput{

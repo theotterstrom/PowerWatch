@@ -1,2 +1,5 @@
 delete.json
 .env
+node_modules
+ssl-dev
+syncdbs.js

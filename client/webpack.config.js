@@ -33,8 +33,8 @@ module.exports = {
     server: {
       type: 'https',
       options: {
-        key: fs.readFileSync('./ssl/localhost.key'),
-        cert: fs.readFileSync('./ssl/localhost.crt'),
+        key: fs.readFileSync('../ssl-dev/localhost.key'),
+        cert: fs.readFileSync('../ssl-dev/localhost.crt'),
       }
     },
     compress: true,
