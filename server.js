@@ -2,25 +2,24 @@ require('dotenv').config();
 const express = require('express');
 const { MongoClient } = require('mongodb');
 const cors = require('cors');
-const routes = require('./routes');
+const routes = require('./backend/routes');
 const PORT = process.env.PORT || 3001;
 const cookieParser = require('cookie-parser');
 const fs = require('fs');
 const https = require('https');
+const path = require('path');
 
 const { mongouri, dbname, shellytoken, shellyurl } = process.env;
-let db;
 
-// Initialize MongoDB connection once
 const initializeDatabase = async () => {
   try {
     const client = new MongoClient(mongouri);
     await client.connect();
-    db = client.db(dbname); // Assign the database instance
     console.log("Connected to MongoDB");
+    return client.db(dbname);
   } catch (err) {
     console.error("Failed to connect to MongoDB:", err);
-    process.exit(1); // Exit if database connection fails
+    process.exit(1);
   }
 };
 
@@ -28,7 +27,6 @@ const corsOptions = {
   origin: 'https://localhost:9000',
   credentials: true,
 };
-
 
 const app = express();
 app.use(express.json());
@@ -46,8 +44,12 @@ const httpsOptions = process.env.NODE_ENV === "development" ? {
 
 let server;
 
-initializeDatabase().then(() => {
-  app.use(routes(db));
+initializeDatabase().then((db) => {
+  app.use('/api', routes(db));
+  app.use(express.static(path.join(__dirname, 'client/build')));
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client/public', 'index.html'));
+  });
   const listenPort = process.env.NODE_ENV === "production" ? 443 : PORT;
   server = https.createServer(httpsOptions, app).listen(listenPort, '0.0.0.0', () => {
     console.log(`Backend running on https://localhost:${listenPort}`);

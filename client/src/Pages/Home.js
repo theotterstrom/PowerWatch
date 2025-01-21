@@ -4,9 +4,10 @@ import '../Styles/Home.css';
 import requestMaker from "../Components/Helpers/MakeRequest";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import apiUrl from "../Components/Helpers/APIWrapper";
 
 const Home = () => {
-
+  
   const [key, setKey] = useState('login');
   const [inKey, setInKey] = useState('purpose');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -44,7 +45,7 @@ const Home = () => {
 
   const checkAuth = async () => {
     try {
-      const response = await axios.get('https://localhost:3001/check-auth', {
+      const response = await axios.get(`${apiUrl}/check-auth`, {
         withCredentials: true,
         headers: {
           'Access-Control-Allow-Origin': '*',

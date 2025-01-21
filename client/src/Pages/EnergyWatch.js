@@ -8,7 +8,6 @@ import Savings from "../Components/Children/Savings";
 import Scheduele from "../Components/Children/Scheduele";
 import PowerHour from "../Components/Children/PowerHour";
 import apiUrl from '../Components/Helpers/APIWrapper'
-import MakeRequest from "../Components/Helpers/MakeRequest";
 import LogOut from "../Components/Children/LogOut";
 
 const PowerChild = React.memo(({ readings, temps }) => {

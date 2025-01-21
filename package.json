@@ -34,7 +34,8 @@
     "scripts": {
         "start": "concurrently \"npm run start-client\" \"npm run start-backend\"",
         "start-client": "npm start --prefix client",
-        "start-backend": "node backend/server.js"
+        "start-backend": "node backend/server.js",
+        "build": "NODE_ENV=production npm run build --prefix client"
     },
     "devDependencies": {
         "@babel/preset-react": "^7.24.7",

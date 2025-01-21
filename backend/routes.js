@@ -272,5 +272,9 @@ module.exports = (db) => {
         res.status(200).json({ message: 'Authenticated' });
     });
 
+    router.get('/api', (req, res) => {
+        res.status(200).json({ message: "Hellooouuu "});
+    });
+
     return router;
 };

@@ -1,5 +1,9 @@
+require('dotenv').config();
 const path = require('path');
 const fs = require('fs');
+
+const [keyPath, certPath] = process.env.NODE_ENV === "production" ? 
+['../ssl/private.key', '../ssl/certificate.crt'] : ['../ssl-dev/localhost.key', '../ssl-dev/localhost.crt'];
 
 module.exports = {
   entry: './src/index.js', // Entry file for your app
@@ -33,8 +37,8 @@ module.exports = {
     server: {
       type: 'https',
       options: {
-        key: fs.readFileSync('../ssl-dev/localhost.key'),
-        cert: fs.readFileSync('../ssl-dev/localhost.crt'),
+        key: fs.readFileSync(keyPath),
+        cert: fs.readFileSync(certPath),
       }
     },
     compress: true,
