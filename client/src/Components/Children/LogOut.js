@@ -1,4 +1,5 @@
-import { Container, Navbar, Nav, NavDropdown, Col, Button, Row } from "react-bootstrap";
+import { Container, Col, Button } from "react-bootstrap";
+import MakeRequest from '../Helpers/MakeRequest';
 
 export default ({ initData }) => {
     const { logout, togglelogout } = initData;
