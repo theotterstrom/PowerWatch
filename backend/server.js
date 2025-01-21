@@ -9,17 +9,17 @@ const fs = require('fs');
 const https = require('https');
 const { mongouri, dbname, shellytoken, shellyurl } = process.env;
 let db;
-// Initialize MongoDB connection once
+
 const initializeDatabase = async () => {
   try {
     const client = new MongoClient(mongouri);
     await client.connect();
-    db = client.db(dbname); // Assign the database instance
+    db = client.db(dbname);
     console.log("Connected to MongoDB");
   } catch (err) {
     console.error("Failed to connect to MongoDB:", err);
-    process.exit(1); // Exit if database connection fails
-  }
+    process.exit(1);
+  };
 };
 const corsOptions = {
   origin: 'https://localhost:9000',

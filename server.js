@@ -9,7 +9,7 @@ const fs = require('fs');
 const https = require('https');
 const path = require('path');
 
-const { mongouri, dbname, shellytoken, shellyurl } = process.env;
+const { mongouri, dbname } = process.env;
 
 const initializeDatabase = async () => {
   try {

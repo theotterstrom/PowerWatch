@@ -1,10 +1,10 @@
 require("dotenv").config();
 const cron = require('node-cron');
-const fetchPrices = require('./cron-scripts/FetchPrices');
-const schedueleMaker = require('./cron-scripts/SchedueleMaker');
-const readDevices = require('./cron-scripts/DeviceReading');
-const calculateSavings = require('./cron-scripts/CalculateSavingsHour');
-const controlDevices = require('./cron-scripts/Control');
+const fetchPrices = require('./FetchPrices');
+const schedueleMaker = require('./SchedueleMaker');
+const readDevices = require('./DeviceReading');
+const calculateSavings = require('./CalculateSavingsHour');
+const controlDevices = require('./Control');
 
 const run = async () => {
     cron.schedule("50 23 * * *", async () => {
