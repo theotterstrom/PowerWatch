@@ -200,7 +200,7 @@ const EnergyWatch = () => {
         onToggle={navbarToggle}
       >
         <Container>
-          <Navbar.Brand onClick={() => showPage("power")}>
+          <Navbar.Brand onClick={() => showPage("power")} style={{cursor: "pointer"}}>
             <img style={{ height: "40px" }} src="/images/new1.png" alt="EnergyWatch Logo" />
             &nbsp;EnergyWatch
           </Navbar.Brand>
