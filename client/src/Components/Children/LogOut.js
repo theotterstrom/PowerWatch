@@ -11,7 +11,7 @@ export default ({ initData }) => {
 
     return (<>
         <Container className="container-fluid d-flex justify-content-center align-items-center">
-            <Col xl={8} xs={11} className="logOutWindow p-5 text-center">
+            <Col xl={3} xs={11} className="logOutWindow p-5 text-center">
                 <i onClick={() => togglelogout(false)} className="fa fa-times"></i>
                 Are you sure you want to log out?
                 <Container className="container-fluid d-flex justify-content-around mt-5">
