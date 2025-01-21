@@ -220,7 +220,7 @@ const EnergyWatch = () => {
                 <NavDropdown.Item style={{ backgroundColor: "#002266", color: "white" }} onClick={() => showPowerHourFunc()}>
                   Set power hours
                 </NavDropdown.Item>
-                <NavDropdown.Item style={{ backgroundColor: "#002266", color: "white" }} onClick={() => handleLogout()}>
+                <NavDropdown.Item className="mt-2" style={{ backgroundColor: "#002266", color: "white" }} onClick={() => handleLogout()}>
                   Log Out
                 </NavDropdown.Item>
               </NavDropdown>
