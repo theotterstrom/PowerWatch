@@ -7,15 +7,13 @@ const PORT = process.env.PORT || 3002;
 const cookieParser = require('cookie-parser');
 const fs = require('fs');
 const https = require('https');
-const { mongouri, dbname, shellytoken, shellyurl } = process.env;
-let db;
+const { mongouri, dbname } = process.env;
 
 const initializeDatabase = async () => {
   try {
     const client = new MongoClient(mongouri);
     await client.connect();
-    db = client.db(dbname);
-    console.log("Connected to MongoDB");
+    return client.db(dbname);
   } catch (err) {
     console.error("Failed to connect to MongoDB:", err);
     process.exit(1);
@@ -38,7 +36,7 @@ const httpsOptions = process.env.NODE_ENV === "development" ? {
   ca: fs.readFileSync('/root/PowerWatch/ssl/intermediate-certificate.crt')
 };
 let server;
-initializeDatabase().then(() => {
+initializeDatabase().then((db) => {
   app.use(routes(db));
   const listenPort = process.env.NODE_ENV === "production" ? 443 : PORT;
   server = https.createServer(httpsOptions, app).listen(listenPort, '0.0.0.0', () => {

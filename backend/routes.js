@@ -1,83 +1,20 @@
 require('dotenv').config();
 const express = require('express');
-const deviceIds = require('./data/deviceIds.json');
-const axios = require('axios');
+const deviceIds = require('../cron-scripts/data/deviceIds.json');
 const router = express.Router();
 const fs = require('fs');
 const path = require('path');
 const { getKey, checkKeyRouteCredentials, requestDecrypter } = require('./Controllers/KeyController');
 const UserController = require('./Controllers/UserController');
-const jwt = require('jsonwebtoken');
-
-let database;
+const {
+    verifyToken,
+    authMiddleware,
+    fetchReading,
+    databaseFetch
+} = require('./helpers.js')
 const { shellytoken, shellyurl } = process.env;
 
-const databaseFetch = async (collectionName, offset = 0, limit = 400) => {
-    try {
-        const collection = database.collection(collectionName);
-        const results = await collection
-            .find({})
-            .skip(parseInt(offset))
-            .limit(parseInt(limit))
-            .toArray();
-        return results;
-    } catch (err) {
-        console.error(`Error fetching data from ${collectionName}:`, err);
-        throw err;
-    }
-};
-const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-const fetchReading = async (url, retries = 5) => {
-    try {
-        return await axios.get(url)
-    } catch (e) {
-        console.log("Failed to fetch, trying again", retries, e)
-        await sleep(2000);
-        if (retries <= 1) {
-            return {
-                data: {
-                    data: {
-                        device_status: {
-                            meters: [{
-                                total: 0
-                            }]
-                        }
-                    }
-                }
-            };
-        };
-        return fetchReading(url, retries - 1);
-    };
-};
-
-const authMiddleware = (req, res, next) => {
-    const token = req.cookies.authToken;  // Retrieve the token from cookies
-    if (!token) {
-        return res.status(401).json({ message: 'Unauthorized, no token' });
-    };
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded;
-        next();
-    } catch (err) {
-        return res.status(401).json({ message: 'Unauthorized' });
-    };
-};
-
-const verifyToken = (token) => {
-    if (!token) {
-        return { authenticated: false, status: 401, message: "No token provided" };
-    }
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        return { authenticated: true, decoded };
-    } catch (error) {
-        return { authenticated: false, status: 401, message: "Unauthorized" };
-    }
-};
 module.exports = (db) => {
-
-    database = db;
 
     router.get('/schedueles', async (req, res) => {
         const authToken = req.cookies.authToken;
@@ -87,7 +24,7 @@ module.exports = (db) => {
             return res.status(verificationResult.status).json({ message: verificationResult.message });
         };
         try {
-            res.json(await databaseFetch("schedueles"));
+            res.json(await databaseFetch("schedueles", db));
         } catch (e) {
             res.status(500).json({ error: "Failed to fetch schedueles" });
         }
@@ -101,7 +38,7 @@ module.exports = (db) => {
             return res.status(verificationResult.status).json({ message: verificationResult.message });
         };
         try {
-            res.json(await databaseFetch("prices"));
+            res.json(await databaseFetch("prices", db));
         } catch (e) {
             res.status(500).json({ error: "Failed to fetch prices" });
         }
@@ -116,7 +53,7 @@ module.exports = (db) => {
         };
         const { offset } = req.query;
         try {
-            res.json(await databaseFetch("power_readings", offset || 0));
+            res.json(await databaseFetch("power_readings", db, offset || 0));
         } catch (e) {
             res.status(500).json({ error: "Failed to fetch readings" });
         }
@@ -131,7 +68,7 @@ module.exports = (db) => {
         };
         const { offset } = req.query;
         try {
-            res.json(await databaseFetch("savings", offset || 0));
+            res.json(await databaseFetch("savings", db, offset || 0));
         } catch (e) {
             res.status(500).json({ error: "Failed to fetch savings" });
         }
@@ -146,7 +83,7 @@ module.exports = (db) => {
         };
         const { offset } = req.query;
         try {
-            res.json(await databaseFetch("temp_readings", offset || 0));
+            res.json(await databaseFetch("temp_readings", db, offset || 0));
         } catch (e) {
             res.status(500).json({ error: "Failed to fetch temperatures" });
         }
@@ -185,7 +122,7 @@ module.exports = (db) => {
         };
         try {
             const filePath = path.join(__dirname, 'data', 'drivecontrol.json');
-            const fileContents = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+            const fileContents = JSON.parse(fs.readFileSync('./cron-scripts/data/drivecontrol.json', 'utf8'));
             res.json(fileContents)
         } catch (e) {
             console.log(e)
@@ -203,7 +140,7 @@ module.exports = (db) => {
         if (req.body.data.secret === "28mortvik") {
             try {
                 delete req.body.data.secret;
-                fs.writeFileSync('./data/drivecontrol.json', JSON.stringify(req.body));
+                fs.writeFileSync('./cron-scripts/data/drivecontrol.json', JSON.stringify(req.body));
                 res.status(200).json({ message: "Updated hours" });
             } catch (e) {
                 console.log(e)
@@ -219,13 +156,20 @@ module.exports = (db) => {
             const data = await requestDecrypter(req.body.data, db);
             const loginResponse = await UserController.login(JSON.parse(data), db);
             if (loginResponse.status === 200) {
-                res.cookie('authToken', loginResponse.token, {
+                const cookie = process.env.NODE_ENV === "production" ? {
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: 'Strict',
+                    maxAge: 604800000,
+                    path: '/'
+                } : {
                     httpOnly: true,
                     secure: true,
                     sameSite: 'None',
                     maxAge: 2419200000,
                     path: '/'
-                });
+                };
+                res.cookie('authToken', loginResponse.token, cookie);
             }
             res.status(loginResponse.status).json({ message: loginResponse.message });
         } catch (error) {

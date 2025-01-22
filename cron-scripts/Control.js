@@ -2,7 +2,7 @@ require('dotenv').config();
 const { MongoClient } = require('mongodb');
 const client = new MongoClient(process.env.mongouri);
 const axios = require('axios');
-const deviceIds = require('../data/deviceIds.json');
+const deviceIds = require('./data/deviceIds.json');
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 

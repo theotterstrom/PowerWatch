@@ -1,7 +1,7 @@
 require('dotenv').config();
 const axios = require('axios');
 const { shellytoken, shellyurl, dbname } = process.env;
-const deviceIds = require('../data/deviceIds.json');
+const deviceIds = require('./data/deviceIds.json');
 const { MongoClient } = require('mongodb');
 const client = new MongoClient(process.env.mongouri);
 
