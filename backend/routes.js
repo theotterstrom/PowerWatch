@@ -5,8 +5,8 @@ const axios = require('axios');
 const router = express.Router();
 const fs = require('fs');
 const path = require('path');
-const { getKey, checkKeyRouteCredentials, requestDecrypter } = require('./server-scripts/KeyController');
-const UserController = require('./server-scripts/UserController');
+const { getKey, checkKeyRouteCredentials, requestDecrypter } = require('./Controllers/KeyController');
+const UserController = require('./Controllers/UserController');
 const jwt = require('jsonwebtoken');
 
 let database;
@@ -270,6 +270,10 @@ module.exports = (db) => {
 
     router.get('/check-auth', authMiddleware, (req, res) => {
         res.status(200).json({ message: 'Authenticated' });
+    });
+
+    router.get('/api', (req, res) => {
+        res.status(200).json({ message: "Hellooouuu "});
     });
 
     return router;

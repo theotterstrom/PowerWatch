@@ -8,7 +8,6 @@ import Savings from "../Components/Children/Savings";
 import Scheduele from "../Components/Children/Scheduele";
 import PowerHour from "../Components/Children/PowerHour";
 import apiUrl from '../Components/Helpers/APIWrapper'
-import MakeRequest from "../Components/Helpers/MakeRequest";
 import LogOut from "../Components/Children/LogOut";
 
 const PowerChild = React.memo(({ readings, temps }) => {
@@ -201,7 +200,7 @@ const EnergyWatch = () => {
         onToggle={navbarToggle}
       >
         <Container>
-          <Navbar.Brand onClick={() => showPage("power")}>
+          <Navbar.Brand onClick={() => showPage("power")} style={{cursor: "pointer"}}>
             <img style={{ height: "40px" }} src="/images/new1.png" alt="EnergyWatch Logo" />
             &nbsp;EnergyWatch
           </Navbar.Brand>
@@ -221,7 +220,7 @@ const EnergyWatch = () => {
                 <NavDropdown.Item style={{ backgroundColor: "#002266", color: "white" }} onClick={() => showPowerHourFunc()}>
                   Set power hours
                 </NavDropdown.Item>
-                <NavDropdown.Item style={{ backgroundColor: "#002266", color: "white" }} onClick={() => handleLogout()}>
+                <NavDropdown.Item className="mt-2" style={{ backgroundColor: "#002266", color: "white" }} onClick={() => handleLogout()}>
                   Log Out
                 </NavDropdown.Item>
               </NavDropdown>
