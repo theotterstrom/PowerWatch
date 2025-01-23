@@ -1,3 +1,4 @@
+const options = require('./ChartOptions');
 const generateSavingsData = (allDataStates) => {
     const {
         nilleboatsavings,
@@ -87,191 +88,129 @@ const generateSavingsData = (allDataStates) => {
         datasets: [
             nilleboatsavings.value && {
                 label: "Nillebo AT verklig",
-                data: savingsDataSource["nilleboat"].map((d) => d.realCost / 100),
+                data: savingsDataSource["nilleboat"].map((d) => (d.realCost / 100).toFixed(2)),
                 borderColor: "red",
                 fill: false,
+                tension: 0.4,
             },
             nilleboatsavings.value && {
                 label: "Nillebo AT snitt",
-                data: savingsDataSource["nilleboat"].map((d) => d.averageCost / 100),
+                data: savingsDataSource["nilleboat"].map((d) => (d.averageCost / 100).toFixed(2)),
                 borderColor: "blue",
                 fill: false,
+                tension: 0.4,
             },
 
             nillebovpsavings.value && {
                 label: "Nillebo VP verklig",
-                data: savingsDataSource["nillebovp"].map((d) => d.realCost / 100),
+                data: savingsDataSource["nillebovp"].map((d) => (d.realCost / 100).toFixed(2)),
                 borderColor: "green",
                 fill: false,
+                tension: 0.4,
             },
             nillebovpsavings.value && {
                 label: "Nillebo VP snitt",
-                data: savingsDataSource["nillebovp"].map((d) => d.averageCost / 100),
+                data: savingsDataSource["nillebovp"].map((d) => (d.averageCost / 100).toFixed(2)),
                 borderColor: "black",
                 fill: false,
+                tension: 0.4,
             },
 
             nillebovvsavings.value && {
                 label: "Nillebo VV verklig",
-                data: savingsDataSource["nillebovv"].map((d) => d.realCost / 100),
+                data: savingsDataSource["nillebovv"].map((d) => (d.realCost / 100).toFixed(2)),
                 borderColor: "purple",
                 fill: false,
+                tension: 0.4,
             },
             nillebovvsavings.value && {
                 label: "Nillebo VV snitt",
-                data: savingsDataSource["nillebovv"].map((d) => d.averageCost / 100),
+                data: savingsDataSource["nillebovv"].map((d) => (d.averageCost / 100).toFixed(2)),
                 borderColor: "brown",
                 fill: false,
+                tension: 0.4,
             },
 
             loveboatsavings.value && {
                 label: "Lovebo AT verklig",
-                data: savingsDataSource["loveboat"].map((d) => d.realCost / 100),
+                data: savingsDataSource["loveboat"].map((d) => (d.realCost / 100).toFixed(2)),
                 borderColor: "orange",
                 fill: false,
+                tension: 0.4,
             },
             loveboatsavings.value && {
                 label: "Lovebo AT snitt",
-                data: savingsDataSource["loveboat"].map((d) => d.averageCost / 100),
+                data: savingsDataSource["loveboat"].map((d) => (d.averageCost / 100).toFixed(2)),
                 borderColor: "cyan",
                 fill: false,
+                tension: 0.4,
             },
 
             lovebovvsavings.value && {
                 label: "Lovebo VV verklig",
-                data: savingsDataSource["lovebovv"].map((d) => d.realCost / 100),
+                data: savingsDataSource["lovebovv"].map((d) => (d.realCost / 100).toFixed(2)),
                 borderColor: "magenta",
                 fill: false,
+                tension: 0.4,
             },
             lovebovvsavings.value && {
                 label: "Lovebo VV snitt",
-                data: savingsDataSource["lovebovv"].map((d) => d.averageCost / 100),
+                data: savingsDataSource["lovebovv"].map((d) => (d.averageCost / 100).toFixed(2)),
                 borderColor: "lime",
                 fill: false,
+                tension: 0.4,
             },
 
             ottebosavings.value && {
                 label: "Ottebo verklig",
-                data: savingsDataSource["ottebo"].map((d) => d.realCost / 100),
+                data: savingsDataSource["ottebo"].map((d) => (d.realCost / 100).toFixed(2)),
                 borderColor: "lightblue",
                 fill: false,
+                tension: 0.4,
             },
             ottebosavings.value && {
                 label: "Ottebo snitt",
-                data: savingsDataSource["ottebo"].map((d) => d.averageCost / 100),
+                data: savingsDataSource["ottebo"].map((d) => (d.averageCost / 100).toFixed(2)),
                 borderColor: "pink",
                 fill: false,
+                tension: 0.4,
             },
 
             garagesavings.value && {
                 label: "Garage verklig",
-                data: savingsDataSource["garage"].map((d) => d.realCost / 100),
+                data: savingsDataSource["garage"].map((d) => (d.realCost / 100).toFixed(2)),
                 borderColor: "yellow",
                 fill: false,
+                tension: 0.4,
             },
             garagesavings.value && {
                 label: "Garage snitt",
-                data: savingsDataSource["garage"].map((d) => d.averageCost / 100),
+                data: savingsDataSource["garage"].map((d) => (d.averageCost / 100).toFixed(2)),
                 borderColor: "grey",
                 fill: false,
+                tension: 0.4,
             },
 
             poolsavings.value && {
                 label: "Pool verklig",
-                data: savingsDataSource["pool"].map((d) => d.realCost / 100),
+                data: savingsDataSource["pool"].map((d) => (d.realCost / 100).toFixed(2)),
                 borderColor: "turqoise",
                 fill: false,
+                tension: 0.4,
             },
             poolsavings.value && {
                 label: "Pool snitt",
-                data: savingsDataSource["pool"].map((d) => d.averageCost / 100),
+                data: savingsDataSource["pool"].map((d) => (d.averageCost / 100).toFixed(2)),
                 borderColor: "darkred",
                 fill: false,
+                tension: 0.4,
             },
         ].filter(Boolean),
-    };
-    const savingsOptions = {
-        responsive: true,
-        plugins: {
-            legend: {
-                labels: {
-                    color: "white",
-                    font: {
-                        size: window.innerWidth <= 1024 ? 20 : 12
-                    }
-                },
-            },
-        },
-        scales: {
-            x: {
-                ticks: {
-                    color: "white", // Set x-axis label color to white
-                    font: {
-                        size: window.innerWidth <= 1024 ? 20 : 12
-                    }
-
-                },
-            },
-            y: {
-                ticks: {
-                    color: "white", // Set y-axis label color to white
-                    font: {
-                        size: window.innerWidth <= 1024 ? 20 : 12
-                    }
-                },
-            },
-        },
-    };
-    const mobileOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                display: true,
-                position: 'top',
-                labels: {
-                    color: "white", // Set legend label color to white
-                    font: {
-                        size: window.innerWidth <= 767 ? 12 : 20,
-                    },
-                },
-
-            },
-        },
-        scales: {
-            x: {
-                grid: {
-                    display: false,
-                },
-                ticks: {
-                    color: "white",
-                    maxRotation: 90, // Default rotation
-                    minRotation: 90,
-                    font: {
-                        size: window.innerWidth <= 767 ? 12 : 20,
-                    },
-                }
-            },
-            y: {
-                grid: {
-                    display: true,
-                },
-                ticks: {
-                    color: "white",
-                    maxRotation: 90, // Default rotation
-                    minRotation: 90,
-                    font: {
-                        size: window.innerWidth <= 767 ? 12 : 20,
-                    },
-
-                }
-            },
-        },
     };
 
     return {
         savingsData,
-        savingsOptions: window.innerWidth <= 1024 ? mobileOptions : savingsOptions,
+        savingsOptions: options(window.innerWidth <= 1024, 'Kostnad'),
         totalSpendning,
         totalSaved: totalSpendning[1] - totalSpendning[0]
     }

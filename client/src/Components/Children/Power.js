@@ -1,8 +1,19 @@
 import generatePowerData from "../Datagenerators/GeneratePowerData";
 import { Container, Row, Col } from "react-bootstrap";
 import { Line } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  LineElement,
+  PointElement,
+  LinearScale,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
 import PowerOptions from "../Options/PowerOptions";
 import { useState } from "react";
+
+ChartJS.register(LineElement, PointElement, LinearScale, Title, Tooltip, Legend);
 
 export default ({ initData }) => {
   const { readings, temps } = initData;
@@ -47,6 +58,31 @@ export default ({ initData }) => {
   };
 
   const { chartData, chartOptions } = generatePowerData(allDataStates, dateStates);
+
+  const verticalLinePlugin = {
+    id: 'verticalLinePlugin',
+    beforeDraw: (chart) => {
+        if (chart.tooltip._active && chart.tooltip._active.length) {
+            const ctx = chart.ctx;
+            const activePoint = chart.tooltip._active[0]; // Get the active tooltip point
+            const x = activePoint.element.x; // Get the x-coordinate of the tooltip point
+            const topY = chart.scales.y.top; // Top of the chart
+            const bottomY = chart.scales.y.bottom; // Bottom of the chart
+
+            // Draw the vertical line
+            ctx.save();
+            ctx.beginPath();
+            ctx.moveTo(x, topY);
+            ctx.lineTo(x, bottomY);
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = 'gray'; // Style for the line
+            ctx.setLineDash([5, 5]);
+            ctx.stroke();
+            ctx.restore();
+        }
+    },
+};
+ChartJS.register(verticalLinePlugin);
 
   return (
     <Container className="mt-4 container-fluid power pt-5 pb-5 mainContainer">

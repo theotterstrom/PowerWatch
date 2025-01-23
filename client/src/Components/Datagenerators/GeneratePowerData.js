@@ -1,3 +1,4 @@
+const options = require('./ChartOptions');
 const generatePowerData = (allDataStates, dateStates) => {
     const {
         nilleboAt,
@@ -41,17 +42,17 @@ const generatePowerData = (allDataStates, dateStates) => {
             const firstObjectList = readings.value.filter(obj => obj.date.split(" ")[0] === cur.date.split(" ")[0]);
             let firstObject = firstObjectList[0];
 
-            if(!lastObject){
-                lastObject = firstObjectList[firstObjectList.length -1];
+            if (!lastObject) {
+                lastObject = firstObjectList[firstObjectList.length - 1];
             };
 
             names.forEach(name => {
-                    acc[name].push({
-                        date: cur.date.split(" ")[0],
-                        value: lastObject.values[name] - firstObject.values[name],
-                        firstDate: firstObject.date,
-                        lastDate: lastObject.date
-                    })
+                acc[name].push({
+                    date: cur.date.split(" ")[0],
+                    value: lastObject.values[name] - firstObject.values[name],
+                    firstDate: firstObject.date,
+                    lastDate: lastObject.date
+                })
             });
 
             return acc;
@@ -98,151 +99,81 @@ const generatePowerData = (allDataStates, dateStates) => {
         labels: dateList.filter(date => (date >= startdate.value && date <= enddate.value) || alldates.value),
         datasets: [
             nilleboAt.value && {
-                label: "Nillebo Ackumulatortank",
-                data: readingsDataSource["nilleboat"].map((d) => d.value),
+                label: "Nillebo AT",
+                data: readingsDataSource["nilleboat"].map((d) => d.value.toFixed(2)),
                 borderColor: "red",
                 fill: false,
+                tension: 0.4,
             },
             nillebovp.value && {
-                label: "Nillebo Värmepump",
-                data: readingsDataSource["nillebovp"].map((d) => d.value),
+                label: "Nillebo VP",
+                data: readingsDataSource["nillebovp"].map((d) => d.value.toFixed(2)),
                 borderColor: "blue",
                 fill: false,
+                tension: 0.4,
             },
             nillebovv.value && {
-                label: "Nillebo Varmvatten",
-                data: readingsDataSource["nillebovv"].map((d) => d.value),
+                label: "Nillebo VV",
+                data: readingsDataSource["nillebovv"].map((d) => d.value.toFixed(2)),
                 borderColor: "green",
                 fill: false,
+                tension: 0.4,
             },
             loveboat.value && {
-                label: "Lovebo Ackumulatortank",
-                data: readingsDataSource["loveboat"].map((d) => d.value),
+                label: "Lovebo AT",
+                data: readingsDataSource["loveboat"].map((d) => d.value.toFixed(2)),
                 borderColor: "grey",
                 fill: false,
+                tension: 0.4,
             },
             ottebo.value && {
                 label: "Ottebo",
-                data: readingsDataSource["ottebo"].map((d) => d.value),
+                data: readingsDataSource["ottebo"].map((d) => d.value.toFixed(2)),
                 borderColor: "purple",
                 fill: false,
+                tension: 0.4,
             },
             pool.value && {
                 label: "Pool",
-                data: readingsDataSource["pool"].map((d) => d.value),
+                data: readingsDataSource["pool"].map((d) => d.value.toFixed(2)),
                 borderColor: "brown",
                 fill: false,
+                tension: 0.4,
             },
             nillebotemp.value && {
-                label: "Temperatur Nillebo",
-                data: tempDataSource["nilletemp"].map((d) => d.avgTemp),
+                label: "Temp Nillebo",
+                data: tempDataSource["nilletemp"].map((d) => d.avgTemp.toFixed(2)),
                 borderColor: "orange",
                 fill: false,
+                tension: 0.4,
             },
             ottebotemp.value && {
-                label: "Temperatur Ottebo",
-                data: tempDataSource["ottetemp"].map((d) => d.avgTemp),
+                label: "Temp Ottebo",
+                data: tempDataSource["ottetemp"].map((d) => d.avgTemp.toFixed(2)),
                 borderColor: "cyan",
                 fill: false,
+                tension: 0.4,
             },
             lovetemp.value && {
-                label: "Temperatur Lovebo",
-                data: tempDataSource["lovetemp"].map((d) => d.avgTemp),
+                label: "Temp Lovebo",
+                data: tempDataSource["lovetemp"].map((d) => d.avgTemp.toFixed(2)),
                 borderColor: "magenta",
                 fill: false,
+                tension: 0.4,
             },
             utetemp.value && {
-                label: "Temperatur Utomhus",
-                data: tempDataSource["uttemp"].map((d) => d.avgTemp),
+                label: "Temp Utomhus",
+                data: tempDataSource["uttemp"].map((d) => d.avgTemp.toFixed(2)),
                 borderColor: "lime",
                 fill: false,
+                tension: 0.4,
             },
         ].filter(Boolean),
     };
 
-    const chartOptions = {
-        responsive: true,
-        plugins: {
-            legend: {
-                labels: {
-                    color: "white",
-                    font: {
-                        size: window.innerWidth <= 1024 ? 20 : 12
-                    }
-                },
-            },
-        },
-        scales: {
-            x: {
-                ticks: {
-                    color: "white", // Set x-axis label color to white
-                    font: {
-                        size: window.innerWidth <= 1024 ? 20 : 12
-                    }
-
-                },
-            },
-            y: {
-                ticks: {
-                    color: "white", // Set y-axis label color to white
-                    font: {
-                        size: window.innerWidth <= 1024 ? 20 : 12
-                    }
-                },
-            },
-        },
-    };
-
-    const mobileOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                display: true,
-                position: 'top',
-                labels: {
-                    color: "white", // Set legend label color to white
-                    font: {
-                        size: window.innerWidth <= 767 ? 12 : 20,
-                    },
-                },
-
-            },
-        },
-        scales: {
-            x: {
-                grid: {
-                    display: false,
-                },
-                ticks: {
-                    color: "white",
-                    maxRotation: 90, // Default rotation
-                    minRotation: 90,
-                    font: {
-                        size: window.innerWidth <= 767 ? 12 : 20,
-                    },
-                }
-            },
-            y: {
-                grid: {
-                    display: true,
-                },
-                ticks: {
-                    color: "white",
-                    maxRotation: 90, // Default rotation
-                    minRotation: 90,
-                    font: {
-                        size: window.innerWidth <= 767 ? 12 : 20,
-                    },
-
-                }
-            },
-        },
-    };
-
     return {
         chartData,
-        chartOptions: window.innerWidth <= 1024 ? mobileOptions : chartOptions
+        chartOptions: options(window.innerWidth <= 1024, "Watt")
     }
 };
 

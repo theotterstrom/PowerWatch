@@ -1,6 +1,6 @@
 let apiUrl;
 if (process.env.NODE_ENV === 'development') {
-  apiUrl = 'https://localhost:3001'; // Local development API endpoint
+  apiUrl = 'https://localhost:3002'; // Local development API endpoint
 } else {
   apiUrl = 'https://energywatchmortvik.se/api'; // Live API endpoint
 };
