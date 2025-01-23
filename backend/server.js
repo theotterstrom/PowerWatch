@@ -19,13 +19,17 @@ const initializeDatabase = async () => {
     process.exit(1);
   };
 };
-const corsOptions = {
-  origin: 'https://localhost:9000',
-  credentials: true,
-};
+
 const app = express();
+if(process.env.NODE_ENV === "development"){
+  const corsOptions = {
+    origin: 'https://localhost:9000',
+    credentials: true,
+  };
+  app.use(cors(corsOptions));
+};
+
 app.use(express.json());
-app.use(cors(corsOptions));
 app.use(cookieParser());
 const httpsOptions = process.env.NODE_ENV === "development" ? {
   key: fs.readFileSync('./ssl-dev/localhost.key'),
@@ -35,6 +39,7 @@ const httpsOptions = process.env.NODE_ENV === "development" ? {
   cert: fs.readFileSync('/root/PowerWatch/ssl/certificate.crt'),
   ca: fs.readFileSync('/root/PowerWatch/ssl/intermediate-certificate.crt')
 };
+
 let server;
 initializeDatabase().then((db) => {
   app.use(routes(db));
@@ -43,4 +48,5 @@ initializeDatabase().then((db) => {
     console.log(`Backend running on https://localhost:${listenPort}`);
   });
 });
+
 module.exports = server;

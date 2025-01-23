@@ -5,7 +5,7 @@ const client = new MongoClient(process.env.mongouri);
 
 const makeScheduele = async () => {
     try{
-        const fileContents = (JSON.parse(fs.readFileSync('../data/drivecontrol.json'))).data;
+        const fileContents = (JSON.parse(fs.readFileSync('./cron-scripts/data/drivecontrol.json'))).data;
         console.log("Read drivecontrol.json")
         await client.connect();
         const db = client.db(process.env.dbname);
@@ -34,7 +34,6 @@ const makeScheduele = async () => {
         const schedueleCol = schedueleDb.collection("schedueles");
         const response = await schedueleCol.insertOne({ date: tomorrowsDate, values: newScheduele });
         console.log("Added scheduele for tomorrow");
-        console.log({ date: tomorrowsDate, values: newScheduele });
     } catch(e){
         console.log(e);
     } finally {

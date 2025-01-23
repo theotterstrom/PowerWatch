@@ -17,7 +17,7 @@ const createPromise = ({url, turn, id}) => axios.post(url,
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
         }    
-    });
+});
 
 const switchRelays = async ({url, turn, id}, retries = 5) => {
     try {

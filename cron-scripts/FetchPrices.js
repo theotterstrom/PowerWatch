@@ -43,7 +43,6 @@ const fetchPrices = async () => {
 
         const averagePrice = spotPris.data.reduce((sum, data) => sum + data.ForecastAreaThree, 0);
         const result = await collection.insertOne({ date: tomorrowsDate, values: spotPrisObj, average: averagePrice / 24 });
-        console.log(spotPrisObj)
         console.log("Added prices to database")
     } catch (e) {
         console.log(e);
