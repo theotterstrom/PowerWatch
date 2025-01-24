@@ -71,7 +71,10 @@ export default ({ initData }) => {
             </Row>
             <SavingsOptions dataStates={allDataStates} />
             <Container className="savingsChartContainer p-0 m-0">
-              <ToolTip chartStates={chartStates} />
+
+              <Container className="toolTipParent">
+            <ToolTip chartStates={chartStates}  page={"savings"} />
+            </Container>
               <Line data={savingsData} options={savingsOptions} className="mt-md-4"/>
             </Container>
           </Container>

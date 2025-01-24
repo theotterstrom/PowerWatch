@@ -10,6 +10,17 @@ import PowerHour from "../Components/Children/PowerHour";
 import apiUrl from '../Components/Helpers/APIWrapper'
 import LogOut from "../Components/Children/LogOut";
 
+import {
+  Chart as ChartJS,
+  LineElement,
+  PointElement,
+  LinearScale,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+
+
 const PowerChild = React.memo(({ readings, temps }) => {
   const initData = useMemo(() => ({ readings, temps }), [readings, temps])
   return <Power initData={initData} />
@@ -79,13 +90,13 @@ const EnergyWatch = () => {
   useEffect(() => {
     const run = async () => {
       try {
-        const storedPrices = localStorage.getItem("prices");
-        const storedSchedueles = localStorage.getItem("schedueles");
-        const storedDeviceStatuses = localStorage.getItem("devicestatuses");
-        const storedSavings = localStorage.getItem("savings");
-        const storedReadings = localStorage.getItem("readings");
-        const storedTemps = localStorage.getItem("temps");
-        const storedPowerHour = localStorage.getItem("powerhour");
+        const storedPrices = localStorage.getItem("prices")?.length > 0;
+        const storedSchedueles = localStorage.getItem("schedueles")?.length > 0;
+        const storedDeviceStatuses = localStorage.getItem("devicestatuses")?.length > 0;
+        const storedSavings = localStorage.getItem("savings")?.length > 0;
+        const storedReadings = localStorage.getItem("readings")?.length > 0;
+        const storedTemps = localStorage.getItem("temps")?.length > 0;
+        const storedPowerHour = localStorage.getItem("powerhour")?.length > 0;
 
         if (storedPrices && storedSchedueles && storedDeviceStatuses && storedSavings && storedReadings && storedTemps && storedPowerHour) {
           setPrices(JSON.parse(storedPrices));
@@ -181,6 +192,35 @@ const EnergyWatch = () => {
       </div>
     </>;
   };
+
+  const verticalLinePlugin = {
+    id: 'verticalLinePlugin',
+    beforeDraw: (chart) => {
+      const toolTipContainer = document.getElementsByClassName("toolTipContainer")[0]
+      if (chart.tooltip._active && chart.tooltip._active.length) {
+        const ctx = chart.ctx;
+        const activePoint = chart.tooltip._active[0];
+        const x = activePoint.element.x;
+        const topY = chart.scales.y.top;
+        const bottomY = chart.scales.y.bottom;
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(x, topY);
+        ctx.lineTo(x, bottomY);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = 'gray';
+        ctx.setLineDash([5, 5]);
+        ctx.stroke();
+        ctx.restore();
+
+        toolTipContainer.style.display = "block"
+      } else {
+        toolTipContainer.style.display = "none"
+      }
+    },
+  };
+  ChartJS.register(LineElement, PointElement, LinearScale, Title, Tooltip, Legend, verticalLinePlugin);
 
   return (
     <div>

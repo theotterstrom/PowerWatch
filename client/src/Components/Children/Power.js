@@ -14,8 +14,6 @@ import PowerOptions from "../Options/PowerOptions";
 import { useState } from "react";
 import ToolTip from "./ToolTip";
 
-ChartJS.register(LineElement, PointElement, LinearScale, Title, Tooltip, Legend);
-
 export default ({ initData }) => {
   const { readings, temps } = initData;
   const [nilleboAT, setnilleboAT] = useState(true);
@@ -68,36 +66,6 @@ export default ({ initData }) => {
 
   const { chartData, chartOptions } = generatePowerData(allDataStates, dateStates, chartStates);
 
-  const verticalLinePlugin = {
-    id: 'verticalLinePlugin',
-    beforeDraw: (chart) => {
-      const toolTipContainer = document.getElementsByClassName("toolTipContainer")[0]
-      if (chart.tooltip._active && chart.tooltip._active.length) {
-        const ctx = chart.ctx;
-        const activePoint = chart.tooltip._active[0];
-        const x = activePoint.element.x;
-        const topY = chart.scales.y.top;
-        const bottomY = chart.scales.y.bottom;
-
-        ctx.save();
-        ctx.beginPath();
-        ctx.moveTo(x, topY);
-        ctx.lineTo(x, bottomY);
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = 'gray';
-        ctx.setLineDash([5, 5]);
-        ctx.stroke();
-        ctx.restore();
-
-        toolTipContainer.style.display = "block"
-      } else {
-        toolTipContainer.style.display = "none"
-      }
-    },
-  };
-
-  ChartJS.register(verticalLinePlugin);
-
   return (
     <Container className="mt-4 container-fluid power pt-5 pb-5 mainContainer">
       <Row className="justify-content-center">
@@ -105,10 +73,14 @@ export default ({ initData }) => {
           <Container className="p-0">
             <h3 className="title mt-3">Power Consumption & Temperature</h3>
 
-            <PowerOptions allDataStates={allDataStates} dateStates={dateStates} />
+            <PowerOptions allDataStates={allDataStates} dateStates={dateStates}/>
 
+
+            
             <Container className="chartContainer p-0 m-0">
-              <ToolTip chartStates={chartStates} />
+            <Container className="toolTipParent">
+            <ToolTip chartStates={chartStates}  page={"power"} />
+            </Container>
               <Line data={chartData} options={chartOptions} className="mt-md-3 powerChart" />
             </Container>
           </Container>
