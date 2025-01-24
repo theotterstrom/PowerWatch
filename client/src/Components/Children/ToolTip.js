@@ -20,7 +20,8 @@ export default ({ initData }) => {
         left: "10vw"
     } : {
         width: "90vw",
-        left: "5vw"
+        left: "5vw",
+        fontSize: "12px"
     };
 
     const toolTipStyle = () => {
@@ -32,14 +33,6 @@ export default ({ initData }) => {
             return desktopToolTipStyle;
         };
     };
-
-    const toolTipMargin = () => {
-        if (window.innerWidth <= 1024) {
-            return charty.value
-        } else {
-            return charty.value + 60
-        };
-    }
 
 
     return (
