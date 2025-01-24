@@ -182,8 +182,6 @@ const EnergyWatch = () => {
     </>;
   };
 
-<<<<<<< Updated upstream
-=======
   const verticalLinePlugin = {
     id: 'verticalLinePlugin',
     beforeDraw: (chart) => {
@@ -218,7 +216,6 @@ const EnergyWatch = () => {
     }, 200)
   });
 
->>>>>>> Stashed changes
   return (
     <div>
       {/* Header */}
