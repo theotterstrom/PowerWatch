@@ -6,12 +6,12 @@ export default ({ initData }) => {
     const { currentdate, datavalues } = chartStates;
 
     const desktopToolTipStyle = page === "power" ? {
-        width: "250px",
+        width: "270px",
     } : {
         width: "350px",
     };
     const ipadToolTipStyle = page === "power" ? {
-        width: "250px",
+        width: "270px",
     } : {
         width: "400px",
     };
@@ -59,8 +59,8 @@ export default ({ initData }) => {
                                 &nbsp;
                                 {data.datasetLabel}:
                             </Col>
-                            <Col xl={2} lg={2} md={4} sm={6} xs={4} className="text-start">
-                                {data.value}
+                            <Col xl={4} lg={4} md={4} sm={6} xs={4} className="text-end">
+                                {data.value} {page === "power" ? "W": "SEK"}
                             </Col>
                         </Row>
                     ))}
