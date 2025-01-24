@@ -13,7 +13,14 @@ import {
 import PowerOptions from "../Options/PowerOptions";
 import { useState } from "react";
 
+<<<<<<< Updated upstream
 ChartJS.register(LineElement, PointElement, LinearScale, Title, Tooltip, Legend);
+=======
+const ToolTipChild = React.memo(({ chartStates, page }) => {
+  const initData = useMemo(() => ({ chartStates, page }), [chartStates, page]);
+  return <ToolTip initData={initData} />
+});
+>>>>>>> Stashed changes
 
 export default ({ initData }) => {
   const { readings, temps } = initData;
@@ -89,10 +96,18 @@ ChartJS.register(verticalLinePlugin);
       <Row className="justify-content-center">
         <Col md={10} lg={8} className="p-0">
           <Container className="p-0">
+<<<<<<< Updated upstream
           <h3 className="title mt-3">Power Consumption & Temperature</h3>
             <PowerOptions allDataStates={allDataStates} dateStates={dateStates}  />
             <Container className="chartContainer p-0 m-0">
               <Line data={chartData} options={chartOptions} className="mt-md-3"/>
+=======
+            <h3 className="title mt-3">Power Consumption & Temperature</h3>
+            <PowerOptions allDataStates={allDataStates} dateStates={dateStates} />
+            <Container className="chartContainer p-0 m-0">
+              <ToolTipChild chartStates={chartStates} page={"power"} />
+              <Line data={chartData} options={chartOptions} className="mt-md-3 powerChart" />
+>>>>>>> Stashed changes
             </Container>
           </Container>
         </Col>

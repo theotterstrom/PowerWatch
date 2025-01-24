@@ -37,7 +37,7 @@ const LogOutChild = React.memo(({ logout, togglelogout }) => {
 
 const EnergyWatch = () => {
   const [expanded, setExpanded] = useState(false);
-  const [currentPage, setCurrentPage] = useState("power");
+  const [currentPage, setCurrentPage] = useState("savings");
   const [showPowerHour, setShowPowerHour] = useState(false);
   const [showLogOut, setShowLogOut] = useState(false);
 
@@ -182,6 +182,43 @@ const EnergyWatch = () => {
     </>;
   };
 
+<<<<<<< Updated upstream
+=======
+  const verticalLinePlugin = {
+    id: 'verticalLinePlugin',
+    beforeDraw: (chart) => {
+      const toolTipContainer = document.getElementsByClassName("toolTipContainer")[0];
+      if (chart.tooltip._active && chart.tooltip._active.length) {
+        const ctx = chart.ctx;
+        const activePoint = chart.tooltip._active[0];
+        const x = activePoint.element.x;
+        const topY = chart.scales.y.top;
+        const bottomY = chart.scales.y.bottom;
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(x, topY);
+        ctx.lineTo(x, bottomY);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = 'gray';
+        ctx.setLineDash([5, 5]);
+        ctx.stroke();
+        ctx.restore();
+        toolTipContainer.style.display = "block"
+      } else {
+        toolTipContainer.style.display = "none"
+      }
+    },
+  };
+  ChartJS.register(LineElement, PointElement, LinearScale, Title, Tooltip, Legend, verticalLinePlugin);
+
+  window.addEventListener("touchend", () => {
+    const toolTipContainer = document.getElementsByClassName("toolTipContainer")[0];
+    setTimeout(() => {
+      toolTipContainer.style.display = "none"
+    }, 200)
+  });
+
+>>>>>>> Stashed changes
   return (
     <div>
       {/* Header */}
@@ -200,7 +237,7 @@ const EnergyWatch = () => {
         onToggle={navbarToggle}
       >
         <Container>
-          <Navbar.Brand onClick={() => showPage("power")} style={{cursor: "pointer"}}>
+          <Navbar.Brand onClick={() => showPage("power")} style={{ cursor: "pointer" }}>
             <img style={{ height: "40px" }} src="/images/new1.png" alt="EnergyWatch Logo" />
             &nbsp;EnergyWatch
           </Navbar.Brand>
