@@ -1,4 +1,9 @@
-module.exports = (isMobile, yAxisLabel) => {
+
+
+module.exports = (isMobile, yAxisLabel, chartStates) => {
+
+    let previousIndex = null;
+
     return isMobile ? {
         responsive: true,
         maintainAspectRatio: false,
@@ -15,7 +20,7 @@ module.exports = (isMobile, yAxisLabel) => {
                 position: 'top',
             },
             tooltip: {
-                enabled: true,
+                enabled: false,
                 mode: 'index',
                 intersect: false,
                 callbacks: {
@@ -60,6 +65,39 @@ module.exports = (isMobile, yAxisLabel) => {
         hover: {
             mode: 'index',
             intersect: false,
+        },
+        onHover: function (event, chartElement) {
+            if (chartElement.length) {
+                const index = chartElement[0].index;
+                if (previousIndex !== index) {
+                    previousIndex = index;
+                    const chosenDate = chartElement[0].element.$context.chart.data.labels[index];
+
+                    const dateValues = chartElement.map(obj => {
+                        const value = obj.element["$context"].raw; // Value of the data point
+                        const datasetIndex = obj.datasetIndex; // Dataset index
+                        const datasetLabel = obj.element.$context.chart.data.datasets[datasetIndex].label; // Dataset label (line name)
+                        const datasetColor = obj.element.$context.chart.data.datasets[datasetIndex].borderColor;
+                        return {
+                            value,
+                            datasetLabel,
+                            datasetColor
+                        };
+                    });
+
+                    const xCoordinate = chartElement[0].element.x;
+
+                    if (chosenDate !== chartStates.currentdate.value) {
+                        chartStates.currentdate.set(chosenDate);
+                        chartStates.datavalues.set(dateValues);
+                    };
+                    if (820 <= window.innerWidth) {
+                        const toolTipContainer = document.getElementsByClassName("toolTipContainer")[0];
+                        const halfWidth = parseInt(toolTipContainer.style.width.replace("px", "")) / 2;
+                        toolTipContainer.style.transform = `translateX(${xCoordinate - halfWidth}px)`;
+                    };
+                };
+            };
         }
     } : {
         responsive: true,
@@ -74,14 +112,13 @@ module.exports = (isMobile, yAxisLabel) => {
                 position: 'top',
             },
             tooltip: {
-                enabled: true,
+                enabled: false,
                 mode: 'index',
                 intersect: false,
+                margin: 50,
                 callbacks: {
                     title: (tooltipItems) => `Datum: ${tooltipItems[0].label}`,
-                    label: (tooltipItem) => {
-                        return `${tooltipItem.dataset.label}: ${tooltipItem.raw}`;
-                    },
+                    label: (tooltipItem) => `${tooltipItem.dataset.label}: ${tooltipItem.raw}`,
                 },
             },
         },
@@ -120,6 +157,38 @@ module.exports = (isMobile, yAxisLabel) => {
         hover: {
             mode: 'index',
             intersect: false,
+        },
+        onHover: function (event, chartElement) {
+            if (chartElement.length) {
+                const index = chartElement[0].index;
+                if (previousIndex !== index) {
+                    previousIndex = index;
+                    const chosenDate = chartElement[0].element.$context.chart.data.labels[index];
+
+                    const dateValues = chartElement.map(obj => {
+                        const value = obj.element["$context"].raw; // Value of the data point
+                        const datasetIndex = obj.datasetIndex; // Dataset index
+                        const datasetLabel = obj.element.$context.chart.data.datasets[datasetIndex].label; // Dataset label (line name)
+                        const datasetColor = obj.element.$context.chart.data.datasets[datasetIndex].borderColor;
+                        return {
+                            value,
+                            datasetLabel,
+                            datasetColor
+                        };
+                    });
+
+                    const xCoordinate = chartElement[0].element.x;
+
+                    if (chosenDate !== chartStates.currentdate.value) {
+                        chartStates.currentdate.set(chosenDate);
+                        chartStates.datavalues.set(dateValues);
+                    };
+
+                    const toolTipContainer = document.getElementsByClassName("toolTipContainer")[0];
+                    const halfWidth = parseInt(toolTipContainer.style.width.replace("px", "")) / 2;
+                    toolTipContainer.style.transform = `translateX(${xCoordinate - halfWidth}px)`;
+                };
+            };
         }
     };
 };
