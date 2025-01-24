@@ -16,8 +16,8 @@ export default ({ initData }) => {
         width: "400px",
     };
     const mobileToolTipStyle = page === "power" ? {
-        width: "80vw",
-        left: "10vw"
+        width: "85vw",
+        left: "7.5vw"
     } : {
         width: "90vw",
         left: "5vw",
