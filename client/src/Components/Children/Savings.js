@@ -2,8 +2,13 @@ import generateSavingsData from "../Datagenerators/GenerateSavingsData";
 import { Container, Row, Col } from "react-bootstrap";
 import { Line } from "react-chartjs-2";
 import SavingsOptions from "../Options/SavingsOptions";
-import { useState } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import ToolTip from "./ToolTip";
+
+const ToolTipChild = React.memo(({ chartStates, page }) => {
+  const initData = useMemo(() => ({ chartStates, page }), [chartStates, page]);
+  return <ToolTip initData={initData}/>
+});
 
 export default ({ initData }) => {
   const { savings } = initData;
@@ -73,7 +78,7 @@ export default ({ initData }) => {
             <Container className="savingsChartContainer p-0 m-0">
 
               <Container className="toolTipParent">
-            <ToolTip chartStates={chartStates}  page={"savings"} />
+              <ToolTipChild chartStates={chartStates}  page={"savings"} />
             </Container>
               <Line data={savingsData} options={savingsOptions} className="mt-md-4"/>
             </Container>

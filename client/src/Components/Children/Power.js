@@ -1,18 +1,14 @@
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import generatePowerData from "../Datagenerators/GeneratePowerData";
 import { Container, Row, Col } from "react-bootstrap";
 import { Line } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  LineElement,
-  PointElement,
-  LinearScale,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';
 import PowerOptions from "../Options/PowerOptions";
-import { useState } from "react";
 import ToolTip from "./ToolTip";
+
+const ToolTipChild = React.memo(({ chartStates, page }) => {
+  const initData = useMemo(() => ({ chartStates, page }), [chartStates, page]);
+  return <ToolTip initData={initData}/>
+});
 
 export default ({ initData }) => {
   const { readings, temps } = initData;
@@ -72,14 +68,10 @@ export default ({ initData }) => {
         <Col md={10} lg={8} className="p-0">
           <Container className="p-0">
             <h3 className="title mt-3">Power Consumption & Temperature</h3>
-
             <PowerOptions allDataStates={allDataStates} dateStates={dateStates}/>
-
-
-            
             <Container className="chartContainer p-0 m-0">
             <Container className="toolTipParent">
-            <ToolTip chartStates={chartStates}  page={"power"} />
+            <ToolTipChild chartStates={chartStates}  page={"power"} />
             </Container>
               <Line data={chartData} options={chartOptions} className="mt-md-3 powerChart" />
             </Container>

@@ -1,9 +1,10 @@
 import { Container, Row, Col } from "react-bootstrap";
 
-export default ({ chartStates, page }) => {
+export default ({ initData }) => {
+
+    const { chartStates, page } = initData;
     const { currentdate, datavalues } = chartStates;
 
-    // Define styles conditionally
     const toolTipStyle = page === "power" ? {
         width: "250px",
         bottom: "220px"
@@ -34,7 +35,9 @@ export default ({ chartStates, page }) => {
         ultimateStyle = ipadToolTipStyle;
     } else {
         ultimateStyle = toolTipStyle;
-    }
+    };
+
+    
 
     return (
         <>

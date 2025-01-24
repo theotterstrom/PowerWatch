@@ -70,22 +70,22 @@ const EnergyWatch = () => {
     powerhour: { value: powerHour, set: setPowerHour }
   }), [savings, prices, schedueles, temps, readings, deviceStatuses, powerHour]);
 
-  const navbarToggle = useCallback(() => setExpanded(!expanded));
+  const navbarToggle = () => setExpanded(!expanded);
 
-  const showPage = useCallback((page) => {
+  const showPage = (page) => {
     setExpanded(false);
     setCurrentPage(page);
-  });
+  };
 
-  const showPowerHourFunc = useCallback(() => {
+  const showPowerHourFunc = () => {
     setExpanded(false);
     setShowPowerHour(true);
-  });
+  };
 
-  const handleLogout = useCallback(() => {
+  const handleLogout = () => {
     setExpanded(false);
     setShowLogOut(true)
-  });
+  };
 
   useEffect(() => {
     const run = async () => {
@@ -196,7 +196,7 @@ const EnergyWatch = () => {
   const verticalLinePlugin = {
     id: 'verticalLinePlugin',
     beforeDraw: (chart) => {
-      const toolTipContainer = document.getElementsByClassName("toolTipContainer")[0]
+      const toolTipContainer = document.getElementsByClassName("toolTipContainer")[0];
       if (chart.tooltip._active && chart.tooltip._active.length) {
         const ctx = chart.ctx;
         const activePoint = chart.tooltip._active[0];
@@ -213,7 +213,7 @@ const EnergyWatch = () => {
         ctx.setLineDash([5, 5]);
         ctx.stroke();
         ctx.restore();
-
+        console.log("NO")
         toolTipContainer.style.display = "block"
       } else {
         toolTipContainer.style.display = "none"
@@ -221,6 +221,13 @@ const EnergyWatch = () => {
     },
   };
   ChartJS.register(LineElement, PointElement, LinearScale, Title, Tooltip, Legend, verticalLinePlugin);
+
+  window.addEventListener("touchend", () => {
+    const toolTipContainer = document.getElementsByClassName("toolTipContainer")[0];
+    setTimeout(() => {
+      toolTipContainer.style.display = "none"
+    }, 200)
+  });
 
   return (
     <div>
