@@ -71,7 +71,7 @@ export default ({ initData }) => {
             <PowerOptions allDataStates={allDataStates} dateStates={dateStates} />
             <Container className="chartContainer p-0 m-0">
               <ToolTipChild chartStates={chartStates} page={"power"} />
-              <Line data={chartData} options={chartOptions} className="mt-md-3 powerChart" />
+              <Line height={200} data={chartData} options={chartOptions} className="mt-md-3 powerChart" />
             </Container>
           </Container>
         </Col>

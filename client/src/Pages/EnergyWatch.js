@@ -48,7 +48,7 @@ const LogOutChild = React.memo(({ logout, togglelogout }) => {
 
 const EnergyWatch = () => {
   const [expanded, setExpanded] = useState(false);
-  const [currentPage, setCurrentPage] = useState("savings");
+  const [currentPage, setCurrentPage] = useState("power");
   const [showPowerHour, setShowPowerHour] = useState(false);
   const [showLogOut, setShowLogOut] = useState(false);
 

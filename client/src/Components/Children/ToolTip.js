@@ -39,7 +39,7 @@ export default ({ initData }) => {
         } else if (820 <= window.innerWidth && window.innerWidth <= 1024) {
             return page === "power" ? '110px' : '180px'
         } else {
-            return page === "power" ? '50px' : '70px'
+            return page === "power" ? '40px' : '50px'
         };
     };
 

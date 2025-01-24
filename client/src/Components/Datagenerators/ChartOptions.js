@@ -101,6 +101,7 @@ module.exports = (isMobile, yAxisLabel, chartStates) => {
         }
     } : {
         responsive: true,
+        
         plugins: {
             legend: {
                 labels: {
