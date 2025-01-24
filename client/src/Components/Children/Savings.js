@@ -34,12 +34,12 @@ export default ({ initData }) => {
   const [currentDate, setCurrentDate] = useState(null);
   const [dataValues, setCurrentDataValues] = useState([]);
 
-  const chartStates = {
+  const chartStates = useMemo(() => ({
     currentdate: { value: currentDate, set: setCurrentDate },
     datavalues: { value: dataValues, set: setCurrentDataValues }
-  };
+  }), [currentDate, dataValues]);
 
-  const allDataStates = {
+  const allDataStates = useMemo(() => ({
     nilleboatsavings: { value: nilleboATSavings, set: setNilleboAtSavings },
     nillebovpsavings: { value: nilleboVPSavings, set: setNilleboVPSavings },
     nillebovvsavings: { value: nilleboVVSavings, set: setNilleboVVSavings },
@@ -52,7 +52,9 @@ export default ({ initData }) => {
     savingsenddate: { value: savingEndDate, set: setSavingEndDate },
     allsavingsdate: { value: allsavingsDate, set: setAllSavingsDates },
     savings
-  };
+  }), [nilleboATSavings, nilleboVPSavings, nilleboVVSavings, loveboATSavings, loveboVVSavings, otteboSavings, garageSavings, poolSavings, savingStartDate, savingEndDate, allsavingsDate, savings.value]);
+  
+
   const { savingsData, savingsOptions, totalSpendning, totalSaved } = generateSavingsData(allDataStates, chartStates);
   return (
     <Container className="mt-4 container-fluid savings pt-5 pb-5 mainContainer">

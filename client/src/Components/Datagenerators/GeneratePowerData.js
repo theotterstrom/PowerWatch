@@ -18,11 +18,25 @@ const generatePowerData = (allDataStates, dateStates, chartStates) => {
     const {
         startdate,
         enddate,
-        alldates
+        alldates,
+        month
     } = dateStates;
+    console.log(month.value)
+
+    const monthFilter = () => {
+        const monthArr = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        if(month.value !== "None"){
+            const monthName = month.value.split(" ")[1];
+            let monthNumber = monthArr.findIndex(month => month === monthName);
+            monthNumber++;
+            console.log(monthNumber)
+            return { value: true, month: monthNumber}
+        };
+        return { value: false };
+    };
 
     const readingsDataSource = readings.value.length > 0 ? readings.value
-        .filter(obj => (obj.date.split(" ")[0] >= startdate.value && obj.date.split(" ")[0] <= enddate.value) || alldates.value)
+        .filter(obj => (monthFilter().value && parseInt(obj.date.split("-"[1]) === monthFilter().month)) || (obj.date.split(" ")[0] >= startdate.value && obj.date.split(" ")[0] <= enddate.value) || alldates.value )
         .reduce((acc, cur, index) => {
             if (Object.values(acc)[0] && Object.values(acc)[0].some(obj => obj.date === cur.date.split(" ")[0])) {
                 return acc;

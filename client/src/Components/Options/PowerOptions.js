@@ -1,7 +1,17 @@
 import { Container, Row, Col, Form, Dropdown } from "react-bootstrap";
 import React, { useState } from "react";
 export default ({ allDataStates, dateStates }) => {
+
+    const {
+        alldates,
+        enddate,
+        startdate,
+        month
+    } = dateStates;
+
     const [dropdownText, setDropdownText] = useState("Alla");
+    const [monthText, setMonthText] = useState(month.value)
+
     const {
         nilleboAt,
         nillebovp,
@@ -14,12 +24,6 @@ export default ({ allDataStates, dateStates }) => {
         lovetemp,
         utetemp
     } = allDataStates;
-
-    const {
-        alldates,
-        enddate,
-        startdate,
-    } = dateStates;
 
     const setStartDateFunc = date => {
         if (date > new Date().toISOString()) {
@@ -35,7 +39,6 @@ export default ({ allDataStates, dateStates }) => {
             enddate.set(date);
         }
     };
-
     const handleSelect = (eventKey) => {
         setDropdownText(eventKey)
         let filterList = {
@@ -74,6 +77,35 @@ export default ({ allDataStates, dateStates }) => {
         } else if (eventKey === "Temperatur") {
             loopFunction(["temp"])
         };
+    };
+
+    const handleMonthSelect = eventKey => {
+        setMonthText(eventKey);
+        month.set(eventKey);
+    };
+
+    const generateMonthOptions = () => {
+        let months = [];
+        const startDate = new Date("2024-12-01");
+        const currentDate = new Date();
+        const monthNames = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        let iteratorDate = new Date(startDate);
+        while (iteratorDate <= currentDate) {
+            const year = iteratorDate.getFullYear();
+            const month = String(iteratorDate.getMonth() + 1).padStart(2, "0");
+            const monthStr = `${year} ${monthNames[parseInt(month) - 1]}`;
+            months.push(
+                <Dropdown.Item key={monthStr} eventKey={monthStr}>{monthStr}</Dropdown.Item>
+            );
+            iteratorDate.setMonth(iteratorDate.getMonth() + 1);
+        }
+        months.unshift(
+            <Dropdown.Item key="None" eventKey="None">None</Dropdown.Item>
+        );
+        return months;
     };
 
     return (
@@ -185,6 +217,7 @@ export default ({ allDataStates, dateStates }) => {
                         />
                     </Col>
                     <Col className="mt-md-4 mt-xl-0">
+
                         <Form.Label>Start Date</Form.Label>
                         <Form.Control
                             style={{ height: "30px", fontSize: window.innerWidth <= 1024 ? "20px" : "unset" }}
@@ -200,13 +233,30 @@ export default ({ allDataStates, dateStates }) => {
                             value={enddate.value}
                             onChange={(e) => setEndDateFunc(e.target.value)}
                         />
-                        <Container className="d-flex p-0 mt-2">
-                            <Form.Check className="mt-2" onChange={() => alldates.set(!alldates.value)} />&nbsp;&nbsp;&nbsp;
+
+
+                         <Container className="p-0 mt-3">
+                         <p className="m-0 p-0">Month Filter</p>
+                            <Dropdown onSelect={handleMonthSelect} className="mt-2">
+                                <Dropdown.Toggle variant="primary" id="dropdown-basic">
+                                    {monthText}
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                    {generateMonthOptions()}
+                                </Dropdown.Menu>
+                            </Dropdown>
+                            
+                        <i className="fa fa-times" style={{color: "white", fontSize: "20px"}}></i>
+                        </Container>
+
+                        <Container className="d-flex p-0">
+                            <Form.Check onChange={() => alldates.set(!alldates.value)} />&nbsp;&nbsp;&nbsp;
                             {window.innerWidth <= 1024 ? <>
                                 <Col md={2}></Col>
                             </> : <></>}
-                            <Form.Label className="mt-2">Show all dates</Form.Label>
-                        </Container>
+                            <Form.Label>Show all dates</Form.Label>
+                        </Container> 
+
                     </Col>
                 </Row>
                 <Row className="mb-3">

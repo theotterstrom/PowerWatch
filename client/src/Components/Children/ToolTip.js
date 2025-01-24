@@ -60,7 +60,7 @@ export default ({ initData }) => {
                                 {data.datasetLabel}:
                             </Col>
                             <Col xl={4} lg={4} md={4} sm={6} xs={4} className="text-end">
-                                {data.value} {page === "power" ? "W": "SEK"}
+                                {data.value} {page === "power" ? data.datasetLabel.includes("Temp") ? "C" : "W" : "SEK"}
                             </Col>
                         </Row>
                     ))}
