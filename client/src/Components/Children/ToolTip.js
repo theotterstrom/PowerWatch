@@ -35,11 +35,11 @@ export default ({ initData }) => {
 
     const toolTipParentMargin = () => {
         if (window.innerWidth <= 768) {
-            return page === "power" ? '90px' : '180px'
+            return page === "power" ? '30px' : '50px'
         } else if (820 <= window.innerWidth && window.innerWidth <= 1024) {
-            return page === "power" ? '110px' : '180px'
+            return '50px'
         } else {
-            return page === "power" ? '40px' : '62px'
+            return '10px'
         };
     };
 

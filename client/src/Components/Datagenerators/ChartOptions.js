@@ -116,6 +116,7 @@ module.exports = (isMobile, yAxisLabel, chartStates) => {
                 enabled: false,
                 mode: 'index',
                 intersect: false,
+                
                 margin: 50,
                 callbacks: {
                     title: (tooltipItems) => `Datum: ${tooltipItems[0].label}`,
