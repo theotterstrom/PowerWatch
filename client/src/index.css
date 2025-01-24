@@ -96,8 +96,6 @@ code {
 
 }
 
-<<<<<<< Updated upstream
-=======
 .toolTipParent{
   display: flex;
   justify-content: flex-start; /* Optional: Adjust horizontal alignment */
@@ -114,7 +112,6 @@ code {
   font-size: 14px;
   pointer-events: none;
 }
->>>>>>> Stashed changes
 .custom-dropdown .dropdown-item:hover {
   background-color: rgb(0, 34, 102); /* Optional: Add hover effect */
 }

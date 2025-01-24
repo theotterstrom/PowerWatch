@@ -2,9 +2,6 @@ import generateSavingsData from "../Datagenerators/GenerateSavingsData";
 import { Container, Row, Col } from "react-bootstrap";
 import { Line } from "react-chartjs-2";
 import SavingsOptions from "../Options/SavingsOptions";
-<<<<<<< Updated upstream
-import { useState } from "react";
-=======
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import ToolTip from "./ToolTip";
 
@@ -12,7 +9,6 @@ const ToolTipChild = React.memo(({ chartStates, page }) => {
   const initData = useMemo(() => ({ chartStates, page }), [chartStates, page]);
   return <ToolTip initData={initData} />
 });
->>>>>>> Stashed changes
 
 export default ({ initData }) => {
   const { savings } = initData;
@@ -72,12 +68,8 @@ export default ({ initData }) => {
             </Row>
             <SavingsOptions dataStates={allDataStates} />
             <Container className="savingsChartContainer p-0 m-0">
-<<<<<<< Updated upstream
-              <Line data={savingsData} options={savingsOptions} className="mt-md-4"/>
-=======
               <ToolTipChild chartStates={chartStates} page={"savings"} />
               <Line data={savingsData} options={savingsOptions} className="mt-md-4" />
->>>>>>> Stashed changes
             </Container>
           </Container>
         </Col>
