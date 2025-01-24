@@ -7,7 +7,7 @@ import ToolTip from "./ToolTip";
 
 const ToolTipChild = React.memo(({ chartStates, page }) => {
   const initData = useMemo(() => ({ chartStates, page }), [chartStates, page]);
-  return <ToolTip initData={initData}/>
+  return <ToolTip initData={initData} />
 });
 
 export default ({ initData }) => {
@@ -68,11 +68,9 @@ export default ({ initData }) => {
         <Col md={10} lg={8} className="p-0">
           <Container className="p-0">
             <h3 className="title mt-3">Power Consumption & Temperature</h3>
-            <PowerOptions allDataStates={allDataStates} dateStates={dateStates}/>
+            <PowerOptions allDataStates={allDataStates} dateStates={dateStates} />
             <Container className="chartContainer p-0 m-0">
-            <Container className="toolTipParent">
-            <ToolTipChild chartStates={chartStates}  page={"power"} />
-            </Container>
+              <ToolTipChild chartStates={chartStates} page={"power"} />
               <Line data={chartData} options={chartOptions} className="mt-md-3 powerChart" />
             </Container>
           </Container>

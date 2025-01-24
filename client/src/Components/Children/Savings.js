@@ -7,7 +7,7 @@ import ToolTip from "./ToolTip";
 
 const ToolTipChild = React.memo(({ chartStates, page }) => {
   const initData = useMemo(() => ({ chartStates, page }), [chartStates, page]);
-  return <ToolTip initData={initData}/>
+  return <ToolTip initData={initData} />
 });
 
 export default ({ initData }) => {
@@ -76,11 +76,8 @@ export default ({ initData }) => {
             </Row>
             <SavingsOptions dataStates={allDataStates} />
             <Container className="savingsChartContainer p-0 m-0">
-
-              <Container className="toolTipParent">
-              <ToolTipChild chartStates={chartStates}  page={"savings"} />
-            </Container>
-              <Line data={savingsData} options={savingsOptions} className="mt-md-4"/>
+              <ToolTipChild chartStates={chartStates} page={"savings"} />
+              <Line data={savingsData} options={savingsOptions} className="mt-md-4" />
             </Container>
           </Container>
         </Col>

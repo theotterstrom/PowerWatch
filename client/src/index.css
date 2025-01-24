@@ -100,6 +100,8 @@ code {
   display: flex;
   justify-content: flex-start; /* Optional: Adjust horizontal alignment */
   align-items: flex-end; /* Aligns the bottom of the child to the bottom of the parent */
+  position: absolute;
+
 }
 
 .toolTipContainer{
@@ -193,6 +195,7 @@ code {
 }
 
 @media (max-width: 767px) {
+
   .allDatesPowerTitle{
     position: absolute;
   }

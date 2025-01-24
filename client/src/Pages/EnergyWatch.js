@@ -48,7 +48,7 @@ const LogOutChild = React.memo(({ logout, togglelogout }) => {
 
 const EnergyWatch = () => {
   const [expanded, setExpanded] = useState(false);
-  const [currentPage, setCurrentPage] = useState("power");
+  const [currentPage, setCurrentPage] = useState("savings");
   const [showPowerHour, setShowPowerHour] = useState(false);
   const [showLogOut, setShowLogOut] = useState(false);
 
@@ -203,7 +203,6 @@ const EnergyWatch = () => {
         const x = activePoint.element.x;
         const topY = chart.scales.y.top;
         const bottomY = chart.scales.y.bottom;
-
         ctx.save();
         ctx.beginPath();
         ctx.moveTo(x, topY);
@@ -213,7 +212,6 @@ const EnergyWatch = () => {
         ctx.setLineDash([5, 5]);
         ctx.stroke();
         ctx.restore();
-        console.log("NO")
         toolTipContainer.style.display = "block"
       } else {
         toolTipContainer.style.display = "none"
@@ -247,7 +245,7 @@ const EnergyWatch = () => {
         onToggle={navbarToggle}
       >
         <Container>
-          <Navbar.Brand onClick={() => showPage("power")} style={{cursor: "pointer"}}>
+          <Navbar.Brand onClick={() => showPage("power")} style={{ cursor: "pointer" }}>
             <img style={{ height: "40px" }} src="/images/new1.png" alt="EnergyWatch Logo" />
             &nbsp;EnergyWatch
           </Navbar.Brand>
