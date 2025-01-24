@@ -96,7 +96,7 @@ const generateSavingsData = (allDataStates, chartStates) => {
             nilleboatsavings.value && {
                 label: "Nillebo AT snitt",
                 data: savingsDataSource["nilleboat"].map((d) => (d.averageCost / 100).toFixed(2)),
-                borderColor: "blue",
+                borderColor: "rgb(125, 0, 81)",
                 fill: false,
                 tension: 0.4,
             },
@@ -111,7 +111,7 @@ const generateSavingsData = (allDataStates, chartStates) => {
             nillebovpsavings.value && {
                 label: "Nillebo VP snitt",
                 data: savingsDataSource["nillebovp"].map((d) => (d.averageCost / 100).toFixed(2)),
-                borderColor: "black",
+                borderColor: "lime",
                 fill: false,
                 tension: 0.4,
             },
@@ -119,14 +119,14 @@ const generateSavingsData = (allDataStates, chartStates) => {
             nillebovvsavings.value && {
                 label: "Nillebo VV verklig",
                 data: savingsDataSource["nillebovv"].map((d) => (d.realCost / 100).toFixed(2)),
-                borderColor: "purple",
+                borderColor: "blue",
                 fill: false,
                 tension: 0.4,
             },
             nillebovvsavings.value && {
                 label: "Nillebo VV snitt",
                 data: savingsDataSource["nillebovv"].map((d) => (d.averageCost / 100).toFixed(2)),
-                borderColor: "brown",
+                borderColor: "rgb(0, 187, 255)",
                 fill: false,
                 tension: 0.4,
             },
@@ -141,7 +141,7 @@ const generateSavingsData = (allDataStates, chartStates) => {
             loveboatsavings.value && {
                 label: "Lovebo AT snitt",
                 data: savingsDataSource["loveboat"].map((d) => (d.averageCost / 100).toFixed(2)),
-                borderColor: "cyan",
+                borderColor: "rgb(161, 86, 0)",
                 fill: false,
                 tension: 0.4,
             },
@@ -156,7 +156,7 @@ const generateSavingsData = (allDataStates, chartStates) => {
             lovebovvsavings.value && {
                 label: "Lovebo VV snitt",
                 data: savingsDataSource["lovebovv"].map((d) => (d.averageCost / 100).toFixed(2)),
-                borderColor: "lime",
+                borderColor: "pink",
                 fill: false,
                 tension: 0.4,
             },
@@ -164,14 +164,14 @@ const generateSavingsData = (allDataStates, chartStates) => {
             ottebosavings.value && {
                 label: "Ottebo verklig",
                 data: savingsDataSource["ottebo"].map((d) => (d.realCost / 100).toFixed(2)),
-                borderColor: "lightblue",
+                borderColor: "yellow",
                 fill: false,
                 tension: 0.4,
             },
             ottebosavings.value && {
                 label: "Ottebo snitt",
                 data: savingsDataSource["ottebo"].map((d) => (d.averageCost / 100).toFixed(2)),
-                borderColor: "pink",
+                borderColor: "rgb(109, 110, 0)",
                 fill: false,
                 tension: 0.4,
             },
@@ -179,14 +179,14 @@ const generateSavingsData = (allDataStates, chartStates) => {
             garagesavings.value && {
                 label: "Garage verklig",
                 data: savingsDataSource["garage"].map((d) => (d.realCost / 100).toFixed(2)),
-                borderColor: "yellow",
+                borderColor: "rgb(1, 255, 208)",
                 fill: false,
                 tension: 0.4,
             },
             garagesavings.value && {
                 label: "Garage snitt",
                 data: savingsDataSource["garage"].map((d) => (d.averageCost / 100).toFixed(2)),
-                borderColor: "grey",
+                borderColor: "rgb(0, 200, 255)",
                 fill: false,
                 tension: 0.4,
             },
@@ -194,14 +194,14 @@ const generateSavingsData = (allDataStates, chartStates) => {
             poolsavings.value && {
                 label: "Pool verklig",
                 data: savingsDataSource["pool"].map((d) => (d.realCost / 100).toFixed(2)),
-                borderColor: "turqoise",
+                borderColor: "rgb(66, 66, 66)",
                 fill: false,
                 tension: 0.4,
             },
             poolsavings.value && {
                 label: "Pool snitt",
                 data: savingsDataSource["pool"].map((d) => (d.averageCost / 100).toFixed(2)),
-                borderColor: "darkred",
+                borderColor: "lightgrey",
                 fill: false,
                 tension: 0.4,
             },

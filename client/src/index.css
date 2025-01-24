@@ -112,6 +112,19 @@ code {
   font-size: 14px;
   pointer-events: none;
 }
+
+.toolTipContainer::after {
+  content: '';
+  position: absolute;
+  bottom: -10px; /* Position below the div */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid black; /* Match the div's background color */
+}
 .custom-dropdown .dropdown-item:hover {
   background-color: rgb(0, 34, 102); /* Optional: Add hover effect */
 }
@@ -196,6 +209,10 @@ code {
 }
 
 @media (max-width: 767px) {
+
+  .toolTipContainer::after {
+    display:none;
+  }
 
   .allDatesPowerTitle{
     position: absolute;

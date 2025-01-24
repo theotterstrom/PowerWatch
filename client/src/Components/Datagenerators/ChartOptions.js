@@ -14,7 +14,7 @@ module.exports = (isMobile, yAxisLabel, chartStates) => {
                 labels: {
                     color: "white",
                     font: {
-                        size: window.innerWidth <= 767 ? 12 : 20,
+                        size: window.innerWidth <= 767 ? 12 : 16,
                     },
                 },
                 position: 'top',
@@ -94,7 +94,7 @@ module.exports = (isMobile, yAxisLabel, chartStates) => {
                     if (820 <= window.innerWidth) {
                         const toolTipContainer = document.getElementsByClassName("toolTipContainer")[0];
                         const halfWidth = parseInt(toolTipContainer.style.width.replace("px", "")) / 2;
-                        toolTipContainer.style.transform = `translateX(${xCoordinate - halfWidth}px)`;
+                        toolTipContainer.style.transform = `translateX(${xCoordinate - halfWidth - 12}px)`;
                     };
                 };
             };
@@ -184,10 +184,10 @@ module.exports = (isMobile, yAxisLabel, chartStates) => {
                         chartStates.currentdate.set(chosenDate);
                         chartStates.datavalues.set(dateValues);
                     };
-
+                    
                     const toolTipContainer = document.getElementsByClassName("toolTipContainer")[0];
                     const halfWidth = parseInt(toolTipContainer.style.width.replace("px", "")) / 2;
-                    toolTipContainer.style.transform = `translateX(${xCoordinate - halfWidth}px)`;
+                    toolTipContainer.style.transform = `translateX(${xCoordinate - halfWidth - 12}px)`;
                 };
             };
         }
