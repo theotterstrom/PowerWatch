@@ -1,5 +1,5 @@
 const options = require('./ChartOptions');
-const generateSavingsData = (allDataStates) => {
+const generateSavingsData = (allDataStates, chartStates) => {
     const {
         nilleboatsavings,
         nillebovpsavings,
@@ -210,7 +210,7 @@ const generateSavingsData = (allDataStates) => {
 
     return {
         savingsData,
-        savingsOptions: options(window.innerWidth <= 1024, 'Kostnad'),
+        savingsOptions: options(window.innerWidth <= 1024, 'Kostnad', chartStates),
         totalSpendning,
         totalSaved: totalSpendning[1] - totalSpendning[0]
     }

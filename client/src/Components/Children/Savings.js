@@ -3,6 +3,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import { Line } from "react-chartjs-2";
 import SavingsOptions from "../Options/SavingsOptions";
 import { useState } from "react";
+import ToolTip from "./ToolTip";
 
 export default ({ initData }) => {
   const { savings } = initData;
@@ -25,6 +26,14 @@ export default ({ initData }) => {
   const [savingEndDate, setSavingEndDate] = useState(new Date().toISOString().split("T")[0]);
   const [allsavingsDate, setAllSavingsDates] = useState(false);
 
+  const [currentDate, setCurrentDate] = useState(null);
+  const [dataValues, setCurrentDataValues] = useState([]);
+
+  const chartStates = {
+    currentdate: { value: currentDate, set: setCurrentDate },
+    datavalues: { value: dataValues, set: setCurrentDataValues }
+  };
+
   const allDataStates = {
     nilleboatsavings: { value: nilleboATSavings, set: setNilleboAtSavings },
     nillebovpsavings: { value: nilleboVPSavings, set: setNilleboVPSavings },
@@ -39,7 +48,7 @@ export default ({ initData }) => {
     allsavingsdate: { value: allsavingsDate, set: setAllSavingsDates },
     savings
   };
-  const { savingsData, savingsOptions, totalSpendning, totalSaved } = generateSavingsData(allDataStates);
+  const { savingsData, savingsOptions, totalSpendning, totalSaved } = generateSavingsData(allDataStates, chartStates);
   return (
     <Container className="mt-4 container-fluid savings pt-5 pb-5 mainContainer">
       <Row className="justify-content-center">
@@ -62,6 +71,7 @@ export default ({ initData }) => {
             </Row>
             <SavingsOptions dataStates={allDataStates} />
             <Container className="savingsChartContainer p-0 m-0">
+              <ToolTip chartStates={chartStates} />
               <Line data={savingsData} options={savingsOptions} className="mt-md-4"/>
             </Container>
           </Container>

@@ -95,7 +95,16 @@ code {
   color: white;
 
 }
-
+.toolTipContainer{
+  background-color: rgba(0, 0, 0, 0.9);
+  height: 280px;
+  width: 220px;
+  top: 230px;
+  border-radius: 20px;
+  position: absolute;
+  padding: 10px 30px 20px 20px;
+  font-size: 14px;
+}
 .custom-dropdown .dropdown-item:hover {
   background-color: rgb(0, 34, 102); /* Optional: Add hover effect */
 }
