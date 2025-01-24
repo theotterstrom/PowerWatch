@@ -1,5 +1,5 @@
 const options = require('./ChartOptions');
-const generatePowerData = (allDataStates, dateStates) => {
+const generatePowerData = (allDataStates, dateStates, chartStates) => {
     const {
         nilleboAt,
         nillebovp,
@@ -173,8 +173,8 @@ const generatePowerData = (allDataStates, dateStates) => {
 
     return {
         chartData,
-        chartOptions: options(window.innerWidth <= 1024, "Watt")
-    }
+        chartOptions: options(window.innerWidth <= 1024, "Watt", chartStates)
+    };
 };
 
 module.exports = generatePowerData;

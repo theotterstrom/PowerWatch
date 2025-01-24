@@ -31,6 +31,14 @@ export default ({ initData }) => {
   const [savingEndDate, setSavingEndDate] = useState(new Date().toISOString().split("T")[0]);
   const [allsavingsDate, setAllSavingsDates] = useState(false);
 
+  const [currentDate, setCurrentDate] = useState(null);
+  const [dataValues, setCurrentDataValues] = useState([]);
+
+  const chartStates = {
+    currentdate: { value: currentDate, set: setCurrentDate },
+    datavalues: { value: dataValues, set: setCurrentDataValues }
+  };
+
   const allDataStates = {
     nilleboatsavings: { value: nilleboATSavings, set: setNilleboAtSavings },
     nillebovpsavings: { value: nilleboVPSavings, set: setNilleboVPSavings },
@@ -45,7 +53,7 @@ export default ({ initData }) => {
     allsavingsdate: { value: allsavingsDate, set: setAllSavingsDates },
     savings
   };
-  const { savingsData, savingsOptions, totalSpendning, totalSaved } = generateSavingsData(allDataStates);
+  const { savingsData, savingsOptions, totalSpendning, totalSaved } = generateSavingsData(allDataStates, chartStates);
   return (
     <Container className="mt-4 container-fluid savings pt-5 pb-5 mainContainer">
       <Row className="justify-content-center">

@@ -1,17 +1,9 @@
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import generatePowerData from "../Datagenerators/GeneratePowerData";
 import { Container, Row, Col } from "react-bootstrap";
 import { Line } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  LineElement,
-  PointElement,
-  LinearScale,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';
 import PowerOptions from "../Options/PowerOptions";
-import { useState } from "react";
+import ToolTip from "./ToolTip";
 
 const ToolTipChild = React.memo(({ chartStates, page }) => {
   const initData = useMemo(() => ({ chartStates, page }), [chartStates, page]);
@@ -39,6 +31,14 @@ export default ({ initData }) => {
   const [endDate, setEndDate] = useState(new Date().toISOString().split("T")[0]);
   const [allDates, setAllDates] = useState(false);
 
+  const [currentDate, setCurrentDate] = useState(null);
+  const [dataValues, setCurrentDataValues] = useState([]);
+
+  const chartStates = {
+    currentdate: { value: currentDate, set: setCurrentDate },
+    datavalues: { value: dataValues, set: setCurrentDataValues }
+  };
+
   const allDataStates = {
     nilleboAt: { value: nilleboAT, set: setnilleboAT },
     nillebovp: { value: nilleboVP, set: setnilleboVP },
@@ -60,32 +60,7 @@ export default ({ initData }) => {
     alldates: { value: allDates, set: setAllDates },
   };
 
-  const { chartData, chartOptions } = generatePowerData(allDataStates, dateStates);
-
-  const verticalLinePlugin = {
-    id: 'verticalLinePlugin',
-    beforeDraw: (chart) => {
-        if (chart.tooltip._active && chart.tooltip._active.length) {
-            const ctx = chart.ctx;
-            const activePoint = chart.tooltip._active[0]; // Get the active tooltip point
-            const x = activePoint.element.x; // Get the x-coordinate of the tooltip point
-            const topY = chart.scales.y.top; // Top of the chart
-            const bottomY = chart.scales.y.bottom; // Bottom of the chart
-
-            // Draw the vertical line
-            ctx.save();
-            ctx.beginPath();
-            ctx.moveTo(x, topY);
-            ctx.lineTo(x, bottomY);
-            ctx.lineWidth = 2;
-            ctx.strokeStyle = 'gray'; // Style for the line
-            ctx.setLineDash([5, 5]);
-            ctx.stroke();
-            ctx.restore();
-        }
-    },
-};
-ChartJS.register(verticalLinePlugin);
+  const { chartData, chartOptions } = generatePowerData(allDataStates, dateStates, chartStates);
 
   return (
     <Container className="mt-4 container-fluid power pt-5 pb-5 mainContainer">

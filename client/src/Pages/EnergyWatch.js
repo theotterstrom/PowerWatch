@@ -10,6 +10,17 @@ import PowerHour from "../Components/Children/PowerHour";
 import apiUrl from '../Components/Helpers/APIWrapper'
 import LogOut from "../Components/Children/LogOut";
 
+import {
+  Chart as ChartJS,
+  LineElement,
+  PointElement,
+  LinearScale,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+
+
 const PowerChild = React.memo(({ readings, temps }) => {
   const initData = useMemo(() => ({ readings, temps }), [readings, temps])
   return <Power initData={initData} />
@@ -59,33 +70,33 @@ const EnergyWatch = () => {
     powerhour: { value: powerHour, set: setPowerHour }
   }), [savings, prices, schedueles, temps, readings, deviceStatuses, powerHour]);
 
-  const navbarToggle = useCallback(() => setExpanded(!expanded));
+  const navbarToggle = () => setExpanded(!expanded);
 
-  const showPage = useCallback((page) => {
+  const showPage = (page) => {
     setExpanded(false);
     setCurrentPage(page);
-  });
+  };
 
-  const showPowerHourFunc = useCallback(() => {
+  const showPowerHourFunc = () => {
     setExpanded(false);
     setShowPowerHour(true);
-  });
+  };
 
-  const handleLogout = useCallback(() => {
+  const handleLogout = () => {
     setExpanded(false);
     setShowLogOut(true)
-  });
+  };
 
   useEffect(() => {
     const run = async () => {
       try {
-        const storedPrices = localStorage.getItem("prices");
-        const storedSchedueles = localStorage.getItem("schedueles");
-        const storedDeviceStatuses = localStorage.getItem("devicestatuses");
-        const storedSavings = localStorage.getItem("savings");
-        const storedReadings = localStorage.getItem("readings");
-        const storedTemps = localStorage.getItem("temps");
-        const storedPowerHour = localStorage.getItem("powerhour");
+        const storedPrices = localStorage.getItem("prices")?.length > 0;
+        const storedSchedueles = localStorage.getItem("schedueles")?.length > 0;
+        const storedDeviceStatuses = localStorage.getItem("devicestatuses")?.length > 0;
+        const storedSavings = localStorage.getItem("savings")?.length > 0;
+        const storedReadings = localStorage.getItem("readings")?.length > 0;
+        const storedTemps = localStorage.getItem("temps")?.length > 0;
+        const storedPowerHour = localStorage.getItem("powerhour")?.length > 0;
 
         if (storedPrices && storedSchedueles && storedDeviceStatuses && storedSavings && storedReadings && storedTemps && storedPowerHour) {
           setPrices(JSON.parse(storedPrices));

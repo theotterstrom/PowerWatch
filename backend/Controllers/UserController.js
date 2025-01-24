@@ -20,7 +20,7 @@ const login = async (data, db) => {
     if (!isMatch) {
         return { status: 400, message: 'Invalid credentials', token: null };
     };
-    const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET, { expiresIn: '10h' });
+    const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET, { expiresIn: '7d' });
     return { status: 200, message: 'Login successful', token };
 };
 
