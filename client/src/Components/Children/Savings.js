@@ -33,10 +33,12 @@ export default ({ initData }) => {
 
   const [currentDate, setCurrentDate] = useState(null);
   const [dataValues, setCurrentDataValues] = useState([]);
+  const [chartY, setChartY] = useState(null);
 
   const chartStates = {
     currentdate: { value: currentDate, set: setCurrentDate },
-    datavalues: { value: dataValues, set: setCurrentDataValues }
+    datavalues: { value: dataValues, set: setCurrentDataValues },
+    charty: { value: chartY, set: setChartY }
   };
 
   const allDataStates = {

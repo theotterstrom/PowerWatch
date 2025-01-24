@@ -3,7 +3,7 @@ import { Container, Row, Col } from "react-bootstrap";
 export default ({ initData }) => {
 
     const { chartStates, page } = initData;
-    const { currentdate, datavalues } = chartStates;
+    const { currentdate, datavalues, charty } = chartStates;
 
     const desktopToolTipStyle = page === "power" ? {
         width: "270px",
@@ -33,19 +33,18 @@ export default ({ initData }) => {
         };
     };
 
-    const toolTipParentMargin = () => {
-        if (window.innerWidth <= 768) {
-            return page === "power" ? '30px' : '50px'
-        } else if (820 <= window.innerWidth && window.innerWidth <= 1024) {
-            return '50px'
+    const toolTipMargin = () => {
+        if (window.innerWidth <= 1024) {
+            return charty.value
         } else {
-            return '10px'
+            return charty.value + 60
         };
-    };
+    }
+
 
     return (
         <>
-            <Container className="toolTipParent" style={{ marginTop: toolTipParentMargin() }}>
+            <Container className="toolTipParent" style={{ marginTop: `${window.innerWidth <= 1024 ? charty.value : charty.value + 60}px` }}>
                 <Col className="toolTipContainer text-center" style={toolTipStyle()}>
                     {currentdate.value}
                     <Container className="mt-2"></Container>

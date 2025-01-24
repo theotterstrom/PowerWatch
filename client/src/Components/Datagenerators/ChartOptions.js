@@ -86,10 +86,11 @@ module.exports = (isMobile, yAxisLabel, chartStates) => {
                     });
 
                     const xCoordinate = chartElement[0].element.x;
-
+                    const yCoordinate = event.chart.chartArea.top;
                     if (chosenDate !== chartStates.currentdate.value) {
                         chartStates.currentdate.set(chosenDate);
                         chartStates.datavalues.set(dateValues);
+                        chartStates.charty.set(yCoordinate);
                     };
                     if (820 <= window.innerWidth) {
                         const toolTipContainer = document.getElementsByClassName("toolTipContainer")[0];
@@ -101,7 +102,6 @@ module.exports = (isMobile, yAxisLabel, chartStates) => {
         }
     } : {
         responsive: true,
-        
         plugins: {
             legend: {
                 labels: {
