@@ -95,7 +95,9 @@ module.exports = (isMobile, yAxisLabel, chartStates) => {
                     if (820 <= window.innerWidth) {
                         const toolTipContainer = document.getElementsByClassName("toolTipContainer")[0];
                         const halfWidth = parseInt(toolTipContainer.style.width.replace("px", "")) / 2;
-                        toolTipContainer.style.transform = `translateX(${xCoordinate - halfWidth - 12}px)`;
+                        if(xCoordinate < 550 && xCoordinate > 160){
+                            toolTipContainer.style.transform = `translateX(${xCoordinate - halfWidth - 12}px)`;
+                        }
                     };
                 };
             };
