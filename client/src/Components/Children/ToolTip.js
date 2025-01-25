@@ -37,7 +37,7 @@ export default ({ initData }) => {
 
     return (
         <>
-            <Container className="toolTipParent" style={{ marginTop: `${window.innerWidth <= 1024 ? charty.value : charty.value + 60}px` }}>
+            <Container className="toolTipParent" style={{ marginTop: `${window.innerWidth <= 1024 ? charty.value : charty.value + 20}px` }}>
                 <Col className="toolTipContainer text-center" style={toolTipStyle()}>
                     {currentdate.value}
                     <Container className="mt-2"></Container>

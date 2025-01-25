@@ -205,8 +205,8 @@ export default ({ allDataStates, dateStates }) => {
                         />
 
                         {1024 <= window.innerWidth ? <>
-                            <div className="d-flex" style={{marginTop: "100px"}}>
-                                
+                            <div className="d-flex" style={{ marginTop: "100px" }}>
+
                                 <Dropdown onSelect={handleSelect}>
                                     <Dropdown.Toggle variant="primary" id="dropdown-basic">
                                         {dropdownText}
@@ -349,7 +349,7 @@ export default ({ allDataStates, dateStates }) => {
                             </Row>
                         </> : <>
                         </>}
-                        
+
                     </Col>
                 </Row>
             </>}
