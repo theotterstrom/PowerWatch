@@ -52,10 +52,12 @@ const generateSavingsData = (allDataStates, chartStates) => {
 
     const totalSpendning = newSavingsList.value
         .filter(obj => {
-            if (monthFilter.value) {
+            if(allsavingsdate.value){
+                return true;
+            } else if (monthFilter.value) {
                 return parseInt(obj.date.split("-")[1]) === monthFilter.month;
             };
-            return (obj.date.split(" ")[0] >= savingsstartdate.value && obj.date.split(" ")[0] <= savingsenddate.value) || allsavingsdate.value
+            return (obj.date.split(" ")[0] >= savingsstartdate.value && obj.date.split(" ")[0] <= savingsenddate.value)
         })
         .reduce(([spending, average], cur) => {
             let sum1 = 0;
@@ -69,10 +71,12 @@ const generateSavingsData = (allDataStates, chartStates) => {
 
     const savingsDataSource = newSavingsList.value.length > 0 ? newSavingsList.value
         .filter(obj => {
-            if (monthFilter.value) {
+            if(allsavingsdate.value){
+                return true;
+            } else if (monthFilter.value) {
                 return parseInt(obj.date.split("-")[1]) === monthFilter.month;
             };
-            return (obj.date.split(" ")[0] >= savingsstartdate.value && obj.date.split(" ")[0] <= savingsenddate.value) || allsavingsdate.value
+            return (obj.date.split(" ")[0] >= savingsstartdate.value && obj.date.split(" ")[0] <= savingsenddate.value)
         })
         .reverse()
         .reduce((acc, cur, index) => {
@@ -109,10 +113,12 @@ const generateSavingsData = (allDataStates, chartStates) => {
     };
     const savingsData = {
         labels: dateList.filter(date => {
-            if (monthFilter.value) {
+            if(allsavingsdate.value){
+                return true;
+            } else if (monthFilter.value) {
                 return parseInt(date.split("-")[1]) === monthFilter.month;
             };
-            return (date >= savingsstartdate.value && date <= savingsenddate.value) || allsavingsdate.value
+            return (date >= savingsstartdate.value && date <= savingsenddate.value)
         }),
         datasets: [
             nilleboatsavings.value && {

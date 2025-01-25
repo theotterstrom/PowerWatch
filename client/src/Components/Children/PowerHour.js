@@ -5,8 +5,8 @@ export default ({ initData }) => {
     const setPowerHours = async () => {
         const floatCheckArr = JSON.parse(JSON.stringify(Object.values(powerhour.value)));
         floatCheckArr.pop();
-        
-        if(floatCheckArr.some(obj => isNaN(obj))){
+
+        if (floatCheckArr.some(obj => isNaN(obj))) {
             alert("All values must be integers or decimals")
         } else {
             try {
@@ -26,10 +26,10 @@ export default ({ initData }) => {
     const updateText = (e) => {
         const { name, value } = e.target;
         powerhour.set((prevState) => ({
-          ...prevState,
-          [name]: value,
+            ...prevState,
+            [name]: value,
         }));
-      };
+    };
     return (
         <Container className="container-fluid d-flex justify-content-center align-items-center">
             <Col xl={8} xs={11} className="powerHourWindow p-5">
@@ -222,12 +222,9 @@ export default ({ initData }) => {
                         </Col>
                     </Row>
                 </Form>
-
                 <Container className="container-fluid d-flex justify-content-center mt-5">
                     <Button onClick={() => setPowerHours()}>Set hours</Button>
                 </Container>
-
-
             </Col>
         </Container>
     )

@@ -26,6 +26,7 @@ export default ({ initData }) => {
   const today = new Date();
   const oneWeekAgoDate = new Date();
   oneWeekAgoDate.setDate(today.getDate() - 7);
+  
   // States for date filtering savings
   const [savingStartDate, setSavingStartDate] = useState(oneWeekAgoDate.toISOString().split("T")[0]);
   const [savingEndDate, setSavingEndDate] = useState(new Date().toISOString().split("T")[0]);

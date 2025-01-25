@@ -96,7 +96,7 @@ export default ({ dataStates }) => {
                 <Dropdown.Item key={monthStr} eventKey={monthStr}>{monthStr}</Dropdown.Item>
             );
             iteratorDate.setMonth(iteratorDate.getMonth() + 1);
-        }
+        };
         months.unshift(
             <Dropdown.Item key="None" eventKey="None">None</Dropdown.Item>
         );
@@ -326,8 +326,7 @@ export default ({ dataStates }) => {
                                     <p className="p-0 m-0 pb-2" style={{ fontSize: "20px" }}>Filter by houses</p>
                                 </Col>
                             </Row>
-                        </> : <>
-                        </>}
+                        </> : <></>}
                     </Col>
                 </Row>
             </>}

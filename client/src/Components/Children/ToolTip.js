@@ -34,7 +34,6 @@ export default ({ initData }) => {
         };
     };
 
-
     return (
         <>
             <Container className="toolTipParent" style={{ marginTop: `${window.innerWidth <= 1024 ? charty.value : charty.value + 20}px` }}>
@@ -44,15 +43,10 @@ export default ({ initData }) => {
                     {datavalues.value.map((data, index) => (
                         <Row key={index}>
                             <Col xl={8} lg={8} md={8} sm={6} xs={8} className="text-start">
-                                <i
-                                    className="fa fa-square"
-                                    style={{ fontSize: "8px", color: data.datasetColor }}
-                                ></i>
-                                &nbsp;
-                                {data.datasetLabel}:
+                                <i className="fa fa-square" style={{ fontSize: "8px", color: data.datasetColor }}></i>&nbsp;{data.datasetLabel}:
                             </Col>
                             <Col xl={4} lg={4} md={4} sm={6} xs={4} className="text-end">
-                                {data.value} {page === "power" ? data.datasetLabel.includes("Temp") ? "°C": "W": "SEK"}
+                                {data.value} {page === "power" ? data.datasetLabel.includes("Temp") ? "°C" : "W" : "SEK"}
                             </Col>
                         </Row>
                     ))}

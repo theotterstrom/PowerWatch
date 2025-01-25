@@ -222,10 +222,7 @@ export default ({ allDataStates, dateStates }) => {
                                 </Dropdown>
                                 <p className="p-0 m-0 pb-2 mt-2">&nbsp;&nbsp;Filter houses</p>
                             </div>
-                        </> : <>
-
-                        </>}
-
+                        </> : <></>}
 
                     </Col>
                     <Col>
@@ -349,7 +346,6 @@ export default ({ allDataStates, dateStates }) => {
                             </Row>
                         </> : <>
                         </>}
-
                     </Col>
                 </Row>
             </>}

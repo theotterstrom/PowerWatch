@@ -37,10 +37,12 @@ const generatePowerData = (allDataStates, dateStates, chartStates) => {
 
     const readingsDataSource = readings.value.length > 0 ? readings.value
         .filter(obj => {
-            if(monthFilter.value){
+            if(alldates.value){
+                return true;
+            } else if(monthFilter.value){
                 return parseInt(obj.date.split("-")[1]) === monthFilter.month;
             };
-            return (obj.date.split(" ")[0] >= startdate.value && obj.date.split(" ")[0] <= enddate.value) || alldates.value
+            return (obj.date.split(" ")[0] >= startdate.value && obj.date.split(" ")[0] <= enddate.value)
         })
         .reduce((acc, cur, index) => {
             if (Object.values(acc)[0] && Object.values(acc)[0].some(obj => obj.date === cur.date.split(" ")[0])) {
@@ -105,10 +107,12 @@ const generatePowerData = (allDataStates, dateStates, chartStates) => {
     };
 
     const tempDataSource = tranformTemp(temps.value.filter(obj => {
-        if(monthFilter.value){
+        if(alldates.value){
+            return true;
+        } else if(monthFilter.value){
             return parseInt(obj.date.split("-")[1]) === monthFilter.month;
         };
-        return (obj.date.split(" ")[0] >= startdate.value && obj.date.split(" ")[0] <= enddate.value) || alldates.value
+        return (obj.date.split(" ")[0] >= startdate.value && obj.date.split(" ")[0] <= enddate.value);
     }));
 
     let dateList = [];
@@ -121,10 +125,12 @@ const generatePowerData = (allDataStates, dateStates, chartStates) => {
 
     const chartData = {
         labels: dateList.filter(date => {
-            if(monthFilter.value){
+            if(alldates.value){
+                return true
+            } else if(monthFilter.value){
                 return parseInt(date.split("-")[1]) === monthFilter.month
             };
-            return (date >= startdate.value && date <= enddate.value) || alldates.value
+            return (date >= startdate.value && date <= enddate.value);
         }),
         datasets: [
             nilleboAt.value && {

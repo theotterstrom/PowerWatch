@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import apiUrl from "../Components/Helpers/APIWrapper";
 
 const Home = () => {
-  
+
   const [key, setKey] = useState('login');
   const [inKey, setInKey] = useState('purpose');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -128,10 +128,10 @@ const Home = () => {
                 The purpose of this website is to track the energyconsumption of our houses in Mörtvik, Sweden.
               </Tab>
               <Tab eventKey="technology" title="Technology" className="tab-content">
-                On every large power-consuming device, we've installed a <a href="https://www.shelly.com/products/shelly-plus-1-x1">shelly-switch</a> that 
+                On every large power-consuming device, we've installed a <a href="https://www.shelly.com/products/shelly-plus-1-x1">shelly-switch</a> that
                 tracks and controls the power consumption of that device.
                 <Row className="mt-3"></Row>
-                Furthermore, this application scrapes the web for the power prices of tomorrow, 
+                Furthermore, this application scrapes the web for the power prices of tomorrow,
                 checks the cheapest hours and sets a scheduele for each device depending on the cheapest hours.
                 <Row className="mt-3"></Row>
                 In summary, this application saves money, displays power consumption and savings and controls the devices mentioned above.
