@@ -20,7 +20,7 @@ export default ({ initData }) => {
   }, []);
 
 
-  const allDataStates = {
+  const allDataStates = useMemo(() => ({
     pricedate: { value: priceDate, set: setPriceDate },
     currentdevice: { value: currentDevice, set: setCurrentDevice },
     currentscheduele: { value: currentScheduele, set: setCurrentScheduele },
@@ -29,7 +29,7 @@ export default ({ initData }) => {
     schedueles,
     prices,
     devicestatuses
-  };
+  }), [priceDate, currentDevice, currentScheduele, currentPrice, currentDevicesStatus, schedueles.value, prices.value, devicestatuses.value]);
 
   const numbers = Array.from({ length: 24 }, (_, i) => i);
   return (

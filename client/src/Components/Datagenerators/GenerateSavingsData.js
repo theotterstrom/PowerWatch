@@ -13,8 +13,9 @@ const generateSavingsData = (allDataStates, chartStates) => {
         savingsenddate,
         allsavingsdate,
         savings,
+        savingsmonth
     } = allDataStates;
-
+    
     const filterObj = {
         nilleboat: nilleboatsavings.value,
         nillebovp: nillebovpsavings.value,
@@ -36,8 +37,26 @@ const generateSavingsData = (allDataStates, chartStates) => {
         }
     };
 
+    const monthFilterFunc = () => {
+        const monthArr = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        if (savingsmonth.value !== "None") {
+            const monthName = savingsmonth.value.split(" ")[1];
+            let monthNumber = monthArr.findIndex(month => month === monthName);
+            monthNumber++;
+            return { value: true, month: monthNumber }
+        };
+        return { value: false };
+    };
+
+    const monthFilter = monthFilterFunc()
+
     const totalSpendning = newSavingsList.value
-        .filter(obj => (obj.date.split(" ")[0] >= savingsstartdate.value && obj.date.split(" ")[0] <= savingsenddate.value) || allsavingsdate.value)
+        .filter(obj => {
+            if (monthFilter.value) {
+                return parseInt(obj.date.split("-")[1]) === monthFilter.month;
+            };
+            return (obj.date.split(" ")[0] >= savingsstartdate.value && obj.date.split(" ")[0] <= savingsenddate.value) || allsavingsdate.value
+        })
         .reduce(([spending, average], cur) => {
             let sum1 = 0;
             let sum2 = 0;
@@ -49,7 +68,12 @@ const generateSavingsData = (allDataStates, chartStates) => {
         }, [0, 0]);
 
     const savingsDataSource = newSavingsList.value.length > 0 ? newSavingsList.value
-        .filter(obj => (obj.date.split(" ")[0] >= savingsstartdate.value && obj.date.split(" ")[0] <= savingsenddate.value) || allsavingsdate.value)
+        .filter(obj => {
+            if (monthFilter.value) {
+                return parseInt(obj.date.split("-")[1]) === monthFilter.month;
+            };
+            return (obj.date.split(" ")[0] >= savingsstartdate.value && obj.date.split(" ")[0] <= savingsenddate.value) || allsavingsdate.value
+        })
         .reverse()
         .reduce((acc, cur, index) => {
 
@@ -75,7 +99,7 @@ const generateSavingsData = (allDataStates, chartStates) => {
             return acc;
         }, {}) : {};
     Object.values(savingsDataSource).forEach(array => array.sort((a, b) => new Date(a.date) - new Date(b.date)))
-
+    
     let dateList = [];
     let startingDate = new Date("2024-12-24");
     let endingDate = new Date();
@@ -84,7 +108,12 @@ const generateSavingsData = (allDataStates, chartStates) => {
         startingDate.setDate(startingDate.getDate() + 1);
     };
     const savingsData = {
-        labels: dateList.filter(date => (date >= savingsstartdate.value && date <= savingsenddate.value) || allsavingsdate.value),
+        labels: dateList.filter(date => {
+            if (monthFilter.value) {
+                return parseInt(date.split("-")[1]) === monthFilter.month;
+            };
+            return (date >= savingsstartdate.value && date <= savingsenddate.value) || allsavingsdate.value
+        }),
         datasets: [
             nilleboatsavings.value && {
                 label: "Nillebo AT verklig",

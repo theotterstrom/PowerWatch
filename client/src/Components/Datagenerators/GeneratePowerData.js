@@ -18,11 +18,30 @@ const generatePowerData = (allDataStates, dateStates, chartStates) => {
     const {
         startdate,
         enddate,
-        alldates
+        alldates,
+        month
     } = dateStates;
 
+    const monthFilterFunc = () => {
+        const monthArr = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        if(month.value !== "None"){
+            const monthName = month.value.split(" ")[1];
+            let monthNumber = monthArr.findIndex(month => month === monthName);
+            monthNumber++;
+            return { value: true, month: monthNumber}
+        };
+        return { value: false };
+    };
+
+    const monthFilter = monthFilterFunc();
+
     const readingsDataSource = readings.value.length > 0 ? readings.value
-        .filter(obj => (obj.date.split(" ")[0] >= startdate.value && obj.date.split(" ")[0] <= enddate.value) || alldates.value)
+        .filter(obj => {
+            if(monthFilter.value){
+                return parseInt(obj.date.split("-")[1]) === monthFilter.month;
+            };
+            return (obj.date.split(" ")[0] >= startdate.value && obj.date.split(" ")[0] <= enddate.value) || alldates.value
+        })
         .reduce((acc, cur, index) => {
             if (Object.values(acc)[0] && Object.values(acc)[0].some(obj => obj.date === cur.date.split(" ")[0])) {
                 return acc;
@@ -85,7 +104,12 @@ const generatePowerData = (allDataStates, dateStates, chartStates) => {
         return result;
     };
 
-    const tempDataSource = tranformTemp(temps.value.filter(obj => (obj.date.split(" ")[0] >= startdate.value && obj.date.split(" ")[0] <= enddate.value) || alldates.value));
+    const tempDataSource = tranformTemp(temps.value.filter(obj => {
+        if(monthFilter.value){
+            return parseInt(obj.date.split("-")[1]) === monthFilter.month;
+        };
+        return (obj.date.split(" ")[0] >= startdate.value && obj.date.split(" ")[0] <= enddate.value) || alldates.value
+    }));
 
     let dateList = [];
     let startingDate = new Date("2024-12-22");
@@ -96,7 +120,12 @@ const generatePowerData = (allDataStates, dateStates, chartStates) => {
     };
 
     const chartData = {
-        labels: dateList.filter(date => (date >= startdate.value && date <= enddate.value) || alldates.value),
+        labels: dateList.filter(date => {
+            if(monthFilter.value){
+                return parseInt(date.split("-")[1]) === monthFilter.month
+            };
+            return (date >= startdate.value && date <= enddate.value) || alldates.value
+        }),
         datasets: [
             nilleboAt.value && {
                 label: "Nillebo AT",

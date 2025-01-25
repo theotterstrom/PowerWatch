@@ -30,18 +30,19 @@ export default ({ initData }) => {
   const [startDate, setStartDate] = useState(oneWeekAgoDate.toISOString().split("T")[0]);
   const [endDate, setEndDate] = useState(new Date().toISOString().split("T")[0]);
   const [allDates, setAllDates] = useState(false);
+  const [month, setMonth] = useState("None");
 
   const [currentDate, setCurrentDate] = useState(null);
   const [dataValues, setCurrentDataValues] = useState([]);
   const [chartY, setChartY] = useState(null);
 
-  const chartStates = {
+  const chartStates = useMemo(() => ({
     currentdate: { value: currentDate, set: setCurrentDate },
     datavalues: { value: dataValues, set: setCurrentDataValues },
     charty: { value: chartY, set: setChartY }
-  };
+  }), [currentDate, dataValues, chartY]);
 
-  const allDataStates = {
+  const allDataStates = useMemo(() => ({
     nilleboAt: { value: nilleboAT, set: setnilleboAT },
     nillebovp: { value: nilleboVP, set: setnilleboVP },
     nillebovv: { value: nilleboVV, set: setnilleboVV },
@@ -54,13 +55,14 @@ export default ({ initData }) => {
     utetemp: { value: uteTemp, set: setuteTemp },
     readings,
     temps,
-  };
+  }), [nilleboAT, nilleboVP, nilleboVV, loveboAT, otteboData, poolData, poolData, nilleboTemp, otteboTemp, loveTemp, uteTemp, readings.value, temps.value]);
 
-  const dateStates = {
+  const dateStates = useMemo(() => ({
     startdate: { value: startDate, set: setStartDate },
     enddate: { value: endDate, set: setEndDate },
     alldates: { value: allDates, set: setAllDates },
-  };
+    month: { value: month, set: setMonth }
+  }), [startDate, endDate, allDates, month]);
 
   const { chartData, chartOptions } = generatePowerData(allDataStates, dateStates, chartStates);
 
