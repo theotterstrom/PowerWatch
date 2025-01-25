@@ -30,6 +30,7 @@ export default ({ initData }) => {
   const [savingStartDate, setSavingStartDate] = useState(oneWeekAgoDate.toISOString().split("T")[0]);
   const [savingEndDate, setSavingEndDate] = useState(new Date().toISOString().split("T")[0]);
   const [allsavingsDate, setAllSavingsDates] = useState(false);
+  const [savingsMonth, setSavingsMonth] = useState('None');
 
   const [currentDate, setCurrentDate] = useState(null);
   const [dataValues, setCurrentDataValues] = useState([]);
@@ -51,11 +52,13 @@ export default ({ initData }) => {
     savingsstartdate: { value: savingStartDate, set: setSavingStartDate },
     savingsenddate: { value: savingEndDate, set: setSavingEndDate },
     allsavingsdate: { value: allsavingsDate, set: setAllSavingsDates },
+    savingsmonth: { value: savingsMonth, set: setSavingsMonth },
     savings
-  }), [nilleboATSavings, nilleboVPSavings, nilleboVVSavings, loveboATSavings, loveboVVSavings, otteboSavings, garageSavings, poolSavings, savingStartDate, savingEndDate, allsavingsDate, savings.value]);
-  
+  }), [nilleboATSavings, nilleboVPSavings, nilleboVVSavings, loveboATSavings, loveboVVSavings, otteboSavings, garageSavings, poolSavings, savingStartDate, savingEndDate, allsavingsDate, savingsMonth, savings.value]);
 
+  
   const { savingsData, savingsOptions, totalSpendning, totalSaved } = generateSavingsData(allDataStates, chartStates);
+  
   return (
     <Container className="mt-4 container-fluid savings pt-5 pb-5 mainContainer">
       <Row className="justify-content-center">
