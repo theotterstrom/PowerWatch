@@ -32,13 +32,11 @@ const fetchReading = async (url, retries = 5) => {
 
 const readDevices = async () => {
     try{
-        const resultNames = [
-            'nilleboat', 'loveboat', 'nillebovp', 'ottebo', 'nillebovv', 
-            'pool', 'lovetemp', 'nilletemp', 'ottetemp', 'uttemp'
-            ];
+
+            const resultNames = Object.keys(deviceIds);
             
             let results = [];
-            const urls = resultNames.map(name => `${shellyurl}/device/status?id=${deviceIds[name]}&auth_key=${shellytoken}`);
+            const urls = Object.values(deviceIds).map(device => `${shellyurl}/device/status?id=${device.id}&auth_key=${shellytoken}`);
 
             for(const url of urls){
                 results.push(await fetchReading(url));
@@ -60,11 +58,11 @@ const readDevices = async () => {
                     temperatureObj[name] = tmp.value;
                     continue;
                 }
-                if(['nilleboat', 'loveboat'].includes(name)){
+                if(deviceIds[name].wattFormat === "watthour"){
                     consumptionObj[name] = (meterArr.reduce((sum, emeter) => sum + emeter.total, 0))/1000;
-                } else {
+                } else if (deviceIds[name].wattFormat === "milliwatthour"){
                     consumptionObj[name] = (meterArr.reduce((sum, emeter) => sum + emeter.total, 0))/60000;
-                }
+                };
             };
             await client.connect();
             const db = client.db(dbname);
@@ -83,5 +81,5 @@ const readDevices = async () => {
         await client.close();
     }
 };
-
-module.exports = readDevices;
+readDevices();
+//module.exports = readDevices;

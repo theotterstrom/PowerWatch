@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const deviceIds = require('../cron-scripts/data/deviceIds.json');
+const driveControl = require('../cron-scripts/data/drivecontrol.json');
 const router = express.Router();
 const fs = require('fs');
 const path = require('path');
@@ -28,6 +29,68 @@ module.exports = (db) => {
         } catch (e) {
             res.status(500).json({ error: "Failed to fetch schedueles" });
         }
+    });
+
+    router.get('/devices', async (req, res) => {
+        const fsDeviceIds = fs.readFileSync('./cron-scripts/data/deviceIds.json');
+        const parsedDeviceIds = JSON.parse(fsDeviceIds);
+        res.json(parsedDeviceIds);
+    });
+
+    router.post('/addnewdevice', async (req, res) => {
+        const authToken = req.cookies.authToken;
+        const verificationResult = verifyToken(authToken);
+
+        if (!verificationResult.authenticated) {
+            return res.status(verificationResult.status).json({ message: verificationResult.message });
+        };
+
+        const fsDeviceIds = fs.readFileSync('./cron-scripts/data/deviceIds.json');
+        const parsedDeviceIds = JSON.parse(fsDeviceIds);
+
+        const data = await requestDecrypter(req.body.data, db);
+        const parsedData = JSON.parse(data);
+        if(Object.values(parsedDeviceIds).some(value => value.id === parsedData.id)){
+            return res.status(409).json({ message: "Device id already exists"});
+        };
+        if(parsedDeviceIds[parsedData.deviceName]){
+            return res.status(409).json({ message: "Device already exists"});
+        };
+        parsedDeviceIds[parsedData.deviceName] = {
+            displayName: parsedData.displayName,
+            id: parsedData.id,
+            wattFormat: parsedData.wattFormat,
+            deviceType: parsedData.deviceType
+        };
+        
+        if(parsedData.deviceType === "Relay"){
+            const fsDriveControl = fs.readFileSync('./cron-scripts/data/deviceIds.json');
+            const parsedDriveControl = JSON.parse(fsDriveControl);
+            parsedDriveControl[`device-${parsedData.deviceName}`] = "0";
+            fs.writeFileSync('./cron-scripts/data/devicecontrol.json', JSON.stringify(parsedDriveControl));
+        };
+        fs.writeFileSync('./cron-scripts/data/deviceIds.json', JSON.stringify(parsedDeviceIds));
+        return res.status(200).json({ message: "Device added"});
+    });
+
+    router.post('/removedevice', async (req, res) => {
+        const authToken = req.cookies.authToken;
+        const verificationResult = verifyToken(authToken);
+
+        if (!verificationResult.authenticated) {
+            return res.status(verificationResult.status).json({ message: verificationResult.message });
+        };
+        const data = await requestDecrypter(req.body.data, db);
+        const parsedData = JSON.parse(data);
+        if(!Object.entries(deviceIds).find(([key, value]) => value.id === parsedData.id)){
+            return res.status(404).json({ message: "Device was not found"});
+        };
+        const fsDeviceIds = fs.readFileSync('./cron-scripts/data/deviceIds.json');
+        const parsedDeviceIds = JSON.parse(fsDeviceIds);
+        const deleteKey = Object.entries(parsedDeviceIds).find(([key, value]) => value.id === parsedData.id)[0];
+        delete parsedDeviceIds[deleteKey];
+        fs.writeFileSync('./cron-scripts/data/deviceIds.json', JSON.stringify(parsedDeviceIds));
+        return res.status(200).json({ message: "Device was deleted"})
     });
 
     router.get('/prices', async (req, res) => {
@@ -102,7 +165,7 @@ module.exports = (db) => {
                 'pool', 'lovetemp', 'nilletemp', 'ottetemp', 'uttemp'
             ];
             let results = [];
-            const urls = resultNames.map(name => `${shellyurl}/device/status?id=${deviceIds[name]}&auth_key=${shellytoken}`);
+            const urls = resultNames.map(name => `${shellyurl}/device/status?id=${deviceIds[name]?.id}&auth_key=${shellytoken}`);
             for (const url of urls) {
                 results.push(await fetchReading(url));
             };

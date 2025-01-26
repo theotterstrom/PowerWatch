@@ -50,5 +50,5 @@ const fetchPrices = async () => {
         await client.close();
     }
 };
-//fetchPrices()
-module.exports = fetchPrices;
+fetchPrices()
+//module.exports = fetchPrices;

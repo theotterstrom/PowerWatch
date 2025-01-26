@@ -18,17 +18,17 @@ const makeScheduele = async () => {
         console.log("Fetched prices of tomorrow");
         
         const sortedHours = tomorrowPrices.sort((a, b) => a.price - b.price);
-        const deviceSettings = Object.fromEntries(Object.entries(fileContents).filter(([key, value]) => parseFloat(value) <= 24));
+        const deviceSettings = Object.fromEntries(Object.entries(fileContents).filter(([key, value]) => key.startsWith("device-")));
         let newScheduele = {};
         for(const device of Object.keys(deviceSettings)){
             const necessaryHours = fileContents[device];
             const xCheapestHours = sortedHours.filter((obj, index) => {
-                if(obj.price > parseInt(fileContents.Maxpris*100) || necessaryHours - 1 < index ){
+                if(obj.price > parseInt(fileContents.Maxpris * 100) || necessaryHours - 1 < index ){
                     return false;
                 };
                 return true;
             });
-            newScheduele[device] = xCheapestHours.map(obj => obj.hour);
+            newScheduele[device.replace("device-", "")] = xCheapestHours.map(obj => obj.hour);
         };
         const schedueleDb = client.db(process.env.dbname);
         const schedueleCol = schedueleDb.collection("schedueles");
@@ -40,5 +40,5 @@ const makeScheduele = async () => {
         await client.close();
     }
 }; 
-
-module.exports = makeScheduele;
+makeScheduele();
+//module.exports = makeScheduele;

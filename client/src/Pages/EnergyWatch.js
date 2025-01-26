@@ -9,6 +9,7 @@ import Scheduele from "../Components/Children/Scheduele";
 import PowerHour from "../Components/Children/PowerHour";
 import apiUrl from '../Components/Helpers/APIWrapper'
 import LogOut from "../Components/Children/LogOut";
+import { Navigate } from 'react-router-dom';
 
 import {
   Chart as ChartJS,
@@ -73,8 +74,12 @@ const EnergyWatch = () => {
   const navbarToggle = () => setExpanded(!expanded);
 
   const showPage = (page) => {
-    setExpanded(false);
-    setCurrentPage(page);
+    if(page === "control"){
+      window.location.href = window.location.href.replace(/\/[^/]*$/, "") + "/controlpanel";
+    } else {
+      setExpanded(false);
+      setCurrentPage(page);
+    };
   };
 
   const showPowerHourFunc = () => {
@@ -222,6 +227,7 @@ const EnergyWatch = () => {
 
   window.addEventListener("touchend", () => {
     const toolTipContainer = document.getElementsByClassName("toolTipContainer")[0];
+    if(!toolTipContainer) return;
     setTimeout(() => {
       toolTipContainer.style.display = "none"
     }, 200)
@@ -264,6 +270,9 @@ const EnergyWatch = () => {
               <NavDropdown className="custom-dropdown" title="More" id="nav-dropdown" style={{ color: "white" }}>
                 <NavDropdown.Item style={{ backgroundColor: "#002266", color: "white" }} onClick={() => showPowerHourFunc()}>
                   Set power hours
+                </NavDropdown.Item>
+                <NavDropdown.Item style={{ backgroundColor: "#002266", color: "white" }} onClick={() => showPage("control")}>
+                  Control Panel
                 </NavDropdown.Item>
                 <NavDropdown.Item className="mt-2" style={{ backgroundColor: "#002266", color: "white" }} onClick={() => handleLogout()}>
                   Log Out

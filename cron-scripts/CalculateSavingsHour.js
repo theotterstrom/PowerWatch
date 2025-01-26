@@ -31,21 +31,11 @@ const newCalculateSavings = async () => {
             schedueles = await schedueleCollection.findOne({ date: yesterDaysDate });
             databaseDate = yesterDaysDate;
         } else {
-            [{ values: hour1 }, { values: hour2 }] = [todaysConsumption.find(obj => obj.date.endsWith(currentHour.toString())), todaysConsumption.find(obj => obj.date.endsWith((currentHour - 1).toString()))];
+            hour1 = todaysConsumption.find(obj => obj.date.endsWith(currentHour.toString()))?.values;
+            hour2 = todaysConsumption.find(obj => obj.date.endsWith((currentHour - 1).toString()))?.values;
             dayPrices = await priceCollection.findOne({ date: todaysDate });
             schedueles = await schedueleCollection.findOne({ date: todaysDate });
             databaseDate = todaysDate;
-        };
-
-        const nameMap = {
-            NilleATtim: 'nilleboat',
-            NilleVPtim: 'nillebovp',
-            NilleVVtim: 'nillebovv',
-            LoveATtim: 'loveboat',
-            LoveVVtim: 'lovebovv',
-            Ottebo: 'ottebo',
-            Garage: 'garage',
-            PoolStart: 'pool'
         };
         
         let priceHour = currentHour === '00' ? 23 : parseInt(currentHour) - 1;
@@ -53,13 +43,9 @@ const newCalculateSavings = async () => {
 
         let savingsObject = {}
         for(const [name, scheduele] of Object.entries(schedueles.values)){
-            const deviceName = Object.entries(nameMap).find(obj => obj[0] === name)?.[1];
-            if(!deviceName){
-                continue;
-            };
-            const realCost = (hour1[deviceName] - hour2[deviceName]) * currentPrice;
-            const averageCost = (hour1[deviceName] - hour2[deviceName]) * dayPrices.average;
-            savingsObject[deviceName] = {
+            const realCost = (hour1[name] - hour2[name]) * currentPrice;
+            const averageCost = (hour1[name] - hour2[name]) * dayPrices.average;
+            savingsObject[name] = {
                 realCost:  isNaN(realCost) || !scheduele.includes(priceHour) ? 0 : realCost,
                 averageCost:  isNaN(averageCost) || !scheduele.includes(priceHour) ? 0 : averageCost
             };
@@ -78,5 +64,5 @@ const newCalculateSavings = async () => {
     }
 };
 
-//newCalculateSavings()
-module.exports = newCalculateSavings;
+newCalculateSavings()
+//module.exports = newCalculateSavings;

@@ -43,13 +43,10 @@ const controlDevices = async () => {
         const todayTimeDate = new Date().toLocaleString("sv-SE", { timeZone: "Europe/Stockholm" });
         const currentHour = new Date(todayTimeDate).getHours()
         for(const device of Object.keys(scheduele)){
-            if(!deviceIds[device] || deviceIds[device] === ""){
-                continue;
-            };
             await switchRelays({
                 url: 'https://shelly-115-eu.shelly.cloud/device/relay/control', 
                 turn: scheduele[device].includes(currentHour) ? 'on' : 'off', 
-                id: deviceIds[device]
+                id: deviceIds[device]?.id
             });
             await sleep(2000)
         };
