@@ -1,1 +1,62 @@
-{"nilleboat":{"id":"34945475764d","wattFormat":"watthour","displayName":"Nillebo Ackumulatortank"},"nillebovp":{"id":"485519cb191d","wattFormat":"milliwatthour","displayName":"Nillebo Värmepump"},"nillebovv":{"id":"485519cb0e7d","wattFormat":"milliwatthour","displayName":"Nillebo Varmvatten"},"loveboat":{"id":"349454747f84","wattFormat":"watthour","displayName":"Lovebo Ackumulatortank"},"ottebo":{"id":"c15b8b","wattFormat":"milliwatthour","displayName":"Ottebo"},"pool":{"id":"28828b","wattFormat":"milliwatthour","displayName":"Pool"},"nilletemp":{"id":"caa1c5","wattFormat":null,"displayName":"Nillebo Temperatur"},"ottetemp":{"id":"702152","wattFormat":null,"displayName":"Ottebo Temperatur"},"lovetemp":{"id":"7071a0","wattFormat":null,"displayName":"Lovebo Temperatur"},"uttemp":{"id":"70791e","wattFormat":null,"displayName":"Utetemperatur"}}
+{
+    "nilleboat": {
+        "id": "34945475764d",
+        "wattFormat": "watthour",
+        "displayName": "Nillebo Ackumulatortank",
+        "deviceType": "Relay"
+    },
+    "nillebovp": {
+        "id": "485519cb191d",
+        "wattFormat": "milliwatthour",
+        "displayName": "Nillebo Värmepump",
+        "deviceType": "Relay"
+    },
+    "nillebovv": {
+        "id": "485519cb0e7d",
+        "wattFormat": "milliwatthour",
+        "displayName": "Nillebo Varmvatten",
+        "deviceType": "Relay"
+    },
+    "loveboat": {
+        "id": "349454747f84",
+        "wattFormat": "watthour",
+        "displayName": "Lovebo Ackumulatortank",
+        "deviceType": "Relay"
+    },
+    "ottebo": {
+        "id": "c15b8b",
+        "wattFormat": "milliwatthour",
+        "displayName": "Ottebo",
+        "deviceType": "Relay"
+    },
+    "pool": {
+        "id": "28828b",
+        "wattFormat": "milliwatthour",
+        "displayName": "Pool",
+        "deviceType": "Relay"
+    },
+    "nilletemp": {
+        "id": "caa1c5",
+        "wattFormat": null,
+        "displayName": "Nillebo Temperatur",
+        "deviceType": "Thermometer"
+    },
+    "ottetemp": {
+        "id": "702152",
+        "wattFormat": null,
+        "displayName": "Ottebo Temperatur",
+        "deviceType": "Thermometer"
+    },
+    "lovetemp": {
+        "id": "7071a0",
+        "wattFormat": null,
+        "displayName": "Lovebo Temperatur",
+        "deviceType": "Thermometer"
+    },
+    "uttemp": {
+        "id": "70791e",
+        "wattFormat": null,
+        "displayName": "Utetemperatur",
+        "deviceType": "Thermometer"
+    }
+}

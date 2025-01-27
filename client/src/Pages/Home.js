@@ -15,8 +15,9 @@ const Home = () => {
   const [login1, setLogin1] = useState('');
   const [login2, setLogin2] = useState('');
 
-  const [create1, setCreate1] = useState('')
-  const [create2, setCreate2] = useState('')
+  const [create1, setCreate1] = useState('');
+  const [create2, setCreate2] = useState('');
+  const [create3, setCreate3] = useState('');
 
   const navigate = useNavigate();
 
@@ -38,7 +39,8 @@ const Home = () => {
     event.preventDefault();
     const response = await requestMaker({
       create1,
-      create2
+      create2,
+      create3
     }, 'createuser', 'post');
     alert(response.response?.data?.message || response?.data?.message)
   };
@@ -109,6 +111,10 @@ const Home = () => {
                   <Form.Group controlId="formBasicEmailReg">
                     <Form.Label>Email address</Form.Label>
                     <Form.Control type="email" placeholder="Enter email" required onChange={(e) => setCreate1(e.target.value)} />
+                  </Form.Group>
+                  <Form.Group controlId="formBasicEmailReg">
+                    <Form.Label>Customer Id</Form.Label>
+                    <Form.Control type="number" placeholder="Enter customer-id" required onChange={(e) => setCreate3(e.target.value)} />
                   </Form.Group>
 
                   <Form.Group controlId="formBasicPasswordReg">
