@@ -40,5 +40,5 @@ const makeScheduele = async (customer) => {
         await client.close();
     }
 }; 
-makeScheduele();
-//module.exports = makeScheduele;
+
+module.exports = makeScheduele;

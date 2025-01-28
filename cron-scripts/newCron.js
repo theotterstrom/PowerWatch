@@ -1,3 +1,10 @@
+require("dotenv").config();
+const cron = require('node-cron');
+const fetchPrices = require('./FetchPrices');
+const schedueleMaker = require('./SchedueleMaker');
+const readDevices = require('./DeviceReading');
+const calculateSavings = require('./CalculateSavingsHour');
+const controlDevices = require('./Control');
 const { MongoClient } = require('mongodb');
 const client = new MongoClient(process.env.mongouri);
 

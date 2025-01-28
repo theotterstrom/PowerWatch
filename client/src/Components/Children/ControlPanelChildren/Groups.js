@@ -38,24 +38,24 @@ export default ({ initData }) => {
                     </h5>
                 </Col>
             </Row>
-            
+            {window.innerWidth <= 768 ? <>
                 {Object.entries(groups).map(([groupName, members], index) =>
-                    window.innerWidth <= 768 ? <>
-                      <Col key={index} xs={12} style={{ border: "1px solid white", borderRadius: "5px" }} className="p-3 pt-2 mt-4">
+                    <Col key={index} xs={12} style={{ border: "1px solid white", borderRadius: "5px" }} className="p-3 pt-2 mt-4">
                         <div className="mb-3"><b>{groupName}</b></div>
                         {members.map((member, index) => <p className="p-0 m-0" key={index}>&#183;{member}</p>)}
                     </Col>
-                    </> : <>
-                    <Row className="p-3">
-                    <Col key={index} xl={6} style={{ border: "1px solid white", borderRadius: "5px" }} className="p-3 pt-2">
-                        <div className="mb-3"><b>{groupName}</b></div>
-                        {members.map((member, index) => <p className="p-0 m-0" key={index}>&#183;{member}</p>)}
-                    </Col>
-                    </Row>
-                    </>
-          
                 )}
-            
+            </> : <>
+                <Row className="p-3 justify-content-between">
+                    {Object.entries(groups).map(([groupName, members], index) =>
+                        <Col key={index} xl={5} style={{ border: "1px solid white", borderRadius: "5px" }} className="p-3 pt-2 m-2">
+                            <div className="mb-3"><b>{groupName}</b></div>
+                            {members.map((member, index) => <p className="p-0 m-0" key={index}>&#183;{member}</p>)}
+                        </Col>
+                    )}
+                </Row>
+            </>}
+
         </Container>
     </>)
 };

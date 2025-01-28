@@ -63,5 +63,4 @@ const newCalculateSavings = async (customer) => {
     }
 };
 
-newCalculateSavings()
-//module.exports = newCalculateSavings;
+module.exports = newCalculateSavings;

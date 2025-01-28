@@ -32,16 +32,18 @@ const fetchPrices = async (customer) => {
     try {
         const spotPris = await fetchReading('https://www.elmarknad.se/api/spotprice/current')
         const powerAreaProp = () => {
-            if (customer.powerArea === "1") {
+            if (customer.powerArea.replace("Power Area ", "") === "1") {
                 return "ForecastAreaOne"
-            } else if (customer.powerArea === "1") {
+            } else if (customer.powerArea.replace("Power Area ", "") === "2") {
                 return "ForecastAreaTwo"
-            } else if (customer.powerArea === "1") {
+            } else if (customer.powerArea.replace("Power Area ", "") === "3") {
                 return "ForecastAreaThree"
-            } else if (customer.powerArea === "1") {
+            } else if (customer.powerArea.replace("Power Area ", "") === "4") {
                 return "ForecastAreaFour"
             }
         };
+        console.log(powerAreaProp())
+        console.log(customer.powerArea)
         const spotPrisObj = spotPris.data.map(obj => ({ hour: new Date(obj.CreatedDate).getHours(), price: obj[powerAreaProp()] }));
         console.log("Fetched prices")
         await client.connect();
@@ -61,5 +63,5 @@ const fetchPrices = async (customer) => {
         await client.close();
     }
 };
-fetchPrices()
-//module.exports = fetchPrices;
+
+module.exports = fetchPrices;

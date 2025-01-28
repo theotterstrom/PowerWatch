@@ -1,6 +1,5 @@
 require('dotenv').config();
 const axios = require('axios');
-const deviceIds = require('./data/deviceIds.json');
 const { MongoClient } = require('mongodb');
 const client = new MongoClient(process.env.mongouri);
 
@@ -47,8 +46,8 @@ const readDevices = async (customer) => {
         };
         console.log("Fetched all device statuses")
 
-        const resultObj = resultNames.reduce((acc, name, index) => {
-            acc[name] = results[index];
+        const resultObj = devices.reduce((acc, cur, index) => {
+            acc[cur.deviceName] = results[index];
             return acc;
         }, {});
 
@@ -82,5 +81,5 @@ const readDevices = async (customer) => {
         await client.close();
     }
 };
-readDevices();
-//module.exports = readDevices;
+
+module.exports = readDevices;

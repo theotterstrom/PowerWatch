@@ -88,24 +88,28 @@ const ControlPanel = () => {
 
   return (<>
     {/* Header */}
-    <Navbar
-      style={{
-        backgroundColor: "rgb(0, 34, 102)",
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100vw",
-        zIndex: 100,
-      }}
-      variant="dark"
-      expand="lg"
-      expanded={expanded}
-      onToggle={navbarToggle}
-    >
+      <Navbar
+        style={{
+          backgroundColor: "#004786",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "99.1vw",
+          zIndex: 100,
+          borderBottomLeftRadius: "10px",
+          borderBottomRightRadius: "10px",
+        }}
+        variant="dark"
+        expand="lg"
+        expanded={expanded}
+        onToggle={navbarToggle}
+      >
       <Container>
         <Navbar.Brand onClick={() => showPage("power")} style={{ cursor: "pointer" }}>
-          <img style={{ height: "40px" }} src="/images/new1.png" alt="EnergyWatch Logo" />
-          &nbsp;EnergyWatch
+        <div className="titleHolder">
+            <img style={{ height: "40px" }} src="/images/new1.png" alt="EnergyWatch Logo" />
+            &nbsp;powerwatch
+            </div>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbar-nav" className="navBarButton" />
         <Navbar.Collapse id="navbar-nav" className="ms-lg-5">
@@ -120,13 +124,13 @@ const ControlPanel = () => {
               Prices & Schedules
             </Nav.Link>
             <NavDropdown className="custom-dropdown" title="More" id="nav-dropdown" style={{ color: "white" }}>
-              <NavDropdown.Item style={{ backgroundColor: "#002266", color: "white" }} onClick={() => showPowerHourFunc()}>
+              <NavDropdown.Item style={{ backgroundColor: "#004786", color: "white" }} onClick={() => showPowerHourFunc()}>
                 Set power hours
               </NavDropdown.Item>
-              <NavDropdown.Item style={{ backgroundColor: "#002266", color: "white" }} onClick={() => showPage("control")}>
+              <NavDropdown.Item style={{ backgroundColor: "#004786", color: "white" }} onClick={() => showPage("control")}>
                 Control Panel
               </NavDropdown.Item>
-              <NavDropdown.Item className="mt-2" style={{ backgroundColor: "#002266", color: "white" }} onClick={() => handleLogout()}>
+              <NavDropdown.Item className="mt-2" style={{ backgroundColor: "#004786", color: "white" }} onClick={() => handleLogout()}>
                 Log Out
               </NavDropdown.Item>
             </NavDropdown>
