@@ -112,9 +112,9 @@ const Home = () => {
                     <Form.Label>Email address</Form.Label>
                     <Form.Control type="email" placeholder="Enter email" required onChange={(e) => setCreate1(e.target.value)} />
                   </Form.Group>
-                  <Form.Group controlId="formBasicEmailReg">
+                  <Form.Group controlId="formCustomerIdReg">
                     <Form.Label>Customer Id</Form.Label>
-                    <Form.Control type="number" placeholder="Enter customer-id" required onChange={(e) => setCreate3(e.target.value)} />
+                    <Form.Control type="string" placeholder="Enter customer id" required onChange={(e) => setCreate3(e.target.value)} />
                   </Form.Group>
 
                   <Form.Group controlId="formBasicPasswordReg">

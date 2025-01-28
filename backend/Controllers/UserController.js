@@ -21,10 +21,10 @@ const login = async (data, db) => {
         return { status: 400, message: 'Invalid credentials', token: null };
     };
     const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET, { expiresIn: '7d' });
-    return { status: 200, message: 'Login successful', token };
+    return { status: 200, message: 'Login successful', token, user };
 };
 
-const create = async (data, db) => {
+const create = async (data, db, customer) => {
     try {
         const collection = db.collection("users");
         const existingUser = await collection.findOne({ email: data.create1 });
@@ -35,7 +35,8 @@ const create = async (data, db) => {
         const newUser = await collection.insertOne({
             email: data.create1,
             password: hashPassword(data.create2, newSalt),
-            salt: newSalt
+            salt: newSalt,
+            customerId: customer.customerId,
         });
         return { status: 200, message: 'User created successfully!' }
     } catch (e) {

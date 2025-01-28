@@ -7,7 +7,6 @@ module.exports = async (data, path, method, headers = {}) => {
         if (method === 'get') {
             const response = await axios[method](`${apiUrl}/${path}`, {
                 headers: headers,
-            }, {
                 withCredentials: true
             });
             return response;

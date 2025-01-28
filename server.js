@@ -15,8 +15,11 @@ const initializeDatabase = async () => {
   try {
     const client = new MongoClient(mongouri);
     await client.connect();
-    console.log("Connected to MongoDB");
-    return client.db(dbname);
+    const masterDb = client.db("customers");
+    const customerCollection = masterDb.collection("customerDbs");
+    const customerDbNames = await customerCollection.find({}).toArray();
+    let customerDbs = customerDbNames.map(customerDb => client.db(customerDb.name));
+    return { customerDbs, masterDb };
   } catch (err) {
     console.error("Failed to connect to MongoDB:", err);
     process.exit(1);
@@ -44,8 +47,9 @@ const httpsOptions = process.env.NODE_ENV === "development" ? {
 
 let server;
 
-initializeDatabase().then((db) => {
-  app.use('/api', routes(db));
+initializeDatabase().then((dbs) => {
+
+  app.use('/api', routes(dbs));
   app.use(express.static(path.join(__dirname, 'client/build')));
   app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'client/public', 'index.html'));

@@ -4,15 +4,66 @@ const jwt = require('jsonwebtoken');
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-const databaseFetch = async (collectionName, database, offset = 0, limit = 400) => {
+const databaseFetch = async (collectionName, masterDb, customerCookie, client, offset = 0, limit = 400) => {
     try {
-        const collection = database.collection(collectionName);
+        const customerCollection = masterDb.collection("customerDbs");
+        const databaseObject = await customerCollection.findOne({ customerCookie: customerCookie });
+        const customerDb = client.db(databaseObject.name);
+        const collection = customerDb.collection(collectionName);
         const results = await collection
             .find({})
             .skip(parseInt(offset))
             .limit(parseInt(limit))
             .toArray();
-        return results;
+        return results.length === 1 ? results[0] : results;
+    } catch (err) {
+        console.error(`Error fetching data from ${collectionName}:`, err);
+        throw err;
+    }
+};
+
+const databaseReplace = async (collectionName, masterDb, customerCookie, client, object) => {
+    try {
+        const customerCollection = masterDb.collection("customerDbs");
+        const databaseObject = await customerCollection.findOne({ customerCookie: customerCookie });
+        const customerDb = client.db(databaseObject.name);
+        const collection = customerDb.collection(collectionName);
+        const replaceOne = await collection.replaceOne(   
+            { _id: object["_id"] },
+            object
+        );
+        
+        return 'ok';
+    } catch (err) {
+        console.error(`Error fetching data from ${collectionName}:`, err);
+        throw err;
+    }
+};
+
+const databaseInsert = async (collectionName, masterDb, customerCookie, client, object) => {
+    try {
+        const customerCollection = masterDb.collection("customerDbs");
+        const databaseObject = await customerCollection.findOne({ customerCookie: customerCookie });
+        const customerDb = client.db(databaseObject.name);
+        const collection = customerDb.collection(collectionName);
+        const insertOne = await collection.insertOne(object);
+        return 'ok';
+    } catch (err) {
+        console.error(`Error fetching data from ${collectionName}:`, err);
+        throw err;
+    }
+};
+
+const databaseRemove = async (collectionName, masterDb, customerCookie, client, id) => {
+    try {
+        const customerCollection = masterDb.collection("customerDbs");
+        const databaseObject = await customerCollection.findOne({ customerCookie: customerCookie });
+        const customerDb = client.db(databaseObject.name);
+        const collection = customerDb.collection(collectionName);
+        const deleteOne = await collection.deleteOne({
+            _id: id
+        });
+        return 'ok';
     } catch (err) {
         console.error(`Error fetching data from ${collectionName}:`, err);
         throw err;
@@ -56,21 +107,11 @@ const authMiddleware = (req, res, next) => {
     };
 };
 
-const verifyToken = (token) => {
-    if (!token) {
-        return { authenticated: false, status: 401, message: "No token provided" };
-    }
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        return { authenticated: true, decoded };
-    } catch (error) {
-        return { authenticated: false, status: 401, message: "Unauthorized" };
-    }
-};
-
 module.exports = {
-    verifyToken,
     authMiddleware,
     fetchReading,
-    databaseFetch
+    databaseFetch,
+    databaseReplace,
+    databaseInsert,
+    databaseRemove
 };

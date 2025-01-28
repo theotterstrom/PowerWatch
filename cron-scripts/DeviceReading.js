@@ -1,6 +1,5 @@
 require('dotenv').config();
 const axios = require('axios');
-const { shellytoken, shellyurl, dbname } = process.env;
 const deviceIds = require('./data/deviceIds.json');
 const { MongoClient } = require('mongodb');
 const client = new MongoClient(process.env.mongouri);
@@ -30,52 +29,54 @@ const fetchReading = async (url, retries = 5) => {
     };
 };
 
-const readDevices = async () => {
-    try{
+const readDevices = async (customer) => {
+    try {
+        await client.connect();
+        const db = client.db(customer.name);
+        const powerCollection = db.collection("power_readings");
+        const tempCollection = db.collection("temp_readings");
+        const deviceCollection = db.collection("devices");
+        const devices = await deviceCollection.find({}).toArray();
+        
+        const urls = devices.map(device => `${customer.shellyUrl}/device/status?id=${device.id}&auth_key=${customer.shellyToken}`);
 
-            const resultNames = Object.keys(deviceIds);
-            
-            let results = [];
-            const urls = Object.values(deviceIds).map(device => `${shellyurl}/device/status?id=${device.id}&auth_key=${shellytoken}`);
+        let results = [];
+        for (const url of urls) {
+            results.push(await fetchReading(url));
+            await sleep(2000);
+        };
+        console.log("Fetched all device statuses")
 
-            for(const url of urls){
-                results.push(await fetchReading(url));
-                await sleep(2000);
+        const resultObj = resultNames.reduce((acc, name, index) => {
+            acc[name] = results[index];
+            return acc;
+        }, {});
+
+        let consumptionObj = {};
+        let temperatureObj = {};
+        for (const [name, result] of Object.entries(resultObj)) {
+            const { emeters, meters, tmp } = result.data.data.device_status;
+            let meterArr = emeters ?? meters;
+            if (!meterArr && tmp) {
+                temperatureObj[name] = tmp.value;
+                continue;
             };
-            console.log("Fetched all device statuses")
-
-            const resultObj = resultNames.reduce((acc, name, index) => {
-                acc[name] = results[index];
-                return acc;
-            }, {});
-
-            let consumptionObj = {};
-            let temperatureObj = {};
-            for (const [name, result] of Object.entries(resultObj)) {
-                const { emeters, meters, tmp } = result.data.data.device_status;
-                let meterArr = emeters ?? meters;
-                if(!meterArr && tmp){
-                    temperatureObj[name] = tmp.value;
-                    continue;
-                }
-                if(deviceIds[name].wattFormat === "watthour"){
-                    consumptionObj[name] = (meterArr.reduce((sum, emeter) => sum + emeter.total, 0))/1000;
-                } else if (deviceIds[name].wattFormat === "milliwatthour"){
-                    consumptionObj[name] = (meterArr.reduce((sum, emeter) => sum + emeter.total, 0))/60000;
-                };
+            const currentDevice = devices.find(device => device.deviceName === name);
+            if (currentDevice.wattFormat.toLowerCase() === "watthour") {
+                consumptionObj[name] = (meterArr.reduce((sum, emeter) => sum + emeter.total, 0)) / 1000;
+            } else if (currentDevice.wattFormat.toLowerCase() === "milliwatthour") {
+                consumptionObj[name] = (meterArr.reduce((sum, emeter) => sum + emeter.total, 0)) / 60000;
             };
-            await client.connect();
-            const db = client.db(dbname);
-            const powerCollection = db.collection("power_readings");
-            const tempCollection = db.collection("temp_readings");
-            const currentDateTime = new Date().toLocaleDateString("se-SV", { timeZone: "Europe/Stockholm" });
-            const hour = new Date().toLocaleTimeString("se-SV", { timeZone: "Europe/Stockholm" }).split(":")[0];
-            const [powerResult, tempResult] = await Promise.all([
-                powerCollection.insertOne({ date: `${currentDateTime} ${hour}`, values: consumptionObj }),
-                tempCollection.insertOne({ date: `${currentDateTime} ${hour}`, value: temperatureObj })
-            ]);
-            console.log("Added device statuses to database")
-    } catch(e){
+        };
+
+        const currentDateTime = new Date().toLocaleDateString("se-SV", { timeZone: "Europe/Stockholm" });
+        const hour = new Date().toLocaleTimeString("se-SV", { timeZone: "Europe/Stockholm" }).split(":")[0];
+        const [powerResult, tempResult] = await Promise.all([
+            powerCollection.insertOne({ date: `${currentDateTime} ${hour}`, values: consumptionObj }),
+            tempCollection.insertOne({ date: `${currentDateTime} ${hour}`, value: temperatureObj })
+        ]);
+        console.log("Added device statuses to database")
+    } catch (e) {
         console.log(e);
     } finally {
         await client.close();

@@ -1,19 +1,5 @@
 const options = require('./ChartOptions');
-const generatePowerData = (allDataStates, dateStates, chartStates) => {
-    const {
-        nilleboAt,
-        nillebovp,
-        nillebovv,
-        loveboat,
-        readings,
-        ottebo,
-        pool,
-        temps,
-        nillebotemp,
-        ottebotemp,
-        lovetemp,
-        utetemp,
-    } = allDataStates;
+const generatePowerData = (allDataStates, readings, temps, dateStates, chartStates, devices) => {
 
     const {
         startdate,
@@ -79,7 +65,7 @@ const generatePowerData = (allDataStates, dateStates, chartStates) => {
             return acc;
         }, {}) : {};
     Object.values(readingsDataSource).forEach(array => array.sort((a, b) => new Date(a.date) - new Date(b.date)))
-
+      
     const tranformTemp = data => {
         const result = {};
         data.forEach(item => {
@@ -123,6 +109,25 @@ const generatePowerData = (allDataStates, dateStates, chartStates) => {
         startingDate.setDate(startingDate.getDate() + 1);
     };
 
+    const borderColors = [
+        "red", "blue", "green", "grey", "purple", "brown", "orange", "cyan",
+        "magenta", "lime", "gold", "teal", "navy", "maroon", "aqua", "coral",
+        "orchid", "khaki", "indigo", "violet", "crimson", "turquoise", "peru",
+        "salmon", "darkorange", "darkgreen", "darkblue", "darkred", "darkmagenta",
+        "lightgreen"
+    ];
+
+    const chartDataSets = Object.entries(allDataStates).map(([deviceName, state], index) => {
+        const currentDevice = devices.value.find(obj => obj.deviceName === deviceName);
+        const [dataSource, unit] = currentDevice.deviceType === "Relay" ? [readingsDataSource, "value"] : [tempDataSource, "avgTemp"];
+        return state.value && {
+            label: currentDevice.displayName,
+            data: dataSource[deviceName].map((d) => d[unit].toFixed(2)),
+            borderColor: borderColors[index],
+            fill: false,
+            tension: 0.4
+        }
+    });
     const chartData = {
         labels: dateList.filter(date => {
             if(alldates.value){
@@ -132,78 +137,7 @@ const generatePowerData = (allDataStates, dateStates, chartStates) => {
             };
             return (date >= startdate.value && date <= enddate.value);
         }),
-        datasets: [
-            nilleboAt.value && {
-                label: "Nillebo AT",
-                data: readingsDataSource["nilleboat"].map((d) => d.value.toFixed(2)),
-                borderColor: "red",
-                fill: false,
-                tension: 0.4,
-            },
-            nillebovp.value && {
-                label: "Nillebo VP",
-                data: readingsDataSource["nillebovp"].map((d) => d.value.toFixed(2)),
-                borderColor: "blue",
-                fill: false,
-                tension: 0.4,
-            },
-            nillebovv.value && {
-                label: "Nillebo VV",
-                data: readingsDataSource["nillebovv"].map((d) => d.value.toFixed(2)),
-                borderColor: "green",
-                fill: false,
-                tension: 0.4,
-            },
-            loveboat.value && {
-                label: "Lovebo AT",
-                data: readingsDataSource["loveboat"].map((d) => d.value.toFixed(2)),
-                borderColor: "grey",
-                fill: false,
-                tension: 0.4,
-            },
-            ottebo.value && {
-                label: "Ottebo",
-                data: readingsDataSource["ottebo"].map((d) => d.value.toFixed(2)),
-                borderColor: "purple",
-                fill: false,
-                tension: 0.4,
-            },
-            pool.value && {
-                label: "Pool",
-                data: readingsDataSource["pool"].map((d) => d.value.toFixed(2)),
-                borderColor: "brown",
-                fill: false,
-                tension: 0.4,
-            },
-            nillebotemp.value && {
-                label: "Temp Nillebo",
-                data: tempDataSource["nilletemp"].map((d) => d.avgTemp.toFixed(2)),
-                borderColor: "orange",
-                fill: false,
-                tension: 0.4,
-            },
-            ottebotemp.value && {
-                label: "Temp Ottebo",
-                data: tempDataSource["ottetemp"].map((d) => d.avgTemp.toFixed(2)),
-                borderColor: "cyan",
-                fill: false,
-                tension: 0.4,
-            },
-            lovetemp.value && {
-                label: "Temp Lovebo",
-                data: tempDataSource["lovetemp"].map((d) => d.avgTemp.toFixed(2)),
-                borderColor: "magenta",
-                fill: false,
-                tension: 0.4,
-            },
-            utetemp.value && {
-                label: "Temp Utomhus",
-                data: tempDataSource["uttemp"].map((d) => d.avgTemp.toFixed(2)),
-                borderColor: "lime",
-                fill: false,
-                tension: 0.4,
-            },
-        ].filter(Boolean),
+        datasets: chartDataSets.filter(Boolean),
     };
 
     return {

@@ -1,6 +1,7 @@
 import { Container, Row, Col, Form, Dropdown } from "react-bootstrap";
 import React, { useState } from "react";
-export default ({ allDataStates, dateStates }) => {
+export default ({ initData }) => {
+    const { allDataStates, dateStates, devices } = initData;
 
     const {
         alldates,
@@ -11,19 +12,6 @@ export default ({ allDataStates, dateStates }) => {
 
     const [dropdownText, setDropdownText] = useState("Alla");
     const [monthText, setMonthText] = useState(month.value);
-
-    const {
-        nilleboAt,
-        nillebovp,
-        nillebovv,
-        loveboat,
-        ottebo,
-        pool,
-        nillebotemp,
-        ottebotemp,
-        lovetemp,
-        utetemp
-    } = allDataStates;
 
     const setStartDateFunc = date => {
         if (date > new Date().toISOString()) {
@@ -39,43 +27,21 @@ export default ({ allDataStates, dateStates }) => {
             enddate.set(date);
         }
     };
-    const handleSelect = (eventKey) => {
+
+    const handleSelect = (eventKey, groups) => {
         setDropdownText(eventKey)
-        let filterList = {
-            nilleboAt,
-            nillebovp,
-            nillebovv,
-            loveboat,
-            ottebo,
-            pool,
-            nillebotemp,
-            ottebotemp,
-            lovebotemp: lovetemp,
-            utetemp
-        };
-
-        const loopFunction = (housenames) => {
-            for (const [key, value] of Object.entries(filterList)) {
-                if (housenames.some(word => key.toLowerCase().includes(word))) {
-                    filterList[key].set(true);
-                } else {
-                    filterList[key].set(false);
-                }
+        const rightGroup = groups[eventKey];
+        for (const [deviceName, state] of Object.entries(allDataStates)) {
+            if (eventKey === "Alla") {
+                state.set(true);
+                continue;
+            };
+            const displayName = devices.value.find(obj => obj.deviceName === deviceName).displayName;
+            if (rightGroup.includes(displayName)) {
+                state.set(true)
+            } else {
+                state.set(false)
             }
-        };
-
-        if (eventKey === "Nillebo") {
-            loopFunction(["nillebo", "utetemp"]);
-        } else if (eventKey === "Ottebo") {
-            loopFunction(["ottebo", "utetemp"]);
-        } else if (eventKey === "Lovebo") {
-            loopFunction(["lovebo", "utetemp"]);
-        } else if (eventKey === "Övrigt") {
-            loopFunction(["garage", "pool", "utetemp"]);
-        } else if (eventKey === "Alla") {
-            loopFunction(Object.entries(filterList).map(([key, value]) => key.toLowerCase()));
-        } else if (eventKey === "Temperatur") {
-            loopFunction(["temp"])
         };
     };
 
@@ -107,6 +73,52 @@ export default ({ allDataStates, dateStates }) => {
         );
         return months;
     };
+
+    const splitFormChecks = () => {
+        const firstHalf = devices.value.filter((obj, index) => {
+            if (index > devices.value.length / 2 - 1) {
+                return false
+            }
+            return true;
+        });
+        const secondHalf = devices.value.filter((obj, index) => {
+            if (index > devices.value.length / 2 - 1) {
+                return true
+            }
+            return false;
+        });
+        const firstHalfForms = firstHalf.map((obj, index) =>
+            <Form.Check
+                type="checkbox"
+                key={index}
+                label={obj.displayName}
+                checked={allDataStates[obj.deviceName].value}
+                onChange={() => allDataStates[obj.deviceName].set(!allDataStates[obj.deviceName].value)}
+            />);
+        
+        const secondHalfForms = secondHalf.map((obj, index) =>
+            <Form.Check
+                type="checkbox"
+                key={index + 20}
+                label={obj.displayName}
+                checked={allDataStates[obj.deviceName].value}
+                onChange={() => allDataStates[obj.deviceName].set(!allDataStates[obj.deviceName].value)}
+            />)
+        return [firstHalfForms, secondHalfForms];
+    };
+
+    const groups = devices.value.reduce((acc, cur) => {
+        if (cur.group) {
+            for (const group of cur.group) {
+                if (acc[group]) {
+                    acc[group].push(cur.displayName)
+                } else {
+                    acc[group] = [cur.displayName]
+                }
+            }
+        }
+        return acc;
+    }, {});
 
     return (
         <>
@@ -144,79 +156,36 @@ export default ({ allDataStates, dateStates }) => {
                     <Row className="mt-3">
                         <Col xs={6}>
                             <div className="d-flex m-0 p-0">
-                                <Dropdown onSelect={handleSelect}>
+                                <Dropdown onSelect={(eventKey) => handleSelect(eventKey, groups)}>
                                     <Dropdown.Toggle variant="primary" id="dropdown-basic">
                                         {dropdownText}
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu>
-                                        <Dropdown.Item eventKey="Nillebo">Nillebo</Dropdown.Item>
-                                        <Dropdown.Item eventKey="Lovebo">Lovebo</Dropdown.Item>
-                                        <Dropdown.Item eventKey="Ottebo">Ottebo</Dropdown.Item>
-                                        <Dropdown.Item eventKey="Temperatur">Temperatur</Dropdown.Item>
-                                        <Dropdown.Item eventKey="Övrigt">Övrigt</Dropdown.Item>
+                                        {Object.entries(groups).map(([groupName, members]) => (<Dropdown.Item key={groupName} eventKey={groupName} >{groupName}</Dropdown.Item>))}
                                         <Dropdown.Item eventKey="Alla">Alla</Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown>
                             </div>
                         </Col>
                         <Col className="pb-0 mt-2" xs={6}>
-                            <h6>Filter</h6>
+                            <h6>Filter by group</h6>
                         </Col>
                     </Row>
                 </Col>
             </> : <>
                 <Row className="mt-5 justify-content-center pageOptions">
                     <Col>
-                        <Form.Check
-                            type="checkbox"
-                            label="Nillebo Ackumulatortank"
-                            checked={nilleboAt.value}
-                            onChange={() => nilleboAt.set(!nilleboAt.value)}
-                        />
-                        <Form.Check
-                            type="checkbox"
-                            label="Nillebo Värmepump"
-                            checked={nillebovp.value}
-                            onChange={() => nillebovp.set(!nillebovp.value)}
-                        />
-                        <Form.Check
-                            type="checkbox"
-                            label="Nillebo Varmvatten"
-                            checked={nillebovv.value}
-                            onChange={() => nillebovv.set(!nillebovv.value)}
-                        />
-                        <Form.Check
-                            type="checkbox"
-                            label="Lovebo Ackumulatortank"
-                            checked={loveboat.value}
-                            onChange={() => loveboat.set(!loveboat.value)}
-                        />
-                        <Form.Check
-                            type="checkbox"
-                            label="Ottebo"
-                            checked={ottebo.value}
-                            onChange={() => ottebo.set(!ottebo.value)}
-                        />
-                        <Form.Check
-                            type="checkbox"
-                            label="Pool"
-                            checked={pool.value}
-                            onChange={() => pool.set(!pool.value)}
-                        />
+                        {splitFormChecks()[0]}
 
                         {1024 <= window.innerWidth ? <>
                             <div className="d-flex" style={{ marginTop: "100px" }}>
 
-                                <Dropdown onSelect={handleSelect}>
+                                <Dropdown onSelect={(eventKey) => handleSelect(eventKey, groups)}>
                                     <Dropdown.Toggle variant="primary" id="dropdown-basic">
                                         {dropdownText}
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu>
-                                        <Dropdown.Item eventKey="Nillebo">Nillebo</Dropdown.Item>
-                                        <Dropdown.Item eventKey="Lovebo">Lovebo</Dropdown.Item>
-                                        <Dropdown.Item eventKey="Ottebo">Ottebo</Dropdown.Item>
-                                        <Dropdown.Item eventKey="Temperatur">Temperatur</Dropdown.Item>
-                                        <Dropdown.Item eventKey="Övrigt">Övrigt</Dropdown.Item>
+                                        {Object.entries(groups).map(([groupName, members]) => (<Dropdown.Item key={groupName} eventKey={groupName} >{groupName}</Dropdown.Item>))}
                                         <Dropdown.Item eventKey="Alla">Alla</Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown>
@@ -226,30 +195,8 @@ export default ({ allDataStates, dateStates }) => {
 
                     </Col>
                     <Col>
-                        <Form.Check
-                            type="checkbox"
-                            label="Nillebo Temperatur"
-                            checked={nillebotemp.value}
-                            onChange={() => nillebotemp.set(!nillebotemp.value)}
-                        />
-                        <Form.Check
-                            type="checkbox"
-                            label="Ottebo Temperatur"
-                            checked={ottebotemp.value}
-                            onChange={() => ottebotemp.set(!ottebotemp.value)}
-                        />
-                        <Form.Check
-                            type="checkbox"
-                            label="Lovebo Temperatur"
-                            checked={lovetemp.value}
-                            onChange={() => lovetemp.set(!lovetemp.value)}
-                        />
-                        <Form.Check
-                            type="checkbox"
-                            label="Utetemperatur"
-                            checked={utetemp.value}
-                            onChange={() => utetemp.set(!utetemp.value)}
-                        />
+                        {splitFormChecks()[1]}
+
                     </Col>
                     <Col lg={12} xl={4} className="mt-md-4 mt-xl-0">
 
@@ -325,16 +272,12 @@ export default ({ allDataStates, dateStates }) => {
                         {window.innerWidth <= 1024 ? <>
                             <Row className="d-flex mt-3">
                                 <Col md={3} style={{ position: "absolute" }}>
-                                    <Dropdown onSelect={handleSelect}>
+                                    <Dropdown onSelect={(eventKey) => handleSelect(eventKey, groups)}>
                                         <Dropdown.Toggle variant="primary" id="dropdown-basic">
                                             {dropdownText}
                                         </Dropdown.Toggle>
                                         <Dropdown.Menu style={{ position: "absolute" }}>
-                                            <Dropdown.Item eventKey="Nillebo">Nillebo</Dropdown.Item>
-                                            <Dropdown.Item eventKey="Lovebo">Lovebo</Dropdown.Item>
-                                            <Dropdown.Item eventKey="Ottebo">Ottebo</Dropdown.Item>
-                                            <Dropdown.Item eventKey="Temperatur">Temperatur</Dropdown.Item>
-                                            <Dropdown.Item eventKey="Övrigt">Övrigt</Dropdown.Item>
+                                            {Object.entries(groups).map(([groupName, members]) => (<Dropdown.Item key={groupName} eventKey={groupName} >{groupName}</Dropdown.Item>))}
                                             <Dropdown.Item eventKey="Alla">Alla</Dropdown.Item>
                                         </Dropdown.Menu>
                                     </Dropdown>

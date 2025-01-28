@@ -28,13 +28,24 @@ const fetchReading = async (url, retries = 5) => {
     };
 };
 
-const fetchPrices = async () => {
+const fetchPrices = async (customer) => {
     try {
         const spotPris = await fetchReading('https://www.elmarknad.se/api/spotprice/current')
-        const spotPrisObj = spotPris.data.map(obj => ({ hour: new Date(obj.CreatedDate).getHours(), price: obj.ForecastAreaThree }));
+        const powerAreaProp = () => {
+            if (customer.powerArea === "1") {
+                return "ForecastAreaOne"
+            } else if (customer.powerArea === "1") {
+                return "ForecastAreaTwo"
+            } else if (customer.powerArea === "1") {
+                return "ForecastAreaThree"
+            } else if (customer.powerArea === "1") {
+                return "ForecastAreaFour"
+            }
+        };
+        const spotPrisObj = spotPris.data.map(obj => ({ hour: new Date(obj.CreatedDate).getHours(), price: obj[powerAreaProp()] }));
         console.log("Fetched prices")
         await client.connect();
-        const db = client.db(process.env.dbname);
+        const db = client.db(customer.name);
         const collection = db.collection("prices");
 
         const dateObject = new Date();

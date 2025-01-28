@@ -13,11 +13,11 @@ const initializeDatabase = async () => {
   try {
     const client = new MongoClient(mongouri);
     await client.connect();
-    return client.db(dbname);
+    return { client, masterDb: client.db("customers") };
   } catch (err) {
     console.error("Failed to connect to MongoDB:", err);
     process.exit(1);
-  };
+  }
 };
 
 const app = express();
@@ -41,8 +41,8 @@ const httpsOptions = process.env.NODE_ENV === "development" ? {
 };
 
 let server;
-initializeDatabase().then((db) => {
-  app.use(routes(db));
+initializeDatabase().then(({ client, masterDb }) => {
+  app.use(routes({ client, masterDb }));
   const listenPort = process.env.NODE_ENV === "production" ? 443 : PORT;
   server = https.createServer(httpsOptions, app).listen(listenPort, '0.0.0.0', () => {
     console.log(`Backend running on https://localhost:${listenPort}`);

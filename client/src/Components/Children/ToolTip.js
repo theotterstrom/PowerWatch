@@ -6,9 +6,9 @@ export default ({ initData }) => {
     const { currentdate, datavalues, charty } = chartStates;
 
     const desktopToolTipStyle = page === "power" ? {
-        width: "290px",
+        width: "390px",
     } : {
-        width: "350px",
+        width: "390px",
     };
     const ipadToolTipStyle = page === "power" ? {
         width: "290px",

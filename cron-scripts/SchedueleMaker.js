@@ -1,14 +1,15 @@
 require('dotenv').config();
-const fs = require('fs');
 const { MongoClient } = require('mongodb');
 const client = new MongoClient(process.env.mongouri);
 
-const makeScheduele = async () => {
+const makeScheduele = async (customer) => {
     try{
-        const fileContents = (JSON.parse(fs.readFileSync('./cron-scripts/data/drivecontrol.json'))).data;
-        console.log("Read drivecontrol.json")
+
         await client.connect();
-        const db = client.db(process.env.dbname);
+        const db = client.db(customer.name);
+        const powerHourCollection = db.collection("powerhours");
+        const powerHourObj = (await powerHourCollection.find({}).toArray())[0];
+
         const collection = db.collection("prices");
         
         const dateObject = new Date();
@@ -18,20 +19,19 @@ const makeScheduele = async () => {
         console.log("Fetched prices of tomorrow");
         
         const sortedHours = tomorrowPrices.sort((a, b) => a.price - b.price);
-        const deviceSettings = Object.fromEntries(Object.entries(fileContents).filter(([key, value]) => key.startsWith("device-")));
+        const deviceSettings = Object.fromEntries(Object.entries(powerHourObj).filter(([key, value]) => key.startsWith("device-")));
         let newScheduele = {};
         for(const device of Object.keys(deviceSettings)){
-            const necessaryHours = fileContents[device];
+            const necessaryHours = powerHourObj[device];
             const xCheapestHours = sortedHours.filter((obj, index) => {
-                if(obj.price > parseInt(fileContents.Maxpris * 100) || necessaryHours - 1 < index ){
+                if(obj.price > parseInt(powerHourObj.Maxpris * 100) || necessaryHours - 1 < index ){
                     return false;
                 };
                 return true;
             });
             newScheduele[device.replace("device-", "")] = xCheapestHours.map(obj => obj.hour);
         };
-        const schedueleDb = client.db(process.env.dbname);
-        const schedueleCol = schedueleDb.collection("schedueles");
+        const schedueleCol = db.collection("schedueles");
         const response = await schedueleCol.insertOne({ date: tomorrowsDate, values: newScheduele });
         console.log("Added scheduele for tomorrow");
     } catch(e){

@@ -1,20 +1,39 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
-import { Navigate } from 'react-router-dom';
-import { Container, Navbar, Nav, NavDropdown, Row, Col } from "react-bootstrap";
+import React, { useState, useEffect, useMemo } from "react";
+import { Container, Navbar, Nav, NavDropdown, Row, Col, Tab, Tabs, Dropdown } from "react-bootstrap";
 import apiUrl from '../Components/Helpers/APIWrapper'
 import axios from 'axios';
 import ControlPanelPop from '../Components/Children/ControlPanelPop';
+import Devices from "../Components/Children/ControlPanelChildren/Devices";
+import Groups from "../Components/Children/ControlPanelChildren/Groups";
+import Cloud from "../Components/Children/ControlPanelChildren/Cloud";
+import { useNavigate } from 'react-router-dom';
 
-const PopUp = React.memo(({ showWindow, method, devices }) => {
-  return <ControlPanelPop showWindow={showWindow} method={method} devices={devices} />
+const PopUp = React.memo(({ showWindow, method, devices, setDevices }) => {
+  return <ControlPanelPop showWindow={showWindow} method={method} devices={devices} setDevices={setDevices} />
+});
+
+const DeviceSettings = React.memo(({ showPopUp, devices }) => {
+  const initData = useMemo(() => ({ showPopUp, devices }), [showPopUp, devices]);
+  return <Devices initData={initData} />
+});
+
+const GroupSettings = React.memo(({ showPopUp, groups }) => {
+  const initData = useMemo(() => ({ showPopUp, groups }), [showPopUp, groups]);
+  return <Groups initData={initData} />
+});
+
+const CloudSettings = React.memo(() => {
+  return <Cloud />
 });
 
 const ControlPanel = () => {
-
+  const navigate = useNavigate();
   const [expanded, setExpanded] = useState(false);
   const [devices, setDevices] = useState([]);
   const [showWindow, setShowWindow] = useState(true);
   const [method, setMethod] = useState(null);
+
+  const [mobileShow, setMobileShow] = useState("Device Settings");
 
   const navbarToggle = () => setExpanded(!expanded);
 
@@ -25,9 +44,10 @@ const ControlPanel = () => {
       });
       setDevices(deviceRes.data);
     };
-    fetchDevices();
-  }, []);
 
+    fetchDevices();
+
+  }, []);
 
   if (Object.keys(devices).length === 0) {
     return <>
@@ -40,21 +60,31 @@ const ControlPanel = () => {
   };
 
   const showPage = (page) => {
-    window.location.href = window.location.href.replace(/\/[^/]*$/, "") + "/energywatch";
+    
+    navigate('/energywatch', { state: { pageSet: page } });
+  };
+  
+  
+
+
+  const showPopUp = (method) => {
+    setShowWindow(true)
+    setMethod(method)
   };
 
-  const addDevice = () => {
-    setShowWindow(true)
-    setMethod("add")
-  };
-  const changeDevice = () => {
-    setShowWindow(true)
-    setMethod("change")
-  };
-  const removeDevice = () => {
-    setShowWindow(true)
-    setMethod("remove")
-  };
+
+  const groups = devices.reduce((acc, cur) => {
+    if (cur.group) {
+      for (const group of cur.group) {
+        if (acc[group]) {
+          acc[group].push(cur.displayName)
+        } else {
+          acc[group] = [cur.displayName]
+        }
+      }
+    }
+    return acc;
+  }, {});
 
   return (<>
     {/* Header */}
@@ -109,55 +139,70 @@ const ControlPanel = () => {
     <div className="backgroundBlock"></div>
 
     <Container className="mt-4 container-fluid savings pt-5 pb-5 mainContainer">
-      <Row className="justify-content-center">
-        <Col md={10} lg={8} className="p-0">
-          <Container className="p-0">
-            <h3 className="title mt-3">Control Panel</h3>
-            <Row className="mt-4">
+      {window.innerWidth <= 768 ? <>
 
-              <h4>Devices</h4>
-
-              <Row>
-                <Col xl={3}>
-                  <h5 style={{cursor: "pointer"}} className="mt-4" onClick={addDevice}><i className="fa fa-plus"></i>&nbsp;&nbsp;Add device</h5>
-                </Col>
-                <Col xl={4}>
-                  <h5 style={{cursor: "pointer"}} className="mt-4" onClick={changeDevice}><i className="fa fa-pencil-square-o"></i>&nbsp;&nbsp;Change device</h5>
-                </Col>
-                <Col xl={3}>
-                  <h5 style={{cursor: "pointer"}} className="mt-4" onClick={removeDevice}><i className="fa-solid fa-xmark"></i>&nbsp;&nbsp;Remove device</h5>
-                </Col>
-              </Row>
-
-              <Row className="mt-4 mb-2">
-                <Col><b>Device name</b></Col>
-                <Col><b>Display name</b></Col>
-                <Col><b>Id</b></Col>
-                <Col><b>Wattformat</b></Col>
-                <Col><b>Device type</b></Col>
-              </Row>
-              {Object.entries(devices).map(([key, value], index) => (
-                <Row key={key} className="pt-2 pb-2" style={{borderTop: "1px solid white", borderLeft: "1px solid white", borderRight: "1px solid white", borderBottom: index === Object.entries(devices).length - 1 ? "1px solid white" : 0 }}>
-                  <Col>{key}</Col>
-                  <Col>{value.displayName}</Col>
-                  <Col>{value.id}</Col>
-                  <Col>{value.wattFormat}</Col>
-                  <Col>{value.wattFormat ? "Relay" : "Thermometer"}</Col>
-                </Row>
-              ))}
-
-
-              <Col>
+        <main>
+          <Container className="m-0">
+            <Row className="justify-content-center text-center mt-4">
+              <h3>Control Panel</h3>
+            </Row>
+            <Row className="justify-content-center mt-4">
+              <Col xs={10}>
+                <Dropdown
+                  style={{ backgroundColor: "#f8f9fa", borderRadius: "5px" }}
+                  onSelect={(eventKey) => setMobileShow(eventKey)}
+                >
+                  <Dropdown.Toggle variant="light" style={{ width: "100%", textAlign: "start" }}>
+                    {mobileShow !== "start" ? mobileShow : "Select Panel"}
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item eventKey="Device Settings">Device Settings</Dropdown.Item>
+                    <Dropdown.Item eventKey="Group Settings">Group Settings</Dropdown.Item>
+                    <Dropdown.Item eventKey="Cloud Settings">Cloud Settings</Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
               </Col>
             </Row>
-            <Container className="savingsChartContainer p-0 m-0">
-            </Container>
           </Container>
-        </Col>
-      </Row>
+          {mobileShow === "Device Settings" &&
+            <Container className="controlPanelContainer">
+              <DeviceSettings devices={devices} showPopUp={showPopUp} />
+            </Container>
+          }
+          {mobileShow === "Group Settings" &&
+            <Container className="controlPanelContainer">
+              <GroupSettings groups={groups} showPopUp={showPopUp} />
+            </Container>
+          }
+          {mobileShow === "Cloud Settings" &&
+            <Container className="controlPanelContainer">
+              <CloudSettings />
+            </Container>}
+        </main>
+
+      </> : <>
+        <Row className="justify-content-center">
+          <Col md={10} lg={8} className="p-0">
+            <Container className="p-0 mt-4">
+              <Tabs defaultActiveKey="devices" id="devices-tabs" style={{ borderBottom: "0" }}>
+                <Tab eventKey="devices" title="Devices" className="controlPanelContainer">
+                  <DeviceSettings devices={devices} showPopUp={showPopUp} />
+                </Tab>
+                <Tab eventKey="deviceGroups" title="Device Groups" className="controlPanelContainer">
+                  <GroupSettings groups={groups} showPopUp={showPopUp} />
+                </Tab>
+                <Tab eventKey="cloudSettings" title="Cloud Settings" className="controlPanelContainer">
+                  <CloudSettings />
+                </Tab>
+              </Tabs>
+            </Container>
+          </Col>
+        </Row>
+      </>}
+
     </Container>
     <main>
-      {showWindow && <PopUp showWindow={setShowWindow} method={method} devices={devices} />}
+      {showWindow && <PopUp showWindow={setShowWindow} method={method} devices={devices} setDevices={setDevices} />}
     </main>
   </>
   );

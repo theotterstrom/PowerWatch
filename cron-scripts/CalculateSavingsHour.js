@@ -1,12 +1,11 @@
 require('dotenv').config();
-const { dbname } = process.env;
 const { MongoClient } = require('mongodb');
 const client = new MongoClient(process.env.mongouri);
 
-const newCalculateSavings = async () => {
+const newCalculateSavings = async (customer) => {
     try {
         await client.connect();
-        const db = client.db(dbname);
+        const db = client.db(customer.name);
         const powerCollection = db.collection("power_readings");
         const priceCollection = db.collection("prices");
         const schedueleCollection = db.collection("schedueles");

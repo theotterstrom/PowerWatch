@@ -10,18 +10,17 @@ const ToolTipChild = React.memo(({ chartStates, page }) => {
   return <ToolTip initData={initData} />
 });
 
+const PowerOptionChild = React.memo(({allDataStates, dateStates, devices }) => {
+  const initData = useMemo(() => ({ allDataStates, dateStates, devices  }), [allDataStates, dateStates, devices ]);
+  return <PowerOptions initData={initData} />
+});
+
 export default ({ initData }) => {
-  const { readings, temps } = initData;
-  const [nilleboAT, setnilleboAT] = useState(true);
-  const [nilleboVP, setnilleboVP] = useState(true);
-  const [nilleboVV, setnilleboVV] = useState(true);
-  const [loveboAT, setloveboAT] = useState(true);
-  const [otteboData, setotteboData] = useState(true);
-  const [poolData, setpoolData] = useState(true);
-  const [nilleboTemp, setnilleboTemp] = useState(true);
-  const [otteboTemp, setotteboTemp] = useState(true);
-  const [loveTemp, setloveTemp] = useState(true);
-  const [uteTemp, setuteTemp] = useState(true);
+  const { readings, temps, devices } = initData;
+  const deviceNames = devices.value.map(obj => obj.deviceName)
+  const stateObject = Object.fromEntries(deviceNames.map(obj => [obj, true]));
+
+  const [states, setStates] = useState(stateObject);
 
   const today = new Date();
   const oneWeekAgoDate = new Date();
@@ -42,20 +41,25 @@ export default ({ initData }) => {
     charty: { value: chartY, set: setChartY }
   }), [currentDate, dataValues, chartY]);
 
-  const allDataStates = useMemo(() => ({
-    nilleboAt: { value: nilleboAT, set: setnilleboAT },
-    nillebovp: { value: nilleboVP, set: setnilleboVP },
-    nillebovv: { value: nilleboVV, set: setnilleboVV },
-    loveboat: { value: loveboAT, set: setloveboAT },
-    ottebo: { value: otteboData, set: setotteboData },
-    pool: { value: poolData, set: setpoolData },
-    nillebotemp: { value: nilleboTemp, set: setnilleboTemp },
-    ottebotemp: { value: otteboTemp, set: setotteboTemp },
-    lovetemp: { value: loveTemp, set: setloveTemp },
-    utetemp: { value: uteTemp, set: setuteTemp },
-    readings,
-    temps,
-  }), [nilleboAT, nilleboVP, nilleboVV, loveboAT, otteboData, poolData, poolData, nilleboTemp, otteboTemp, loveTemp, uteTemp, readings.value, temps.value]);
+  const allDataStates = useMemo(() => {
+    const dynamicStates = Object.fromEntries(
+      Object.entries(states).map(([key, value]) => [
+        key,
+        {
+          value,
+          set: (newValue) =>
+            setStates((prev) => ({
+              ...prev,
+              [key]: newValue,
+            })),
+        },
+      ])
+    );
+
+    return {
+      ...dynamicStates
+    };
+  }, [states]);
 
   const dateStates = useMemo(() => ({
     startdate: { value: startDate, set: setStartDate },
@@ -64,15 +68,16 @@ export default ({ initData }) => {
     month: { value: month, set: setMonth }
   }), [startDate, endDate, allDates, month]);
 
-  const { chartData, chartOptions } = generatePowerData(allDataStates, dateStates, chartStates);
+  const { chartData, chartOptions } = generatePowerData(allDataStates, readings, temps, dateStates, chartStates, devices);
 
   return (
+
     <Container className="mt-4 container-fluid power pt-5 pb-5 mainContainer">
       <Row className="justify-content-center">
         <Col md={10} lg={8} className="p-0">
           <Container className="p-0">
             <h3 className="title mt-3">Power Consumption & Temperature</h3>
-            <PowerOptions allDataStates={allDataStates} dateStates={dateStates} />
+            <PowerOptionChild allDataStates={allDataStates} dateStates={dateStates} devices={devices} />
             <Container className="chartContainer p-0 m-0">
               <ToolTipChild chartStates={chartStates} page={"power"} />
               <Line height={200} data={chartData} options={chartOptions} className="mt-md-3 powerChart" />

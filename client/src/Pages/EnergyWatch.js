@@ -9,7 +9,7 @@ import Scheduele from "../Components/Children/Scheduele";
 import PowerHour from "../Components/Children/PowerHour";
 import apiUrl from '../Components/Helpers/APIWrapper'
 import LogOut from "../Components/Children/LogOut";
-import { Navigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import {
   Chart as ChartJS,
@@ -22,23 +22,23 @@ import {
 } from 'chart.js';
 
 
-const PowerChild = React.memo(({ readings, temps }) => {
-  const initData = useMemo(() => ({ readings, temps }), [readings, temps])
+const PowerChild = React.memo(({ readings, temps, devices }) => {
+  const initData = useMemo(() => ({ readings, temps, devices }), [readings, temps, devices])
   return <Power initData={initData} />
 });
 
-const SavingsChild = React.memo(({ savings }) => {
-  const initData = useMemo(() => ({ savings }), [savings]);
+const SavingsChild = React.memo(({ savings, devices }) => {
+  const initData = useMemo(() => ({ savings, devices }), [savings, devices]);
   return <Savings initData={initData} />;
 });
 
-const SchedueleChild = React.memo(({ schedueles, prices, devicestatuses }) => {
-  const initData = useMemo(() => ({ schedueles, prices, devicestatuses }), [schedueles, prices, devicestatuses]);
+const SchedueleChild = React.memo(({ schedueles, prices, devicestatuses, devices }) => {
+  const initData = useMemo(() => ({ schedueles, prices, devicestatuses, devices }), [schedueles, prices, devicestatuses, devices]);
   return <Scheduele initData={initData} />;
 });
 
-const PowerHourChild = React.memo(({ powerhour, togglePowerHour }) => {
-  const initData = useMemo(() => ({ powerhour, togglePowerHour }));
+const PowerHourChild = React.memo(({ powerhour, togglePowerHour, devices }) => {
+  const initData = useMemo(() => ({ powerhour, togglePowerHour, devices }));
   return <PowerHour initData={initData} />
 });
 
@@ -48,8 +48,12 @@ const LogOutChild = React.memo(({ logout, togglelogout }) => {
 });
 
 const EnergyWatch = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  let pageSet = location?.state?.pageSet;
   const [expanded, setExpanded] = useState(false);
-  const [currentPage, setCurrentPage] = useState("power");
+  const [currentPage, setCurrentPage] = useState(pageSet ?? "power");
+
   const [showPowerHour, setShowPowerHour] = useState(false);
   const [showLogOut, setShowLogOut] = useState(false);
 
@@ -59,6 +63,7 @@ const EnergyWatch = () => {
   const [temps, setTemps] = useState([]);
   const [readings, setReadings] = useState([]);
   const [powerHour, setPowerHour] = useState({});
+  const [devices, setDevices] = useState([]);
   const [deviceStatuses, setDeviceStatuses] = useState([]);
 
   const apiData = useMemo(() => ({
@@ -68,8 +73,11 @@ const EnergyWatch = () => {
     tempsState: { value: temps, set: setTemps },
     readingsState: { value: readings, set: setReadings },
     devicestatusesState: { value: deviceStatuses, set: setDeviceStatuses },
-    powerhour: { value: powerHour, set: setPowerHour }
-  }), [savings, prices, schedueles, temps, readings, deviceStatuses, powerHour]);
+    powerhour: { value: powerHour, set: setPowerHour },
+    devices: { value: devices, set: setDevices }
+  }), [savings, prices, schedueles, temps, readings, deviceStatuses, powerHour, devices]);
+
+
 
   const navbarToggle = () => setExpanded(!expanded);
 
@@ -93,17 +101,32 @@ const EnergyWatch = () => {
   };
 
   useEffect(() => {
+    navigate('/energywatch', { state: { pageSet: currentPage } });
+  }, [currentPage]);
+
+  useEffect(() => {
     const run = async () => {
       try {
-        const storedPrices = localStorage.getItem("prices")?.length > 0;
-        const storedSchedueles = localStorage.getItem("schedueles")?.length > 0;
-        const storedDeviceStatuses = localStorage.getItem("devicestatuses")?.length > 0;
-        const storedSavings = localStorage.getItem("savings")?.length > 0;
-        const storedReadings = localStorage.getItem("readings")?.length > 0;
-        const storedTemps = localStorage.getItem("temps")?.length > 0;
-        const storedPowerHour = localStorage.getItem("powerhour")?.length > 0;
+/*         const storedPrices = localStorage.getItem("prices");
+        const storedSchedueles = localStorage.getItem("schedueles");
+        const storedDeviceStatuses = localStorage.getItem("devicestatuses");
+        const storedSavings = localStorage.getItem("savings");
+        const storedReadings = localStorage.getItem("readings");
+        const storedTemps = localStorage.getItem("temps");
+        const storedPowerHour = localStorage.getItem("powerhour");
+        const storedDevices = localStorage.getItem("devices");
+        const allContent = 
+        storedPrices.length > 0 && 
+        storedDeviceStatuses.length > 0 && 
+        storedSavings.length > 0 && 
+        storedReadings.length > 0 && 
+        storedTemps.length > 0 && 
+        storedPowerHour.length > 0 && 
+        storedDevices.length > 0;
 
-        if (storedPrices && storedSchedueles && storedDeviceStatuses && storedSavings && storedReadings && storedTemps && storedPowerHour) {
+
+
+        if (allContent && storedPrices && storedSchedueles && storedDeviceStatuses && storedSavings && storedReadings && storedTemps && storedPowerHour && storedDevices) {
           setPrices(JSON.parse(storedPrices));
           setSchedueles(JSON.parse(storedSchedueles));
           setDeviceStatuses(JSON.parse(storedDeviceStatuses));
@@ -112,10 +135,10 @@ const EnergyWatch = () => {
           setTemps(JSON.parse(storedTemps));
           setPowerHour(JSON.parse(storedPowerHour));
           return;
-        };
+        }; */
 
-        const urlList = ["prices", "schedueles", "devicestatuses", "getcurrenthour"];
-        const [pricesRes, scheduelesRes, deviceStatusRes, powerhourRes] = await Promise.all(
+        const urlList = ["prices", "schedueles", "devicestatuses", "getcurrenthour", "devices"];
+        const [pricesRes, scheduelesRes, deviceStatusRes, powerhourRes, deviceRes] = await Promise.all(
           urlList.map((name) => axios.get(`${apiUrl}/${name}`, {
             withCredentials: true
           }))
@@ -145,8 +168,9 @@ const EnergyWatch = () => {
         setPrices(pricesRes.data);
         setSchedueles(scheduelesRes.data);
         setDeviceStatuses(deviceStatusRes.data);
+        setDevices(deviceRes.data);
         setPowerHour({
-          ...powerhourRes.data.data,
+          ...powerhourRes.data,
           secret: ''
         });
         setSavings(ackReqs.savings.reverse());
@@ -159,6 +183,8 @@ const EnergyWatch = () => {
         localStorage.setItem("savings", JSON.stringify(ackReqs.savings.reverse()));
         localStorage.setItem("readings", JSON.stringify(ackReqs.readings.reverse()));
         localStorage.setItem("temps", JSON.stringify(ackReqs.temps));
+        localStorage.setItem("devices", JSON.stringify(deviceRes.data));
+        localStorage.setItem("powerhour", JSON.stringify(powerhourRes.data));
       } catch (e) {
         console.error("Error fetching data:", e);
       }
@@ -180,9 +206,7 @@ const EnergyWatch = () => {
         setExpanded(false);
       };
     };
-
     window.addEventListener("click", handleClickOutside);
-
     return () => {
       window.removeEventListener("click", handleClickOutside);
     };
@@ -253,7 +277,7 @@ const EnergyWatch = () => {
         <Container>
           <Navbar.Brand onClick={() => showPage("power")} style={{ cursor: "pointer" }}>
             <img style={{ height: "40px" }} src="/images/new1.png" alt="EnergyWatch Logo" />
-            &nbsp;EnergyWatch
+            &nbsp;PowerWatch
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="navbar-nav" className="navBarButton" />
           <Navbar.Collapse id="navbar-nav" className="ms-lg-5">
@@ -287,10 +311,10 @@ const EnergyWatch = () => {
       <div className="backgroundBlock"></div>
 
       <main>
-        {currentPage === "power" && <PowerChild readings={apiData.readingsState} temps={apiData.tempsState} />}
-        {currentPage === "savings" && <SavingsChild savings={apiData.savingsState} />}
-        {currentPage === "scheduele" && <SchedueleChild schedueles={apiData.scheduelesState} prices={apiData.pricesState} devicestatuses={apiData.devicestatusesState} />}
-        {showPowerHour && <PowerHourChild powerhour={apiData.powerhour} togglePowerHour={setShowPowerHour} />}
+        {currentPage === "power" && <PowerChild readings={apiData.readingsState} temps={apiData.tempsState} devices={apiData.devices} />}
+        {currentPage === "savings" && <SavingsChild savings={apiData.savingsState} devices={apiData.devices}/>}
+        {currentPage === "scheduele" && <SchedueleChild schedueles={apiData.scheduelesState} prices={apiData.pricesState} devicestatuses={apiData.devicestatusesState} devices={apiData.devices} />}
+        {showPowerHour && <PowerHourChild powerhour={apiData.powerhour} togglePowerHour={setShowPowerHour} devices={apiData.devices}/>}
         {showLogOut && <LogOutChild logout={showLogOut} togglelogout={setShowLogOut} />}
       </main>
     </div>

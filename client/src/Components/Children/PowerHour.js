@@ -1,7 +1,9 @@
 import axios from "axios";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 export default ({ initData }) => {
-    const { powerhour, togglePowerHour } = initData;
+    const { powerhour, togglePowerHour, devices } = initData;
+    const powerHourDevices = JSON.parse(JSON.stringify(devices.value)).filter(obj => obj.deviceType === "Relay");
+
     const setPowerHours = async () => {
         const floatCheckArr = JSON.parse(JSON.stringify(Object.values(powerhour.value)));
         floatCheckArr.pop();
@@ -30,195 +32,65 @@ export default ({ initData }) => {
             [name]: value,
         }));
     };
+
+    console.log(powerhour.value)
+    const splitPowerHours = () => {
+        const firstHalf = powerHourDevices.filter((obj, index) => {
+            if (index > powerHourDevices.length / 2 - 1) {
+                return false
+            }
+            return true;
+        });
+        const secondHalf = powerHourDevices.filter((obj, index) => {
+            if (index > powerHourDevices.length / 2 - 1) {
+                return true
+            }
+            return false;
+        });
+        const firstHalfForms = firstHalf.map((obj, index) =>
+
+            <div className={window.innerWidth <= 768 ? 'mt-3' : " mt-2"}>
+                <Col>{obj.displayName}: </Col>
+                <Col>
+                    <Form.Control
+                        onChange={updateText}
+                        className="powerHourInput"
+                        type="text"
+                        placeholder={`Enter powerhour for ${obj.displayName}`}
+                        name={obj.deviceName}
+                        value={powerhour.value[`device-${obj.deviceName}`]}
+                    /></Col>
+            </div>
+            );
+
+        const secondHalfForms = secondHalf.map((obj, index) =>
+            <div className={window.innerWidth <= 768 ? 'mt-3' : " mt-2"}>
+                <Col>{obj.displayName}: </Col>
+                <Col>
+                    <Form.Control
+                        onChange={updateText}
+                        className="powerHourInput"
+                        type="text"
+                        placeholder={`Enter powerhour for ${obj.displayName}`}
+                        name={obj.deviceName}
+                        value={powerhour.value[`device-${obj.deviceName}`]}
+                    /></Col>
+            </div>)
+        return [firstHalfForms, secondHalfForms];
+    };
+
     return (
         <Container className="container-fluid d-flex justify-content-center align-items-center">
-            <Col xl={8} xs={11} className="powerHourWindow p-5">
+            <Col xl={5} xs={11} className="powerHourWindow p-4 pt-5">
                 <i onClick={() => togglePowerHour(false)} className="fa fa-times"></i>
                 <Form>
                     <Row className="justify-content-center">
                         <Col lg={6}>
-                            <Row>
-                                <Col>NilleboAT: </Col>
-                                <Col>
-                                    <Form.Control
-                                        onChange={updateText}
-                                        className="powerHourInput"
-                                        type="text"
-                                        placeholder="Enter text for field 1"
-                                        name="NilleATtim"
-                                        value={powerhour.value.NilleATtim}
-                                    /></Col>
-                            </Row>
-                            <Row className="mt-2">
-                                <Col>NilleboVP: </Col>
-                                <Col>
-                                    <Form.Control
-                                        onChange={updateText}
-                                        className="powerHourInput"
-                                        type="text"
-                                        placeholder="Enter text for field 1"
-                                        name="NilleVPtim"
-                                        value={powerhour.value.NilleVPtim}
-                                    /></Col>
-                            </Row>
-                            <Row className="mt-2">
-                                <Col>NilleboVV: </Col>
-                                <Col>
-                                    <Form.Control
-                                        onChange={updateText}
-                                        className="powerHourInput"
-                                        type="text"
-                                        placeholder="Enter text for field 1"
-                                        name="NilleVVtim"
-                                        value={powerhour.value.NilleVVtim}
-                                    /></Col>
-                            </Row>
-                            <Row className="mt-2">
-                                <Col>LoveboAT: </Col>
-                                <Col>
-                                    <Form.Control
-                                        onChange={updateText}
-                                        className="powerHourInput"
-                                        type="text"
-                                        placeholder="Enter text for field 1"
-                                        name="LoveATtim"
-                                        value={powerhour.value.LoveATtim}
-                                    /></Col>
-                            </Row>
-                            <Row className="mt-2">
-                                <Col>LoveboVV: </Col>
-                                <Col>
-                                    <Form.Control
-                                        onChange={updateText}
-                                        className="powerHourInput"
-                                        type="text"
-                                        placeholder="Enter text for field 1"
-                                        name="LoveVVtim"
-                                        value={powerhour.value.LoveVVtim}
-                                    /></Col>
-                            </Row>
-                            <Row className="mt-2">
-                                <Col>Ottebo: </Col>
-                                <Col>
-                                    <Form.Control
-                                        onChange={updateText}
-                                        className="powerHourInput"
-                                        type="text"
-                                        placeholder="Enter text for field 1"
-                                        name="Ottebo"
-                                        value={powerhour.value.Ottebo}
-                                    /></Col>
-                            </Row>
-                            <Row className="mt-2">
-                                <Col>Garage: </Col>
-                                <Col>
-                                    <Form.Control
-                                        onChange={updateText}
-                                        className="powerHourInput"
-                                        type="text"
-                                        placeholder="Enter text for field 1"
-                                        name="Garage"
-                                        value={powerhour.value.Garage}
-                                    /></Col>
-                            </Row>
-                            <Row className="mt-2">
-                                <Col>PoolStart: </Col>
-                                <Col>
-                                    <Form.Control
-                                        onChange={updateText}
-                                        className="powerHourInput"
-                                        type="text"
-                                        placeholder="Enter text for field 1"
-                                        name="PoolStart"
-                                        value={powerhour.value.PoolStart}
-                                    /></Col>
-                            </Row>
+                            {splitPowerHours()[0]}
                         </Col>
                         <Col lg={6}>
 
-                            <Row className="mt-2">
-                                <Col>PoolTid: </Col>
-                                <Col>
-                                    <Form.Control
-                                        onChange={updateText}
-                                        className="powerHourInput"
-                                        type="text"
-                                        placeholder="Enter text for field 1"
-                                        name="PoolTid"
-                                        value={powerhour.value.PoolTid}
-                                    /></Col>
-                            </Row>
-                            <Row className="mt-2">
-                                <Col>Maxpris: </Col>
-                                <Col>
-                                    <Form.Control
-                                        onChange={updateText}
-                                        className="powerHourInput"
-                                        type="text"
-                                        placeholder="Enter text for field 1"
-                                        name="Maxpris"
-                                        value={powerhour.value.Maxpris}
-                                    /></Col>
-                            </Row>
-                            <Row className="mt-2">
-                                <Col>Hoglast: </Col>
-                                <Col>
-                                    <Form.Control
-                                        onChange={updateText}
-                                        className="powerHourInput"
-                                        type="text"
-                                        placeholder="Enter text for field 1"
-                                        name="Hoglast"
-                                        value={powerhour.value.Hoglast}
-                                    /></Col>
-                            </Row>
-                            <Row className="mt-2">
-                                <Col>Favgift: </Col>
-                                <Col>
-                                    <Form.Control
-                                        onChange={updateText}
-                                        className="powerHourInput"
-                                        type="text"
-                                        placeholder="Enter text for field 1"
-                                        name="Favgift"
-                                        value={powerhour.value.Favgift}
-                                    /></Col>
-                            </Row>
-                            <Row className="mt-2">
-                                <Col>Laglast: </Col>
-                                <Col>
-                                    <Form.Control
-                                        onChange={updateText}
-                                        className="powerHourInput"
-                                        type="text"
-                                        placeholder="Enter text for field 1"
-                                        name="Laglast"
-                                        value={powerhour.value.Laglast}
-                                    /></Col>
-                            </Row>
-                            <Row className="mt-2">
-                                <Col>Skatt: </Col>
-                                <Col>
-                                    <Form.Control
-                                        onChange={updateText}
-                                        className="powerHourInput"
-                                        type="text"
-                                        placeholder="Enter text for field 1"
-                                        name="Skatt"
-                                        value={powerhour.value.Skatt}
-                                    /></Col>
-                            </Row>
-                            <Row className="mt-2">
-                                <Col>Password: </Col>
-                                <Col>
-                                    <Form.Control
-                                        onChange={updateText}
-                                        className="powerHourInput"
-                                        type="password"
-                                        name="secret"
-                                        value={powerhour.value.secret}
-                                    /></Col>
-                            </Row>
+                        {splitPowerHours()[1]}
                         </Col>
                     </Row>
                 </Form>

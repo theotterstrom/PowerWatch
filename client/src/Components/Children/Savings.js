@@ -10,18 +10,17 @@ const ToolTipChild = React.memo(({ chartStates, page }) => {
   return <ToolTip initData={initData} />
 });
 
-export default ({ initData }) => {
-  const { savings } = initData;
+const SavingsOptionsChild = React.memo(({ allDataStates, dateStates, devices }) => {
+  const initData = useMemo(() => ({ allDataStates, dateStates, devices }), [allDataStates, dateStates, devices]);
+  return <SavingsOptions initData={initData} />
+});
 
-  // States for toggling savings visibility
-  const [nilleboATSavings, setNilleboAtSavings] = useState(true);
-  const [nilleboVPSavings, setNilleboVPSavings] = useState(true);
-  const [nilleboVVSavings, setNilleboVVSavings] = useState(true);
-  const [loveboATSavings, setLoveboATSavings] = useState(true);
-  const [loveboVVSavings, setLoveboVVSavings] = useState(true);
-  const [otteboSavings, setOtteboSavings] = useState(true);
-  const [garageSavings, setGarageSavings] = useState(true);
-  const [poolSavings, setPoolSavings] = useState(true);
+export default ({ initData }) => {
+  const { savings, devices } = initData;
+  const deviceNames = devices.value.filter(obj => obj.deviceType === "Relay").map(obj => obj.deviceName)
+  const stateObject = Object.fromEntries(deviceNames.map(obj => [obj, true]));
+
+  const [states, setStates] = useState(stateObject);
 
   const today = new Date();
   const oneWeekAgoDate = new Date();
@@ -43,24 +42,34 @@ export default ({ initData }) => {
     charty: { value: chartY, set: setChartY }
   }), [currentDate, dataValues, chartY]);
 
-  const allDataStates = useMemo(() => ({
-    nilleboatsavings: { value: nilleboATSavings, set: setNilleboAtSavings },
-    nillebovpsavings: { value: nilleboVPSavings, set: setNilleboVPSavings },
-    nillebovvsavings: { value: nilleboVVSavings, set: setNilleboVVSavings },
-    loveboatsavings: { value: loveboATSavings, set: setLoveboATSavings },
-    lovebovvsavings: { value: loveboVVSavings, set: setLoveboVVSavings },
-    ottebosavings: { value: otteboSavings, set: setOtteboSavings },
-    garagesavings: { value: garageSavings, set: setGarageSavings },
-    poolsavings: { value: poolSavings, set: setPoolSavings },
-    savingsstartdate: { value: savingStartDate, set: setSavingStartDate },
-    savingsenddate: { value: savingEndDate, set: setSavingEndDate },
-    allsavingsdate: { value: allsavingsDate, set: setAllSavingsDates },
-    savingsmonth: { value: savingsMonth, set: setSavingsMonth },
-    savings
-  }), [nilleboATSavings, nilleboVPSavings, nilleboVVSavings, loveboATSavings, loveboVVSavings, otteboSavings, garageSavings, poolSavings, savingStartDate, savingEndDate, allsavingsDate, savingsMonth, savings.value]);
-
+    const allDataStates = useMemo(() => {
+      const dynamicStates = Object.fromEntries(
+        Object.entries(states).map(([key, value]) => [
+          key,
+          {
+            value,
+            set: (newValue) =>
+              setStates((prev) => ({
+                ...prev,
+                [key]: newValue,
+              })),
+          },
+        ])
+      );
   
-  const { savingsData, savingsOptions, totalSpendning, totalSaved } = generateSavingsData(allDataStates, chartStates);
+      return {
+        ...dynamicStates
+      };
+    }, [states]);
+
+    const dateStates = useMemo(() => ({
+      savingsstartdate: { value: savingStartDate, set: setSavingStartDate },
+      savingsenddate: { value: savingEndDate, set: setSavingEndDate },
+      allsavingsdate: { value: allsavingsDate, set: setAllSavingsDates },
+      savingsmonth: { value: savingsMonth, set: setSavingsMonth },
+    }), [savingStartDate, savingEndDate, allsavingsDate, savingsMonth]);
+  
+  const { savingsData, savingsOptions, totalSpendning, totalSaved } = generateSavingsData(allDataStates, savings, dateStates, chartStates, devices);
   
   return (
     <Container className="mt-4 container-fluid savings pt-5 pb-5 mainContainer">
@@ -82,7 +91,7 @@ export default ({ initData }) => {
                 {(totalSaved / 100).toFixed(2)} SEK
               </Col>
             </Row>
-            <SavingsOptions dataStates={allDataStates} />
+            <SavingsOptionsChild allDataStates={allDataStates} dateStates={dateStates} devices={devices} />
             <Container className="savingsChartContainer p-0 m-0">
               <ToolTipChild chartStates={chartStates} page={"savings"} />
               <Line height={200} data={savingsData} options={savingsOptions} className="mt-md-4" />

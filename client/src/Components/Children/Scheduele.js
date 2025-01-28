@@ -2,20 +2,21 @@ import { Container, Row, Col } from "react-bootstrap";
 import { useEffect, useState, useMemo } from "react";
 import SchedueleOptions from "../Options/SchedueleOptions";
 
+const ScheduleOptions = React.memo(({ allDataStates }) => {
+  const initData = useMemo(() => ({ allDataStates }), [allDataStates]);
+  return <SchedueleOptions initData={initData} />
+});
+
 export default ({ initData }) => {
-  const { schedueles, prices, devicestatuses } = initData;
-  const [currentDevice, setCurrentDevice] = useState("Nillebo AT");
+  const { schedueles, prices, devicestatuses, devices } = initData;
+  const [currentDevice, setCurrentDevice] = useState("Choose device");
   const [currentScheduele, setCurrentScheduele] = useState([]);
   const [currentPrice, setCurrentPrice] = useState([]);
   const [currentDevicesStatus, setCurrentDeviceStatus] = useState();
   const [priceDate, setPriceDate] = useState(new Date().toISOString().split("T")[0]);
 
   useEffect(() => {
-    const defaultScheduele = schedueles.value.find(obj => obj.date === new Date().toISOString().split("T")[0]);
-    const todaysPrices = prices.value.find(obj => obj.date === new Date().toISOString().split("T")[0]);
-    const defaultDeviceStatus = devicestatuses.value.find(obj => obj.device_status.mac === "34945475764d")?.device_status.relays[0].ison ? "ON" : "OFF";
-    setCurrentDeviceStatus(defaultDeviceStatus);
-    setCurrentScheduele(defaultScheduele.values["NilleATtim"]);
+    const todaysPrices = prices.value[prices.value.length -1]; 
     setCurrentPrice(todaysPrices.values)
   }, []);
 
@@ -26,10 +27,11 @@ export default ({ initData }) => {
     currentscheduele: { value: currentScheduele, set: setCurrentScheduele },
     currentprice: { value: currentPrice, set: setCurrentPrice },
     currentdevicestatus: { value: currentDevicesStatus, set: setCurrentDeviceStatus },
+    devices: devices.value,
     schedueles,
     prices,
     devicestatuses
-  }), [priceDate, currentDevice, currentScheduele, currentPrice, currentDevicesStatus, schedueles.value, prices.value, devicestatuses.value]);
+  }), [priceDate, currentDevice, currentScheduele, currentPrice, currentDevicesStatus, devices.value, schedueles.value, prices.value, devicestatuses.value]);
 
   const numbers = Array.from({ length: 24 }, (_, i) => i);
   return (
@@ -38,7 +40,7 @@ export default ({ initData }) => {
         <Col md={8} className="p-0">
           <Container className="p-0">
             <h3 className="title mt-3">Prices & Schedueles</h3>
-            <SchedueleOptions allDataStates={allDataStates} />
+            <ScheduleOptions allDataStates={allDataStates} />
             <Row className="justify-content-center  schedueleHolder">
               <Col lg={6} xl={6}>
                 <Container className="schedueleContainer p-3 mt-4">

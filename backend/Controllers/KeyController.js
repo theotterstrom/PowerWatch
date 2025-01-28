@@ -66,7 +66,8 @@ const requestDecrypter = async (req, db) => {
     const collection = db.collection("keys");
     const allKeys = await collection.find({}).toArray();
     const correctKey = allKeys.find(obj => obj.key.slice(10, 20) === keyPart).key;
-    return await unscramble(data, correctKey);
+    const unscrambledData = await unscramble(data, correctKey)
+    return await JSON.parse(unscrambledData);
 };
 
 module.exports = {
