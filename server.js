@@ -9,29 +9,28 @@ const fs = require('fs');
 const https = require('https');
 const path = require('path');
 
-const { mongouri, dbname } = process.env;
+const { mongouri } = process.env;
 
 const initializeDatabase = async () => {
   try {
     const client = new MongoClient(mongouri);
     await client.connect();
-    const masterDb = client.db("customers");
-    const customerCollection = masterDb.collection("customerDbs");
-    const customerDbNames = await customerCollection.find({}).toArray();
-    let customerDbs = customerDbNames.map(customerDb => client.db(customerDb.name));
-    return { customerDbs, masterDb };
+    return { client, masterDb: client.db("customers") };
   } catch (err) {
     console.error("Failed to connect to MongoDB:", err);
     process.exit(1);
   }
 };
 
-const corsOptions = {
-  origin: 'https://localhost:9000',
-  credentials: true,
+const app = express();
+if(process.env.NODE_ENV === "development"){
+  const corsOptions = {
+    origin: 'https://localhost:9000',
+    credentials: true,
+  };
+  app.use(cors(corsOptions));
 };
 
-const app = express();
 app.use(express.json());
 app.use(cors(corsOptions));
 app.use(cookieParser());
@@ -47,9 +46,9 @@ const httpsOptions = process.env.NODE_ENV === "development" ? {
 
 let server;
 
-initializeDatabase().then((dbs) => {
+initializeDatabase().then(({ client, masterDb }) => {
 
-  app.use('/api', routes(dbs));
+  app.use('/api', routes({ client, masterDb }));
   app.use(express.static(path.join(__dirname, 'client/build')));
   app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'client/public', 'index.html'));
