@@ -14,7 +14,7 @@ module.exports = (isMobile, yAxisLabel, chartStates) => {
                 labels: {
                     color: "white",
                     font: {
-                        size: window.innerWidth <= 767 ? 12 : 16,
+                        size: 12,
                     },
                 },
                 position: 'top',
@@ -41,7 +41,7 @@ module.exports = (isMobile, yAxisLabel, chartStates) => {
                     maxRotation: 90,
                     minRotation: 90,
                     font: {
-                        size: window.innerWidth <= 767 ? 12 : 20,
+                        size: 12,
                     },
                 }
             },
@@ -54,7 +54,7 @@ module.exports = (isMobile, yAxisLabel, chartStates) => {
                     maxRotation: 90,
                     minRotation: 90,
                     font: {
-                        size: window.innerWidth <= 767 ? 12 : 20,
+                        size: 12,
                     },
                     callback: function (value) {
                         return `${value}`;
@@ -72,7 +72,6 @@ module.exports = (isMobile, yAxisLabel, chartStates) => {
                 if (previousIndex !== index) {
                     previousIndex = index;
                     const chosenDate = chartElement[0].element.$context.chart.data.labels[index];
-
                     const dateValues = chartElement.map(obj => {
                         const value = obj.element["$context"].raw; // Value of the data point
                         const datasetIndex = obj.datasetIndex; // Dataset index
@@ -109,7 +108,7 @@ module.exports = (isMobile, yAxisLabel, chartStates) => {
                 labels: {
                     color: "white",
                     font: {
-                        size: window.innerWidth <= 1024 ? 20 : 12
+                        size: 12
                     }
                 },
                 position: 'top',
@@ -131,7 +130,7 @@ module.exports = (isMobile, yAxisLabel, chartStates) => {
                 ticks: {
                     color: "white",
                     font: {
-                        size: window.innerWidth <= 1024 ? 20 : 12
+                        size: 12
                     }
 
                 },
@@ -150,7 +149,7 @@ module.exports = (isMobile, yAxisLabel, chartStates) => {
                 ticks: {
                     color: "white",
                     font: {
-                        size: window.innerWidth <= 1024 ? 20 : 12
+                        size: 12
                     },
                     callback: function (value) {
                         return `${value}`;
@@ -168,7 +167,6 @@ module.exports = (isMobile, yAxisLabel, chartStates) => {
                 if (previousIndex !== index) {
                     previousIndex = index;
                     const chosenDate = chartElement[0].element.$context.chart.data.labels[index];
-
                     const dateValues = chartElement.map(obj => {
                         const value = obj.element["$context"].raw; // Value of the data point
                         const datasetIndex = obj.datasetIndex; // Dataset index
@@ -180,7 +178,7 @@ module.exports = (isMobile, yAxisLabel, chartStates) => {
                             datasetColor
                         };
                     });
-
+                    
                     const xCoordinate = chartElement[0].element.x;
 
                     if (chosenDate !== chartStates.currentdate.value) {

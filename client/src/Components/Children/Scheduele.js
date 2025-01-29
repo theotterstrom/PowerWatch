@@ -35,13 +35,18 @@ export default ({ initData }) => {
 
   const numbers = Array.from({ length: 24 }, (_, i) => i);
   return (
-    <Container className="mt-4 container-fluid prices pt-5 pb-5 mainContainer">
-      <Row className="justify-content-center">
-        <Col md={8} className="p-0">
-          <Container className="p-0">
-            <h3 className="title mt-3">Prices & Schedueles</h3>
+        <Container className="mt-4 container-fluid power pt-5 pb-5 mainContainer">
+          <Row className="justify-content-center">
+            <Col xl={8} lg={8} md={10} className="p-0">
+              <Container className="p-0 justify-content-center">
+                <Container className="container-fluid d-flex justify-content-center">
+                  <Col xl={12} lg={12} md={12} sm={8} xs={8} className="text-center text-lg-start">
+                    <h3 className="mt-3">Prices & Schedules</h3>
+                  </Col>
+                </Container>
+
             <ScheduleOptions allDataStates={allDataStates} />
-            <Row className="justify-content-center  schedueleHolder">
+            <Row className="justify-content-center">
               <Col lg={6} xl={6}>
                 <Container className="schedueleContainer p-3 mt-4">
                   <h4>Scheduele</h4>

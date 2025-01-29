@@ -10,8 +10,8 @@ const ToolTipChild = React.memo(({ chartStates, page }) => {
   return <ToolTip initData={initData} />
 });
 
-const PowerOptionChild = React.memo(({allDataStates, dateStates, devices }) => {
-  const initData = useMemo(() => ({ allDataStates, dateStates, devices  }), [allDataStates, dateStates, devices ]);
+const PowerOptionChild = React.memo(({ allDataStates, dateStates, devices }) => {
+  const initData = useMemo(() => ({ allDataStates, dateStates, devices }), [allDataStates, dateStates, devices]);
   return <PowerOptions initData={initData} />
 });
 
@@ -71,12 +71,15 @@ export default ({ initData }) => {
   const { chartData, chartOptions } = generatePowerData(allDataStates, readings, temps, dateStates, chartStates, devices);
 
   return (
-
     <Container className="mt-4 container-fluid power pt-5 pb-5 mainContainer">
       <Row className="justify-content-center">
-        <Col md={10} lg={8} className="p-0">
-          <Container className="p-0">
-            <h3 className="title mt-3">Power Consumption & Temperature</h3>
+        <Col xl={8} lg={8} md={10} className="p-0">
+          <Container className="p-0 justify-content-center">
+            <Container className="container-fluid d-flex justify-content-center">
+              <Col xl={12} lg={12} md={12} sm={8} xs={8} className="text-center text-lg-start">
+                <h3 className="mt-3">Power Consumption & Temperature</h3>
+              </Col>
+            </Container>
             <PowerOptionChild allDataStates={allDataStates} dateStates={dateStates} devices={devices} />
             <Container className="chartContainer p-0 m-0">
               <ToolTipChild chartStates={chartStates} page={"power"} />

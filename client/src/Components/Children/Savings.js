@@ -10,8 +10,8 @@ const ToolTipChild = React.memo(({ chartStates, page }) => {
   return <ToolTip initData={initData} />
 });
 
-const SavingsOptionsChild = React.memo(({ allDataStates, dateStates, devices }) => {
-  const initData = useMemo(() => ({ allDataStates, dateStates, devices }), [allDataStates, dateStates, devices]);
+const SavingsOptionsChild = React.memo(({ allDataStates, dateStates, devices, savingsData }) => {
+  const initData = useMemo(() => ({ allDataStates, dateStates, devices, savingsData }), [allDataStates, dateStates, devices, savingsData]);
   return <SavingsOptions initData={initData} />
 });
 
@@ -72,33 +72,24 @@ export default ({ initData }) => {
   const { savingsData, savingsOptions, totalSpending, totalSaved } = generateSavingsData(allDataStates, savings, dateStates, chartStates, devices);
   
   return (
-    <Container className="mt-4 container-fluid savings pt-5 pb-5 mainContainer">
-      <Row className="justify-content-center">
-        <Col md={10} lg={8} className="p-0">
-          <Container className="p-0">
-            <h3 className="title mt-3">Savings</h3>
-            <Row className="mt-4 savingsHolder">
-              <Col xs={6} md={4} lg={3} className="savingsText" >
-                <b>Total spending:</b><br></br>
-                <b>Average price:</b><br></br>
-                <div></div>
-                <b>Total saved:</b>
-              </Col>
-              <Col xs={5} md={4} lg={3}>
-                {(totalSpending[0] / 100).toFixed(2)} SEK<br></br>
-                {(totalSpending[1] / 100).toFixed(2)} SEK
-                <div></div>
-                {(totalSaved / 100).toFixed(2)} SEK
-              </Col>
-            </Row>
-            <SavingsOptionsChild allDataStates={allDataStates} dateStates={dateStates} devices={devices} />
-            <Container className="savingsChartContainer p-0 m-0">
-              <ToolTipChild chartStates={chartStates} page={"savings"} />
-              <Line height={200} data={savingsData} options={savingsOptions} className="mt-md-4" />
-            </Container>
-          </Container>
-        </Col>
-      </Row>
-    </Container>
+        <Container className="mt-4 container-fluid power pt-5 pb-5 mainContainer">
+          <Row className="justify-content-center">
+            <Col xl={8} lg={8} md={10} className="p-0">
+              <Container className="p-0 justify-content-center">
+                <Container className="container-fluid d-flex justify-content-center">
+                  <Col xl={12} lg={12} md={12} sm={8} xs={8} className="text-center text-lg-start">
+                    <h3 className="mt-3">Savings</h3>
+                  </Col>
+                </Container>
+                
+                <SavingsOptionsChild allDataStates={allDataStates} dateStates={dateStates} devices={devices} savingsData={{totalSpending, totalSaved}} />
+                <Container className="chartContainer p-0 m-0">
+                <ToolTipChild chartStates={chartStates} page={"savings"} />
+                  <Line height={200} data={savingsData} options={savingsOptions} className="mt-md-4" />
+                </Container>
+              </Container>
+            </Col>
+          </Row>
+        </Container>
   );
 };

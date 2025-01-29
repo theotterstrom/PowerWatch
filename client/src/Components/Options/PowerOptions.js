@@ -95,7 +95,7 @@ export default ({ initData }) => {
                 checked={allDataStates[obj.deviceName].value}
                 onChange={() => allDataStates[obj.deviceName].set(!allDataStates[obj.deviceName].value)}
             />);
-        
+
         const secondHalfForms = secondHalf.map((obj, index) =>
             <Form.Check
                 type="checkbox"
@@ -122,176 +122,78 @@ export default ({ initData }) => {
 
     return (
         <>
-            {window.innerWidth <= 768 ? <>
-                <Col className="p-5 pt-0 pb-0 mt-4 mb-4">
-                    <Form.Label>Start Date</Form.Label>
-                    <Form.Control style={{ height: "30px" }} type="date" value={startdate.value} onChange={(e) => setStartDateFunc(e.target.value)} />
-                    <Form.Label className="mt-3">End Date</Form.Label>
-                    <Form.Control style={{ height: "30px" }} type="date" value={enddate.value} onChange={(e) => setEndDateFunc(e.target.value)} />
+            <Row className="justify-content-center mt-sm-2 mt-md-2 mt-lg-3">
+                <Col xl={8} lg={7} md={12} sm={10} xs={11} className="p-3 d-lg-block d-none">
+                    <Row className="p-0 m-0" style={{ height: "100%" }}>
+                        <Col className="d-flex flex-column">
+                            {splitFormChecks()[0]}
 
-                    <Container className="p-0 mt-3">
-                        <p className="m-0 p-0">Month Filter</p>
-                        <Container className="d-flex p-0 m-0">
-                            <Dropdown onSelect={handleMonthSelect} className="mt-2" style={{ width: "85%" }}>
-                                <Dropdown.Toggle variant="light" id="dropdown-basic" style={{ width: "100%", textAlign: "start", height: "35px", padding: "0 0 0 20px" }}>
-                                    {monthText}
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu>
-                                    {generateMonthOptions()}
-                                </Dropdown.Menu>
-                            </Dropdown>
-                            &nbsp;&nbsp;<i onClick={() => handleMonthSelect()} className="fa-solid fa-xmark mt-2" style={{ color: "white", fontSize: "40px", cursor: "pointer" }}></i>
-                        </Container>
-                    </Container>
-
-                    <Row className="mt-3">
-                        <Col xs={3} className="justify-content-center d-flex">
-                            <Form.Check onChange={() => alldates.set(!alldates.value)} />
-                        </Col>
-                        <Col xs={3}></Col>
-                        <Col xs={6} className="p-0 p-2 pt-2 pb-0">
-                            <h6 className="allDatesPowerTitle">Show all dates</h6>
-                        </Col>
-                    </Row>
-                    <Row className="mt-3">
-                        <Col xs={6}>
-                            <div className="d-flex m-0 p-0">
-                                <Dropdown onSelect={(eventKey) => handleSelect(eventKey, groups)}>
-                                    <Dropdown.Toggle variant="primary" id="dropdown-basic">
-                                        {dropdownText}
-                                    </Dropdown.Toggle>
-                                    <Dropdown.Menu>
-                                        {Object.entries(groups).map(([groupName, members]) => (<Dropdown.Item key={groupName} eventKey={groupName} >{groupName}</Dropdown.Item>))}
-                                        <Dropdown.Item eventKey="Alla">Alla</Dropdown.Item>
-                                    </Dropdown.Menu>
-                                </Dropdown>
-                            </div>
-                        </Col>
-                        <Col className="pb-0 mt-2" xs={6}>
-                            <h6>Group</h6>
-                        </Col>
-                    </Row>
-                </Col>
-            </> : <>
-                <Row className="mt-5 justify-content-center pageOptions">
-                    <Col>
-                        {splitFormChecks()[0]}
-
-                        {1024 <= window.innerWidth ? <>
-                            <div className="d-flex" style={{ marginTop: "100px" }}>
-
-                                <Dropdown onSelect={(eventKey) => handleSelect(eventKey, groups)}>
-                                    <Dropdown.Toggle variant="primary" id="dropdown-basic">
-                                        {dropdownText}
-                                    </Dropdown.Toggle>
-                                    <Dropdown.Menu>
-                                        {Object.entries(groups).map(([groupName, members]) => (<Dropdown.Item key={groupName} eventKey={groupName} >{groupName}</Dropdown.Item>))}
-                                        <Dropdown.Item eventKey="Alla">Alla</Dropdown.Item>
-                                    </Dropdown.Menu>
-                                </Dropdown>
-                                <p className="p-0 m-0 pb-2 mt-2">&nbsp;&nbsp;Group</p>
-                            </div>
-                        </> : <></>}
-
-                    </Col>
-                    <Col>
-                        {splitFormChecks()[1]}
-
-                    </Col>
-                    <Col lg={12} xl={4} className="mt-md-4 mt-xl-0">
-
-                        <Form.Label>Start Date</Form.Label>
-                        <Form.Control
-                            style={{ height: "30px", fontSize: window.innerWidth <= 1024 ? "20px" : "unset" }}
-                            type="date"
-                            value={startdate.value}
-                            onChange={(e) => setStartDateFunc(e.target.value)}
-                            className="dateToggles"
-                        />
-                        <Form.Label className="mt-3">End Date</Form.Label>
-                        <Form.Control
-                            style={{ height: "30px", fontSize: window.innerWidth <= 1024 ? "20px" : "unset" }}
-                            type="date"
-                            value={enddate.value}
-                            onChange={(e) => setEndDateFunc(e.target.value)}
-                        />
-
-                        {1024 <= window.innerWidth ? <>
-                            <Container className="p-0 mt-3">
-                                <p className="m-0 p-0">Month Filter</p>
-                                <Container className="d-flex p-0 m-0">
-                                    <Dropdown onSelect={handleMonthSelect} className="mt-2" style={{ width: "85%" }}>
-                                        <Dropdown.Toggle variant="light" id="dropdown-basic" style={{ width: "100%", textAlign: "start", height: "35px", padding: "0 0 0 20px" }}>
-                                            {monthText}
-                                        </Dropdown.Toggle>
-                                        <Dropdown.Menu>
-                                            {generateMonthOptions()}
-                                        </Dropdown.Menu>
-                                    </Dropdown>
-                                    &nbsp;&nbsp;<i onClick={() => handleMonthSelect()} className="fa-solid fa-xmark mt-2" style={{ color: "white", fontSize: "40px", cursor: "pointer" }}></i>
-                                </Container>
-                            </Container>
-                            <Container className="d-flex p-0 mt-4">
-                                <Form.Check onChange={() => alldates.set(!alldates.value)} />&nbsp;&nbsp;&nbsp;
-                                {window.innerWidth <= 1024 ? <>
-                                    <Col md={2}></Col>
-                                </> : <></>}
-                                <Form.Label>Show all dates</Form.Label>
-                            </Container>
-                        </> : <>
-                            <Row>
-                                <Col md={6}>
-                                    <Container className="p-0 mt-3">
-                                        <p className="m-0 p-0">Month Filter</p>
-                                        <Container className="d-flex p-0 m-0">
-                                            <Dropdown onSelect={handleMonthSelect} className="mt-2" style={{ width: "100%" }}>
-                                                <Dropdown.Toggle variant="light" id="dropdown-basic" style={{ width: "100%", textAlign: "start", height: "35px", padding: "0 0 0 20px" }}>
-                                                    {monthText}
-                                                </Dropdown.Toggle>
-                                                <Dropdown.Menu>
-                                                    {generateMonthOptions()}
-                                                </Dropdown.Menu>
-                                            </Dropdown>
-                                            &nbsp;&nbsp;<i onClick={() => handleMonthSelect()} className="fa-solid fa-xmark mt-2" style={{ color: "white", fontSize: "40px", cursor: "pointer" }}></i>
-                                        </Container>
-                                    </Container>
-                                </Col>
-
-                                <Col md={6} className="mt-5">
-                                    <Container className="d-flex p-0 mt-3 justify-content-end">
-                                        <Form.Check onChange={() => alldates.set(!alldates.value)} />&nbsp;&nbsp;&nbsp;
-                                        <Form.Label>Show all dates</Form.Label>
-                                    </Container>
-                                </Col>
-                            </Row>
-                        </>}
-                    </Col>
-                </Row>
-                <Row className="mb-3">
-                    <Col className="checkContainer">
-                        {window.innerWidth <= 1024 ? <>
-                            <Row className="d-flex mt-3">
-                                <Col md={3} style={{ position: "absolute" }}>
+                            <Container className="mt-auto m-0 p-0 d-flex flex-column-reverse">
+                                <Container className="m-0 p-0 d-flex mt-4">
                                     <Dropdown onSelect={(eventKey) => handleSelect(eventKey, groups)}>
                                         <Dropdown.Toggle variant="primary" id="dropdown-basic">
                                             {dropdownText}
                                         </Dropdown.Toggle>
-                                        <Dropdown.Menu style={{ position: "absolute" }}>
+                                        <Dropdown.Menu>
                                             {Object.entries(groups).map(([groupName, members]) => (<Dropdown.Item key={groupName} eventKey={groupName} >{groupName}</Dropdown.Item>))}
                                             <Dropdown.Item eventKey="Alla">Alla</Dropdown.Item>
                                         </Dropdown.Menu>
                                     </Dropdown>
-                                </Col>
-                                <Col md={3}></Col>
-                                <Col>
-                                    <p className="p-0 m-0 pb-2" style={{ fontSize: "20px" }}>Group</p>
-                                </Col>
-                            </Row>
-                        </> : <>
-                        </>}
-                    </Col>
-                </Row>
-            </>}
+                                    &nbsp;<p className="mt-1">Group</p>
+                                </Container>
+                            </Container>
+
+                        </Col>
+                        <Col>
+                            {splitFormChecks()[1]}
+                        </Col>
+                    </Row>
+
+                </Col>
+                <Col xl={4} lg={5} md={12} sm={10} xs={11} className="p-3 d-flex flex-column justify-content-between">
+                    <Form.Label>Start Date</Form.Label>
+                    <Form.Control type="date" value={startdate.value} onChange={(e) => setStartDateFunc(e.target.value)} />
+                    <Form.Label className="mt-3">End Date</Form.Label>
+                    <Form.Control type="date" value={enddate.value} onChange={(e) => setEndDateFunc(e.target.value)} />
+                    <Form.Label className="mt-3">Month filter</Form.Label>
+                    <Container className="d-flex p-0 m-0">
+                        <Dropdown onSelect={handleMonthSelect} className="mt-2" style={{ width: "85%" }}>
+                            <Dropdown.Toggle variant="light" id="dropdown-basic" style={{ width: "100%", textAlign: "start", height: "35px", padding: "0 0 0 20px" }}>
+                                {monthText}
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu>
+                                {generateMonthOptions()}
+                            </Dropdown.Menu>
+                        </Dropdown>
+                        &nbsp;&nbsp;<i onClick={() => handleMonthSelect()} className="fa-solid fa-xmark mt-2" style={{ color: "white", fontSize: "40px", cursor: "pointer" }}></i>
+                    </Container>
+                    <Container className="justify-content-between d-flex">
+
+                        <Container className="m-0 p-0 mt-4 d-lg-none d-flex">
+                            <Dropdown onSelect={(eventKey) => handleSelect(eventKey, groups)}>
+                                <Dropdown.Toggle variant="primary" id="dropdown-basic">
+                                    {dropdownText}
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                    {Object.entries(groups).map(([groupName, members]) => (
+                                        <Dropdown.Item key={groupName} eventKey={groupName}>
+                                            {groupName}
+                                        </Dropdown.Item>
+                                    ))}
+                                    <Dropdown.Item eventKey="Alla">Alla</Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                            &nbsp;<p className="mt-1">Group</p>
+                        </Container>
+
+                        <Container className="m-0 p-0 d-flex mt-4">
+                            <Form.Check onChange={() => alldates.set(!alldates.value)} />
+                            &nbsp;<p>Show all dates</p>
+                        </Container>
+                    </Container>
+
+                </Col>
+            </Row>
         </>
     );
 };

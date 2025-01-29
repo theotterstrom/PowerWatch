@@ -62,7 +62,6 @@ const generateSavingsData = (allDataStates, savings, dateStates, chartStates, de
         },
         [[0, 0], {}]
     );
-    console.log(totalSpending)
 
     Object.values(savingsDataSource).forEach(array => array.sort((a, b) => new Date(a.date) - new Date(b.date)))
     let dateList = [];

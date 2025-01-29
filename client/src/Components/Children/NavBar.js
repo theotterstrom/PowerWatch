@@ -131,7 +131,7 @@ export default ({ states }) => {
                             <NavDropdown.Item style={{ backgroundColor: "#004786", color: "white" }} onClick={() => showPowerHourFunc()}>
                                 Set power hours
                             </NavDropdown.Item>
-                            <NavDropdown.Item style={{ backgroundColor: "#004786", color: "white" }} onClick={() => showPage("control")}>
+                            <NavDropdown.Item style={{ backgroundColor: "#004786", color: "white" }} onClick={() => showPage("control")} className="mt-2">
                                 Control Panel
                             </NavDropdown.Item>
                             <NavDropdown.Item className="mt-2" style={{ backgroundColor: "#004786", color: "white" }} onClick={() => handleLogout()}>
