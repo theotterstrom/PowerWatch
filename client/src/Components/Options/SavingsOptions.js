@@ -171,7 +171,7 @@ export default ({ initData }) => {
                             </div>
                         </Col>
                         <Col className="p-0 mt-2" xs={7}>
-                            <h6>Filter by houses</h6>
+                            <h6>Group</h6>
                         </Col>
                     </Row>
 
@@ -183,7 +183,7 @@ export default ({ initData }) => {
 
                         {window.innerWidth <= 1024 ? <>
                         </> : <>
-                            <div className="d-flex" style={{ marginTop: "150px" }}>
+                            <div className="d-flex" style={{ marginTop: "50px" }}>
                                 <Dropdown onSelect={(eventKey) => handleSelect(eventKey, groups)}>
                                     <Dropdown.Toggle variant="primary" id="dropdown-basic">
                                         {dropdownText}
@@ -193,7 +193,7 @@ export default ({ initData }) => {
                                         <Dropdown.Item eventKey="Alla">Alla</Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown>
-                                <p className="p-0 m-0 pb-2 mt-2">&nbsp;&nbsp;Filter houses</p>
+                                <p className="p-0 m-0 pb-2 mt-2">&nbsp;&nbsp;Groups</p>
                             </div>
                         </>}
 
@@ -202,21 +202,24 @@ export default ({ initData }) => {
                         {splitFormChecks()[1]}
                     </Col>
                     <Col lg={12} xl={4} className="mt-md-4 mt-xl-0">
-
-                        <Form.Label>Start Date</Form.Label>
-                        <Form.Control
-                            style={{ height: "30px" }}
-                            type="date"
-                            value={savingsstartdate.value}
-                            onChange={(e) => setSavingStartDateFunc(e.target.value)}
-                        />
-                        <Form.Label className="mt-3">End Date</Form.Label>
-                        <Form.Control
-                            style={{ height: "30px" }}
-                            type="date"
-                            value={savingsenddate.value}
-                            onChange={(e) => setSavingEndDateFunc(e.target.value)}
-                        />
+                        <Container className="p-0 dateContainer">
+                           
+                                <Form.Label>Start Date</Form.Label>
+                                <Form.Control
+                                    style={{ height: "30px" }}
+                                    type="date"
+                                    value={savingsstartdate.value}
+                                    onChange={(e) => setSavingStartDateFunc(e.target.value)}
+                                />
+                                <Form.Label className="mt-3">End Date</Form.Label>
+                                <Form.Control
+                                    style={{ height: "30px" }}
+                                    type="date"
+                                    value={savingsenddate.value}
+                                    onChange={(e) => setSavingEndDateFunc(e.target.value)}
+                                />
+                         
+                        </Container>
 
                         {1024 <= window.innerWidth ? <>
                             <Container className="p-0 mt-3">
@@ -287,7 +290,7 @@ export default ({ initData }) => {
                                 </Col>
                                 <Col md={2}></Col>
                                 <Col>
-                                    <p className="p-0 m-0 pb-2" style={{ fontSize: "20px" }}>Filter by houses</p>
+                                    <p className="p-0 m-0 pb-2" style={{ fontSize: "20px" }}>Group</p>
                                 </Col>
                             </Row>
                         </> : <></>}

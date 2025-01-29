@@ -1,6 +1,6 @@
 import { Container, Row, Col, Form, Button, Dropdown } from "react-bootstrap";
 import React, { useState } from "react";
-import MakeRequest from "../Helpers/MakeRequest";
+import MakeRequest from "../../Helpers/MakeRequest";
 
 export default ({ showWindow, method, devices, setDevices }) => {
 
@@ -13,6 +13,7 @@ export default ({ showWindow, method, devices, setDevices }) => {
     const [newGroupDevices, setNewGroupDevices] = useState([]);
     const [newGroup, setNewGroup] = useState({});
     const [removeGroup, setRemoveGroup] = useState(null);
+    const [isDisabled, setIsDisabled] = useState(false);
 
     const makeDeviceRequest = async (e, type) => {
         e.preventDefault();
@@ -21,7 +22,8 @@ export default ({ showWindow, method, devices, setDevices }) => {
         let removeId;
 
         if (type === "add") {
-            if (Object.keys(newDevice).length !== 5 || Object.values(newDevice).some(value => !value || value.trim() === "")) {
+            const requiredLength = newDevice.deviceType === "Thermometer" ? 4 : 5;
+            if (Object.keys(newDevice).length !== requiredLength || Object.values(newDevice).some(value => !value || value.trim() === "")) {
                 alert("All fields must be filled out")
                 return;
             };
@@ -32,7 +34,8 @@ export default ({ showWindow, method, devices, setDevices }) => {
             endpoint = "removedevice"
             data = { id: removeId };
         } else if (type === "update") {
-            if (Object.keys(updateDevice).length !== 6 || Object.values(newDevice).some(value => !value || value.trim() === "")) {
+            const requiredLength = newDevice.deviceType === "Thermometer" ? 5 : 6;
+            if (Object.keys(updateDevice).length !== requiredLength || Object.values(newDevice).some(value => !value || value.trim() === "")) {
                 alert("All fields must be filled out")
                 return;
             };
@@ -175,7 +178,7 @@ export default ({ showWindow, method, devices, setDevices }) => {
                             onSelect={(eventKey) => {
                                 setNewDevice({ ...newDevice, wattFormat: eventKey });
                             }}>
-                            <Dropdown.Toggle variant="light" className="popDropDownToggle" style={{ textAlign: "start" }}>
+                            <Dropdown.Toggle variant="light" className="popDropDownToggle" style={{ textAlign: "start" }} disabled={isDisabled}>
                                 {newDevice.wattFormat || "Select Format"}
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
@@ -187,7 +190,14 @@ export default ({ showWindow, method, devices, setDevices }) => {
                         <Form.Label className="mt-3">Device type</Form.Label>
                         <Dropdown className="popDropDown"
                             onSelect={(eventKey) => {
-                                setNewDevice({ ...newDevice, deviceType: eventKey });
+                                if (eventKey === "Thermometer") {
+                                    setIsDisabled(true)
+                                    setNewDevice({ ...newDevice, wattFormat: '', deviceType: eventKey })
+                                } else {
+                                    setIsDisabled(false)
+                                    setNewDevice({ ...newDevice, deviceType: eventKey });
+                                };
+
                             }}
                         >
                             <Dropdown.Toggle variant="light" className="popDropDownToggle" style={{ textAlign: "start" }}>
@@ -235,7 +245,7 @@ export default ({ showWindow, method, devices, setDevices }) => {
                                 setUpdateDevice({ ...updateDevice, wattFormat: eventKey });
                             }}
                         >
-                            <Dropdown.Toggle variant="light" className="popDropDownToggle" style={{ textAlign: "start" }}>
+                            <Dropdown.Toggle variant="light" className="popDropDownToggle" style={{ textAlign: "start" }} disabled={isDisabled}>
                                 {updateDevice.wattFormat || "Select Format"}
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
@@ -249,7 +259,13 @@ export default ({ showWindow, method, devices, setDevices }) => {
                         <Dropdown
                             className="popDropDown"
                             onSelect={(eventKey) => {
-                                setUpdateDevice({ ...updateDevice, deviceType: eventKey });
+                                if (eventKey === "Thermometer") {
+                                    setIsDisabled(true)
+                                    setUpdateDevice({ ...updateDevice, wattFormat: '', deviceType: eventKey })
+                                } else {
+                                    setIsDisabled(false)
+                                    setUpdateDevice({ ...updateDevice, deviceType: eventKey });
+                                };
                             }}
                         >
                             <Dropdown.Toggle variant="light" className="popDropDownToggle" style={{ textAlign: "start" }}>

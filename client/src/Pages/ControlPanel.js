@@ -2,11 +2,11 @@ import React, { useState, useEffect, useMemo } from "react";
 import { Container, Navbar, Nav, NavDropdown, Row, Col, Tab, Tabs, Dropdown } from "react-bootstrap";
 import apiUrl from '../Components/Helpers/APIWrapper'
 import axios from 'axios';
-import ControlPanelPop from '../Components/Children/ControlPanelPop';
+import ControlPanelPop from '../Components/Children/ControlPanelChildren/ControlPanelPop';
 import Devices from "../Components/Children/ControlPanelChildren/Devices";
 import Groups from "../Components/Children/ControlPanelChildren/Groups";
 import Cloud from "../Components/Children/ControlPanelChildren/Cloud";
-import { useNavigate } from 'react-router-dom';
+import Header from "../Components/Children/NavBar";
 
 const PopUp = React.memo(({ showWindow, method, devices, setDevices }) => {
   return <ControlPanelPop showWindow={showWindow} method={method} devices={devices} setDevices={setDevices} />
@@ -26,16 +26,15 @@ const CloudSettings = React.memo(() => {
   return <Cloud />
 });
 
+const NewNavBar = React.memo(() => {
+  return <Header />
+})
+
 const ControlPanel = () => {
-  const navigate = useNavigate();
-  const [expanded, setExpanded] = useState(false);
   const [devices, setDevices] = useState([]);
   const [showWindow, setShowWindow] = useState(true);
   const [method, setMethod] = useState(null);
-
   const [mobileShow, setMobileShow] = useState("Device Settings");
-
-  const navbarToggle = () => setExpanded(!expanded);
 
   useEffect(() => {
     const fetchDevices = async () => {
@@ -44,24 +43,13 @@ const ControlPanel = () => {
       });
       setDevices(deviceRes.data);
     };
-
     fetchDevices();
-
   }, []);
-
-  const showPage = (page) => {
-    
-    navigate('/energywatch', { state: { pageSet: page } });
-  };
-  
-  
-
 
   const showPopUp = (method) => {
     setShowWindow(true)
     setMethod(method)
   };
-
 
   const groups = devices.reduce((acc, cur) => {
     if (cur.group) {
@@ -78,56 +66,7 @@ const ControlPanel = () => {
 
   return (<>
     {/* Header */}
-      <Navbar
-        style={{
-          backgroundColor: "#004786",
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "99.1vw",
-          zIndex: 100,
-          borderBottomLeftRadius: "10px",
-          borderBottomRightRadius: "10px",
-        }}
-        variant="dark"
-        expand="lg"
-        expanded={expanded}
-        onToggle={navbarToggle}
-      >
-      <Container>
-        <Navbar.Brand onClick={() => showPage("power")} style={{ cursor: "pointer" }}>
-        <div className="titleHolder">
-            <img style={{ height: "40px" }} src="/images/new1.png" alt="EnergyWatch Logo" />
-            &nbsp;powerwatch
-            </div>
-        </Navbar.Brand>
-        <Navbar.Toggle aria-controls="navbar-nav" className="navBarButton" />
-        <Navbar.Collapse id="navbar-nav" className="ms-lg-5">
-          <Nav className="me-auto">
-            <Nav.Link onClick={() => showPage("power")} style={{ color: "white" }}>
-              Power & Temperature
-            </Nav.Link>
-            <Nav.Link onClick={() => showPage("savings")} style={{ color: "white" }} className="ms-lg-2">
-              Savings
-            </Nav.Link>
-            <Nav.Link onClick={() => showPage("scheduele")} style={{ color: "white" }} className="ms-lg-2">
-              Prices & Schedules
-            </Nav.Link>
-            <NavDropdown className="custom-dropdown" title="More" id="nav-dropdown" style={{ color: "white" }}>
-              <NavDropdown.Item style={{ backgroundColor: "#004786", color: "white" }} onClick={() => showPowerHourFunc()}>
-                Set power hours
-              </NavDropdown.Item>
-              <NavDropdown.Item style={{ backgroundColor: "#004786", color: "white" }} onClick={() => showPage("control")}>
-                Control Panel
-              </NavDropdown.Item>
-              <NavDropdown.Item className="mt-2" style={{ backgroundColor: "#004786", color: "white" }} onClick={() => handleLogout()}>
-                Log Out
-              </NavDropdown.Item>
-            </NavDropdown>
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+      <NewNavBar />
 
     <img className="backgroundBlock" src="/images/power.jpg" />
     <div className="backgroundBlock"></div>

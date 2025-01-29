@@ -99,7 +99,7 @@ module.exports = ({ client, masterDb }) => {
             };
             
             if(data.deviceType === "Relay"){
-                const fsDriveControl = await databaseFetch("powerhours", masterDb, customer, client);
+                const fsDriveControl = await databaseFetch("powerhour", masterDb, customer, client);
                 fsDriveControl[`device-${data.deviceName}`] = "0";
                 await databaseReplace("powerhour", masterDb, customer, client, fsDriveControl);
             };
@@ -226,7 +226,7 @@ module.exports = ({ client, masterDb }) => {
     router.get('/getcurrenthour', authMiddleware, async (req, res) => {
         try {
             const { customer } = req.cookies;
-           const fsDriveControl = await databaseFetch("powerhours", masterDb, customer, client);
+           const fsDriveControl = await databaseFetch("powerhour", masterDb, customer, client);
             res.json(fsDriveControl)
         } catch (e) {
             console.log(e)
@@ -311,6 +311,12 @@ module.exports = ({ client, masterDb }) => {
             sameSite: 'Strict',
             expires: new Date(0),
         });
+        res.cookie('customer', '', {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'Strict',
+            expires: new Date(0),
+        });
         return res.status(200).json({ message: 'Logged out successfully' });
     });
 
@@ -355,15 +361,18 @@ module.exports = ({ client, masterDb }) => {
 
     router.get('/fdsf8f9an3', async (req, res) => {
         try {
+            console.log("He")
             const { timestamp, hash: clientHash } = req.query;
             if (!timestamp || !clientHash) {
                 return res.status(400).send({ message: 'Missing timestamp or hash.' });
             }
             const allowed = checkKeyRouteCredentials(timestamp, clientHash);
+            console.log("He")
             if (allowed && req.query.session === "n41e3HGsg2V3vg") {
                 const key = await getKey(masterDb);
                 return res.status(200).json({ session: key });
             };
+            console.log("He")
             return res.status(401).json({ message: "Unauthorized" });
         } catch (e) {
             console.error(e)

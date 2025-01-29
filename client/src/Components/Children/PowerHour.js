@@ -3,18 +3,18 @@ import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import apiUrl from "../Helpers/APIWrapper";
 export default ({ initData }) => {
     const { powerhour, togglePowerHour, devices } = initData;
+    delete powerhour.value._id;
     const powerHourDevices = JSON.parse(JSON.stringify(devices.value)).filter(obj => obj.deviceType === "Relay");
-
     const setPowerHours = async () => {
         const floatCheckArr = JSON.parse(JSON.stringify(Object.values(powerhour.value)));
-        floatCheckArr.pop();
-
         if (floatCheckArr.some(obj => isNaN(obj))) {
             alert("All values must be integers or decimals")
         } else {
             try {
                 const setHourRes = await axios.post(`${apiUrl}/setpowerhour`, {
                     data: powerhour.value,
+                }, {
+                    withCredentials: true
                 });
                 alert("Hours were set")
                 togglePowerHour(false);
@@ -57,7 +57,7 @@ export default ({ initData }) => {
                         className="powerHourInput"
                         type="text"
                         placeholder={`Enter powerhour for ${obj.displayName}`}
-                        name={obj.deviceName}
+                        name={`device-${obj.deviceName}`}
                         value={powerhour.value[`device-${obj.deviceName}`]}
                     /></Col>
             </div>
@@ -72,7 +72,7 @@ export default ({ initData }) => {
                         className="powerHourInput"
                         type="text"
                         placeholder={`Enter powerhour for ${obj.displayName}`}
-                        name={obj.deviceName}
+                        name={`device-${obj.deviceName}`}
                         value={powerhour.value[`device-${obj.deviceName}`]}
                     /></Col>
             </div>)

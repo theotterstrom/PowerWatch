@@ -168,7 +168,7 @@ export default ({ initData }) => {
                             </div>
                         </Col>
                         <Col className="pb-0 mt-2" xs={6}>
-                            <h6>Filter by group</h6>
+                            <h6>Group</h6>
                         </Col>
                     </Row>
                 </Col>
@@ -189,7 +189,7 @@ export default ({ initData }) => {
                                         <Dropdown.Item eventKey="Alla">Alla</Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown>
-                                <p className="p-0 m-0 pb-2 mt-2">&nbsp;&nbsp;Filter houses</p>
+                                <p className="p-0 m-0 pb-2 mt-2">&nbsp;&nbsp;Group</p>
                             </div>
                         </> : <></>}
 
@@ -284,7 +284,7 @@ export default ({ initData }) => {
                                 </Col>
                                 <Col md={3}></Col>
                                 <Col>
-                                    <p className="p-0 m-0 pb-2" style={{ fontSize: "20px" }}>Filter by houses</p>
+                                    <p className="p-0 m-0 pb-2" style={{ fontSize: "20px" }}>Group</p>
                                 </Col>
                             </Row>
                         </> : <>

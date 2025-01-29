@@ -21,58 +21,48 @@ const generateSavingsData = (allDataStates, savings, dateStates, chartStates, de
 
     const monthFilter = monthFilterFunc()
 
-    const totalSpendning = savings.value
-        .filter(obj => {
-            if(allsavingsdate.value){
-                return true;
-            } else if (monthFilter.value) {
-                return parseInt(obj.date.split("-")[1]) === monthFilter.month;
-            };
-            return (obj.date.split(" ")[0] >= savingsstartdate.value && obj.date.split(" ")[0] <= savingsenddate.value)
-        })
-        .reduce(([spending, average], cur) => {
+    const filteredSavings = savings.value.filter(obj => {
+        if (allsavingsdate.value) {
+            return true;
+        } else if (monthFilter.value) {
+            return parseInt(obj.date.split("-")[1]) === monthFilter.month;
+        }
+        return obj.date.split(" ")[0] >= savingsstartdate.value && obj.date.split(" ")[0] <= savingsenddate.value;
+    });
+
+    const [totalSpending, savingsDataSource] = filteredSavings.reduce(
+        ([totals, acc], cur, index) => {
             let sum1 = 0;
             let sum2 = 0;
-            for (const device of Object.values(cur.values)) {
-                sum1 += device.realCost;
-                sum2 += device.averageCost;
-            };
-            return [spending += sum1, average += sum2]
-        }, [0, 0]);
+            const names = Object.keys(cur.values);
 
-    const savingsDataSource = savings.value.length > 0 ? savings.value
-        .filter(obj => {
-            if(allsavingsdate.value){
-                return true;
-            } else if (monthFilter.value) {
-                return parseInt(obj.date.split("-")[1]) === monthFilter.month;
-            };
-            return (obj.date.split(" ")[0] >= savingsstartdate.value && obj.date.split(" ")[0] <= savingsenddate.value)
-        })
-        .reverse()
-        .reduce((acc, cur, index) => {
-
-            const names = Object.keys(savings.value[0].values);
             if (index === 0) {
                 names.forEach(name => acc[name] = []);
-            };
+            }
 
             names.forEach(name => {
-                if (!acc[name].some(obj => obj.date === cur.date.split(" ")[0])) {
-                    acc[name].push({
-                        date: cur.date.split(" ")[0],
-                        realCost: cur.values[name].realCost,
-                        averageCost: cur.values[name].averageCost
-                    });
+                const realCost = cur.values[name].realCost;
+                const averageCost = cur.values[name].averageCost;
+                sum1 += allDataStates[name]?.value ? realCost : 0;
+                sum2 += allDataStates[name]?.value ? averageCost : 0;
+
+                const date = cur.date.split(" ")[0];
+                const existingIndex = acc[name].findIndex(obj => obj.date === date);
+
+                if (existingIndex === -1) {
+                    acc[name].push({ date, realCost, averageCost });
                 } else {
-                    const currentDateObjIndex = acc[name].findIndex(obj => obj.date === cur.date.split(" ")[0]);
-                    acc[name][currentDateObjIndex].realCost += cur.values[name].realCost;
-                    acc[name][currentDateObjIndex].averageCost += cur.values[name].averageCost;
-                };
+                    acc[name][existingIndex].realCost += realCost;
+                    acc[name][existingIndex].averageCost += averageCost;
+                }
             });
 
-            return acc;
-        }, {}) : {};
+            return [[totals[0] + sum1, totals[1] + sum2], acc];
+        },
+        [[0, 0], {}]
+    );
+    console.log(totalSpending)
+
     Object.values(savingsDataSource).forEach(array => array.sort((a, b) => new Date(a.date) - new Date(b.date)))
     let dateList = [];
     let startingDate = new Date("2024-12-24");
@@ -89,13 +79,13 @@ const generateSavingsData = (allDataStates, savings, dateStates, chartStates, de
         "salmon", "darkorange", "darkgreen", "darkblue", "darkred", "darkmagenta",
         "lightgreen"
     ];
-    
+
     let colorIndex = 0;
     const unprocessedSets = Object.entries(allDataStates).map(([deviceName, state]) => {
         const currentDevice = devices.value.find(obj => obj.deviceName === deviceName);
         const realCost = state.value && {
             label: currentDevice.displayName + " real",
-            data: savingsDataSource[deviceName].map((d) => (d["realCost"]/ 100).toFixed(2)),
+            data: savingsDataSource[deviceName].map((d) => (d["realCost"] / 100).toFixed(2)),
             borderColor: borderColors[colorIndex],
             fill: false,
             tension: 0.4
@@ -103,7 +93,7 @@ const generateSavingsData = (allDataStates, savings, dateStates, chartStates, de
         colorIndex++;
         const averageCost = state.value && {
             label: currentDevice.displayName + " average",
-            data: savingsDataSource[deviceName].map((d) => (d["averageCost"]/ 100).toFixed(2)),
+            data: savingsDataSource[deviceName].map((d) => (d["averageCost"] / 100).toFixed(2)),
             borderColor: borderColors[colorIndex],
             fill: false,
             tension: 0.4
@@ -114,7 +104,7 @@ const generateSavingsData = (allDataStates, savings, dateStates, chartStates, de
             averageCost
         }
     });
-    
+
     const chartDataSets = unprocessedSets.reduce((acc, cur) => {
         acc.push(cur.realCost);
         acc.push(cur.averageCost);
@@ -123,7 +113,7 @@ const generateSavingsData = (allDataStates, savings, dateStates, chartStates, de
 
     const savingsData = {
         labels: dateList.filter(date => {
-            if(allsavingsdate.value){
+            if (allsavingsdate.value) {
                 return true;
             } else if (monthFilter.value) {
                 return parseInt(date.split("-")[1]) === monthFilter.month;
@@ -136,8 +126,8 @@ const generateSavingsData = (allDataStates, savings, dateStates, chartStates, de
     return {
         savingsData,
         savingsOptions: options(window.innerWidth <= 1024, 'Kostnad', chartStates),
-        totalSpendning,
-        totalSaved: totalSpendning[1] - totalSpendning[0]
+        totalSpending,
+        totalSaved: totalSpending[1] - totalSpending[0]
     }
 };
 module.exports = generateSavingsData;

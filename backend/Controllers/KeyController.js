@@ -20,9 +20,7 @@ const getKey = async (db) => {
         });
         return key
     } else {
-        collection.deleteMany({
-            where: {},
-        })
+        await collection.deleteMany({})
         return await getKey(db);
     };
 };

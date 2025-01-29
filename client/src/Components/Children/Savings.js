@@ -69,7 +69,7 @@ export default ({ initData }) => {
       savingsmonth: { value: savingsMonth, set: setSavingsMonth },
     }), [savingStartDate, savingEndDate, allsavingsDate, savingsMonth]);
   
-  const { savingsData, savingsOptions, totalSpendning, totalSaved } = generateSavingsData(allDataStates, savings, dateStates, chartStates, devices);
+  const { savingsData, savingsOptions, totalSpending, totalSaved } = generateSavingsData(allDataStates, savings, dateStates, chartStates, devices);
   
   return (
     <Container className="mt-4 container-fluid savings pt-5 pb-5 mainContainer">
@@ -85,8 +85,8 @@ export default ({ initData }) => {
                 <b>Total saved:</b>
               </Col>
               <Col xs={5} md={4} lg={3}>
-                {(totalSpendning[0] / 100).toFixed(2)} SEK<br></br>
-                {(totalSpendning[1] / 100).toFixed(2)} SEK
+                {(totalSpending[0] / 100).toFixed(2)} SEK<br></br>
+                {(totalSpending[1] / 100).toFixed(2)} SEK
                 <div></div>
                 {(totalSaved / 100).toFixed(2)} SEK
               </Col>
