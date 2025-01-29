@@ -39,7 +39,7 @@ const generateSavingsData = (allDataStates, savings, dateStates, chartStates, de
             if (index === 0) {
                 names.forEach(name => acc[name] = []);
             }
-
+            
             names.forEach(name => {
                 const realCost = cur.values[name].realCost;
                 const averageCost = cur.values[name].averageCost;
@@ -47,14 +47,15 @@ const generateSavingsData = (allDataStates, savings, dateStates, chartStates, de
                 sum2 += allDataStates[name]?.value ? averageCost : 0;
 
                 const date = cur.date.split(" ")[0];
-                const existingIndex = acc[name].findIndex(obj => obj.date === date);
-
-                if (existingIndex === -1) {
-                    acc[name].push({ date, realCost, averageCost });
-                } else {
-                    acc[name][existingIndex].realCost += realCost;
-                    acc[name][existingIndex].averageCost += averageCost;
-                }
+                if(acc[name]){
+                    const existingIndex = acc[name].findIndex(obj => obj.date === date);
+                    if (existingIndex === -1) {
+                        acc[name].push({ date, realCost, averageCost });
+                    } else {
+                        acc[name][existingIndex].realCost += realCost;
+                        acc[name][existingIndex].averageCost += averageCost;
+                    };
+                };
             });
 
             return [[totals[0] + sum1, totals[1] + sum2], acc];
