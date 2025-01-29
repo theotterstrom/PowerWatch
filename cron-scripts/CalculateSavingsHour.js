@@ -2,9 +2,8 @@ require('dotenv').config();
 const { MongoClient } = require('mongodb');
 const client = new MongoClient(process.env.mongouri);
 
-const newCalculateSavings = async (customer) => {
+const newCalculateSavings = async (customer, client) => {
     try {
-        await client.connect();
         const db = client.db(customer.name);
         const powerCollection = db.collection("power_readings");
         const priceCollection = db.collection("prices");
@@ -58,8 +57,6 @@ const newCalculateSavings = async (customer) => {
         console.log("Inserted savings into database");
     } catch(e){
         console.log(e);
-    } finally {
-        await client.close();
     }
 };
 

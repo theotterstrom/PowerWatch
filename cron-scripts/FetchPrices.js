@@ -28,7 +28,7 @@ const fetchReading = async (url, retries = 5) => {
     };
 };
 
-const fetchPrices = async (customer) => {
+const fetchPrices = async (customer, client) => {
     try {
         const spotPris = await fetchReading('https://www.elmarknad.se/api/spotprice/current')
         const powerAreaProp = () => {
@@ -42,11 +42,8 @@ const fetchPrices = async (customer) => {
                 return "ForecastAreaFour"
             }
         };
-        console.log(powerAreaProp())
-        console.log(customer.powerArea)
         const spotPrisObj = spotPris.data.map(obj => ({ hour: new Date(obj.CreatedDate).getHours(), price: obj[powerAreaProp()] }));
         console.log("Fetched prices")
-        await client.connect();
         const db = client.db(customer.name);
         const collection = db.collection("prices");
 
@@ -59,8 +56,6 @@ const fetchPrices = async (customer) => {
         console.log("Added prices to database")
     } catch (e) {
         console.log(e);
-    } finally {
-        await client.close();
     }
 };
 

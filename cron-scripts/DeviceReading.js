@@ -28,9 +28,8 @@ const fetchReading = async (url, retries = 5) => {
     };
 };
 
-const readDevices = async (customer) => {
+const readDevices = async (customer, client) => {
     try {
-        await client.connect();
         const db = client.db(customer.name);
         const powerCollection = db.collection("power_readings");
         const tempCollection = db.collection("temp_readings");
@@ -78,8 +77,6 @@ const readDevices = async (customer) => {
         console.log("Added device statuses to database")
     } catch (e) {
         console.log(e);
-    } finally {
-        await client.close();
     }
 };
 

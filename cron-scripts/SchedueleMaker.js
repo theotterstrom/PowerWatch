@@ -2,10 +2,8 @@ require('dotenv').config();
 const { MongoClient } = require('mongodb');
 const client = new MongoClient(process.env.mongouri);
 
-const makeScheduele = async (customer) => {
+const makeScheduele = async (customer, client) => {
     try{
-
-        await client.connect();
         const db = client.db(customer.name);
         const powerHourCollection = db.collection("powerhours");
         const powerHourObj = (await powerHourCollection.find({}).toArray())[0];
@@ -36,8 +34,6 @@ const makeScheduele = async (customer) => {
         console.log("Added scheduele for tomorrow");
     } catch(e){
         console.log(e);
-    } finally {
-        await client.close();
     }
 }; 
 

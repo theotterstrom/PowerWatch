@@ -16,17 +16,19 @@ const getCustomers = async () => {
         const db = client.db("customers");
         const collection = db.collection("customerDbs");
         const allCustomers = await collection.find({}).toArray();
-        return allCustomers;
-    } catch(e){
+        return { allCustomers, client };
+    } catch (e) {
         console.log("ERROR", e)
     }
 };
 
-const runCronForCustomer = (customer) => {
+const runCronForCustomer = (customer, client) => {
+
+
     cron.schedule("50 23 * * *", async () => {
-        try{
-            await fetchPrices(customer);
-        } catch(e){
+        try {
+            await fetchPrices(customer, client);
+        } catch (e) {
             console.log("ERROR")
             console.log(e.response?.data?.errors ?? e);
         }
@@ -34,9 +36,9 @@ const runCronForCustomer = (customer) => {
         timezone: "Europe/Stockholm"
     });
     cron.schedule("55 23 * * *", async () => {
-        try{
-            await schedueleMaker(customer);
-        } catch(e){
+        try {
+            await schedueleMaker(customer, client);
+        } catch (e) {
             console.log("ERROR")
             console.log(e.response?.data?.errors ?? e);
         }
@@ -44,9 +46,9 @@ const runCronForCustomer = (customer) => {
         timezone: "Europe/Stockholm"
     });
     cron.schedule("10 * * * *", async () => {
-        try{
-            await calculateSavings(customer);
-        } catch(e){
+        try {
+            await calculateSavings(customer, client);
+        } catch (e) {
             console.log("ERROR")
             console.log(e.response?.data?.errors ?? e);
         }
@@ -54,9 +56,9 @@ const runCronForCustomer = (customer) => {
         timezone: "Europe/Stockholm"
     });
     cron.schedule("0 * * * *", async () => {
-        try{
-            await readDevices(customer);
-        } catch(e){
+        try {
+            await readDevices(customer, client);
+        } catch (e) {
             console.log("ERROR")
             console.log(e.response?.data?.errors ?? e);
         }
@@ -64,9 +66,9 @@ const runCronForCustomer = (customer) => {
         timezone: "Europe/Stockholm"
     });
     cron.schedule("0 * * * *", async () => {
-        try{
-            await controlDevices(customer);
-        } catch(e){
+        try {
+            await controlDevices(customer, client);
+        } catch (e) {
             console.log("ERROR")
             console.log(e.response?.data?.errors ?? e);
         }
@@ -76,11 +78,11 @@ const runCronForCustomer = (customer) => {
 };
 
 const initializeCronJobs = async () => {
-    const allCustomers = await getCustomers();
+    const { allCustomers, client } = await getCustomers();
     allCustomers.forEach((customer) => {
-        if (!customers.includes(customer._id)) {
-            customers.push(customer._id);
-            runCronForCustomer(customer);
+        if (!customers.includes(customer.customerId)) {
+            customers.push(customer.customerId);
+            runCronForCustomer(customer, client);
         }
     });
 };

@@ -31,9 +31,8 @@ const switchRelays = async ({url, turn, id, token}, retries = 5) => {
     };
 };
 
-const controlDevices = async (customer) => {
+const controlDevices = async (customer, client) => {
     try{
-        await client.connect()
         const db = client.db(customer.name);
         const collection = db.collection("schedueles");
         const deviceCollection = db.collection("devices");
@@ -60,8 +59,6 @@ const controlDevices = async (customer) => {
     } catch(e){
         console.log(e);
         console.log(e?.response?.data)
-    } finally {
-        await client.close();
     }
 };
 module.exports = controlDevices;
