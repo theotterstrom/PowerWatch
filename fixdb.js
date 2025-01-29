@@ -14,6 +14,9 @@ const fixSchedueleNames = async () => {
         Garage: 'garage',
         PoolTid: "pool"
     };
+    const client = new MongoClient(mongouri);
+    await client.connect()
+    const db = client.db("styrning")
     const scheduelecollection = db.collection("schedueles");
     const schdulearray = await scheduelecollection.find({}).toArray();
 
@@ -32,3 +35,4 @@ const fixSchedueleNames = async () => {
 
     console.log("Keys have been updated in all schedules.");
 };
+fixSchedueleNames();

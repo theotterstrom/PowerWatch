@@ -49,16 +49,6 @@ const ControlPanel = () => {
 
   }, []);
 
-  if (Object.keys(devices).length === 0) {
-    return <>
-      <div className="loading-container">
-        <div className="loading-circle"></div>
-        <img className="backgroundBlock" src="/images/power.jpg" />
-        <div className="backgroundBlock"></div>
-      </div>
-    </>;
-  };
-
   const showPage = (page) => {
     
     navigate('/energywatch', { state: { pageSet: page } });

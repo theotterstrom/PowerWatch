@@ -32,7 +32,6 @@ if(process.env.NODE_ENV === "development"){
 };
 
 app.use(express.json());
-app.use(cors(corsOptions));
 app.use(cookieParser());
 
 const httpsOptions = process.env.NODE_ENV === "development" ? {
