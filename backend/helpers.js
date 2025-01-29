@@ -15,7 +15,7 @@ const databaseFetch = async (collectionName, masterDb, customerCookie, client, o
             .skip(parseInt(offset))
             .limit(parseInt(limit))
             .toArray();
-        return results.length === 1 ? results[0] : results;
+        return results;
     } catch (err) {
         console.error(`Error fetching data from ${collectionName}:`, err);
         throw err;

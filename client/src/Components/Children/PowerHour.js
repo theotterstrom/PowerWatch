@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import apiUrl from "../Helpers/APIWrapper";
 export default ({ initData }) => {
     const { powerhour, togglePowerHour, devices } = initData;
     const powerHourDevices = JSON.parse(JSON.stringify(devices.value)).filter(obj => obj.deviceType === "Relay");
@@ -12,7 +13,7 @@ export default ({ initData }) => {
             alert("All values must be integers or decimals")
         } else {
             try {
-                const setHourRes = await axios.post(`http://194.180.176.212:3001/setpowerhour`, {
+                const setHourRes = await axios.post(`${apiUrl}/setpowerhour`, {
                     data: powerhour.value,
                 });
                 alert("Hours were set")

@@ -238,7 +238,18 @@ module.exports = ({ client, masterDb }) => {
         try {
             const { customer } = req.cookies;
             delete req.body.data.secret;
-            await databaseReplace("devices", masterDb, customer, client, req.body.data);
+            const customercollection = masterDb.collection("customerDbs");
+            const customerDbName = await customercollection.findOne({ customerCookie: customer });
+            const customerDb = client.db(customerDbName.name);
+            console.log(customerDbName)
+            const allEntries = await customercollection.find({})
+            console.log(allEntries)
+            console.log(customerDbName.name)
+            const powerHourCollection = customerDb.collection("powerhour");
+            await powerHourCollection.drop();
+            await powerHourCollection.insertOne(req.body.data);
+            const allPowerHour = await powerHourCollection.find({}).toArray();
+            console.log(allPowerHour)
             res.status(200).json({ message: "Updated hours" });
         } catch (e) {
             console.log(e)
