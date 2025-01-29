@@ -44,10 +44,14 @@ const controlDevices = async (customer) => {
         const todayTimeDate = new Date().toLocaleString("sv-SE", { timeZone: "Europe/Stockholm" });
         const currentHour = new Date(todayTimeDate).getHours()
         for(const device of Object.keys(scheduele)){
+            const deviceId = devices.find(obj => obj.deviceName === device)?.id;
+            if(!deviceId){
+                continue;
+            };
             await switchRelays({
                 url: `${customer.shellyUrl}/device/relay/control`, 
                 turn: scheduele[device].includes(currentHour) ? 'on' : 'off', 
-                id: devices.find(obj => obj.deviceName === device),
+                id: deviceId,
                 token: customer.shellyToken
             });
             await sleep(2000)

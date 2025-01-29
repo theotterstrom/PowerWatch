@@ -34,7 +34,6 @@ export default ({ initData }) => {
         }));
     };
 
-    console.log(powerhour.value)
     const splitPowerHours = () => {
         const firstHalf = powerHourDevices.filter((obj, index) => {
             if (index > powerHourDevices.length / 2 - 1) {

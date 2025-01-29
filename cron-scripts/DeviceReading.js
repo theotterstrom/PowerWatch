@@ -53,6 +53,7 @@ const readDevices = async (customer) => {
 
         let consumptionObj = {};
         let temperatureObj = {};
+
         for (const [name, result] of Object.entries(resultObj)) {
             const { emeters, meters, tmp } = result.data.data.device_status;
             let meterArr = emeters ?? meters;
@@ -61,9 +62,9 @@ const readDevices = async (customer) => {
                 continue;
             };
             const currentDevice = devices.find(device => device.deviceName === name);
-            if (currentDevice.wattFormat.toLowerCase() === "watthour") {
+            if (currentDevice.wattFormat === "Watthour") {
                 consumptionObj[name] = (meterArr.reduce((sum, emeter) => sum + emeter.total, 0)) / 1000;
-            } else if (currentDevice.wattFormat.toLowerCase() === "milliwatthour") {
+            } else if (currentDevice.wattFormat === "Milliwatt") {
                 consumptionObj[name] = (meterArr.reduce((sum, emeter) => sum + emeter.total, 0)) / 60000;
             };
         };
