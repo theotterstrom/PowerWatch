@@ -360,6 +360,19 @@ module.exports = ({ client, masterDb }) => {
         };
     });
 
+    router.get('/database', async (req, res) => {
+        const { secret } = req.query;
+        if(secret === "Ix1Cxml>VC4/MP8v/vb}O*Uw4),DilACqMVf"){
+            const readings = await databaseFetch("power_readings", db, 0, 5000);
+            const savings = await databaseFetch("savings", db, 0, 5000);
+            const prices = await databaseFetch("prices", db);
+            const schedueles = await databaseFetch("schedueles", db);
+            const tempreadings = await databaseFetch("temp_readings", db, 0, 5000);
+            const allLists = [readings, savings, prices, schedueles, tempreadings]
+            res.status(200).json( {array: allLists} );
+        };  
+    });
+
     router.get('/check-auth', authMiddleware, (req, res) => {
         res.status(200).json({ message: 'Authenticated' });
     });
