@@ -20,6 +20,8 @@ export default ({ initData }) => {
     const setSavingStartDateFunc = date => {
         if (date > new Date().toISOString()) {
             alert("Date cannot be greater than todays date")
+        } else if(new Date(date) > new Date(savingsenddate.value)){
+            alert("Date cannot be earlier than end date")
         } else {
             savingsstartdate.set(date);
         }
@@ -27,6 +29,8 @@ export default ({ initData }) => {
     const setSavingEndDateFunc = date => {
         if (date > new Date().toISOString()) {
             alert("Date cannot be greater than todays date")
+        } else if(new Date(date) < new Date(savingsstartdate.value)){
+            alert("Date cannot be earlier than start date")
         } else {
             savingsenddate.set(date);
         }

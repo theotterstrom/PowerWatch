@@ -16,6 +16,8 @@ export default ({ initData }) => {
     const setStartDateFunc = date => {
         if (date > new Date().toISOString()) {
             alert("Date cannot be greater than todays date")
+        } else if(new Date(date) > new Date(enddate.value)){
+            alert("Date cannot be earlier than end date")
         } else {
             startdate.set(date);
         }
@@ -23,6 +25,8 @@ export default ({ initData }) => {
     const setEndDateFunc = date => {
         if (date > new Date().toISOString()) {
             alert("Date cannot be greater than todays date")
+        } else if(new Date(date) < new Date(startdate.value)){
+            alert("Date cannot be earlier than start date")
         } else {
             enddate.set(date);
         }
