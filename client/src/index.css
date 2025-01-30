@@ -58,6 +58,7 @@ code {
 .tab-content{
   margin: 0 !important;
   padding: 0 !important;
+  border-top: 1px solid white;
 }
 
 .powerHourWindow{

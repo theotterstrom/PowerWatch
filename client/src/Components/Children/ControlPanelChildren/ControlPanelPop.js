@@ -326,7 +326,7 @@ export default ({ showWindow, method, devices, setDevices, identifier }) => {
                             <Col xl={9} style={{ backgroundColor: "white", color: "black", borderRadius: "5px", minHeight: "35px", padding: "10px" }}>
                                 {groupDevices.map(member =>
                                     <Row key={member}>
-                                        <Col xs={4}>{member}</Col>
+                                        <Col xs={8} style={{whiteSpace: "nowrap"}}>{member}</Col>
                                         <Col><i className="fa-solid fa-xmark mt-1" style={{ cursor: "pointer" }} onClick={() => removeGroupKey(member, "change")}></i></Col>
                                     </Row>
                                 )}

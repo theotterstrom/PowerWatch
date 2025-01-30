@@ -49,7 +49,7 @@ export default ({ initData }) => {
     };
 
     return (
-        <Container className="m-0 p-3 pt-0 pb-0 p-0 mt-5">
+        <Container className="m-0 p-3 pt-0 pb-0 p-0 mt-md-5 mt-3">
             <Row>
                 <Container className="d-sm-block d-md-flex">
                     <Col xl={3} lg={4} md={4} xs={12} className="p-3">

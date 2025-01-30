@@ -5,8 +5,8 @@ export default ({ initData }) => {
     const { showPopUp, groups } = initData;
 
     return (
-        <Container>
-            <Row xl={3}>
+        <Container className="p-0 m-0">
+            <Row xl={3} className="p-2">
                 <h5
                     style={{ cursor: 'pointer' }}
                     className="mt-4"
@@ -26,19 +26,20 @@ export default ({ initData }) => {
                     >
                         <Row className="d-flex justify-content-between">
                             <Col className="text-start p-0">
-                                <b>{groupName}</b>
+                            <div style={{fontSize: "18px"}}><b>{groupName}</b></div>
                             </Col>
                             <Col className="text-end">
                                 <i className="fa fa-pencil-square-o" style={{ cursor: "pointer" }} onClick={() => showPopUp("change-group", groupName)}></i>
                             </Col>
                         </Row>
-                        <Row>
-                            <Col className="text-start p-0">
+                        <Row className="mt-3 p-3" style={{border: "2px solid rgb(0, 97, 188)"}}>
+                            <Row className="d-flex justify-content-center"><b>Members</b></Row>
+                            <Col className="text-center p-0 mt-3">
                                 {members.filter((_, i) => i % 2 === 0).map(member => (
                                     <p key={`${groupName}-${member}`} className="m-1">{member}</p>
                                 ))}
                             </Col>
-                            <Col className="text-start">
+                            <Col className="text-center mt-3">
                                 {members.filter((_, i) => i % 2 !== 0).map(member => (
                                     <p key={`${groupName}-${member}-alt`} className="m-1">{member}</p>
                                 ))}

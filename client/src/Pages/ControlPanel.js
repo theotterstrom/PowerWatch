@@ -84,7 +84,7 @@ const ControlPanel = () => {
     <div className="backgroundBlock"></div>
     <Container className="mt-4 container-fluid power pt-5 pb-5 mainContainer">
       <Row className="justify-content-center">
-        <Col xl={8} lg={10} md={12} className="p-0  d-block">
+        <Col xl={8} lg={10} md={12} className="p-0">
           <Container className="p-0 justify-content-center">
             <Container className="container-fluid d-flex justify-content-center">
               <Col xl={12} lg={12} md={12} sm={8} xs={8} className="text-center text-lg-start">
@@ -92,14 +92,14 @@ const ControlPanel = () => {
               </Col>
             </Container>
             <Container className="mt-md-5 mt-3">
-              <Tabs defaultActiveKey="devices" id="devices-tabs" style={{ borderBottom: "0" }} className="tabHolder" fill={fill}>
-                <Tab eventKey="devices" title="Devices" className="ctrlContainer">
+              <Tabs defaultActiveKey="deviceGroups" id="devices-tabs" style={{ borderBottom: "0" }} className="tabHolder" fill={fill}>
+                <Tab eventKey="devices" title="Devices" className="ctrlContainer p-md-4 p-2">
                   <DeviceSettings devices={devices} showPopUp={showPopUp} />
                 </Tab>
-                <Tab eventKey="deviceGroups" title="Device Groups" className="ctrlContainer">
+                <Tab eventKey="deviceGroups" title="Device Groups" className="ctrlContainer p-md-4 p-2">
                   <GroupSettings groups={groups} showPopUp={showPopUp} />
                 </Tab>
-                <Tab eventKey="cloudSettings" title="Cloud Settings" className="ctrlContainer">
+                <Tab eventKey="cloudSettings" title="Cloud Settings" className="ctrlContainer p-md-4 p-2">
                   <CloudSettings />
                 </Tab>
               </Tabs>
