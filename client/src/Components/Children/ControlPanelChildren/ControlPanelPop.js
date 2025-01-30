@@ -78,29 +78,6 @@ export default ({ showWindow, method, devices, setDevices, identifier }) => {
             setgroupDevices(groups[identifier])
         }
     }, []);
-/*     const handleChangeSelect = (eventKey) => {
-        setChosenDevice(eventKey);
-        const classNames = ["deviceNameChange", "displayNameChange", "idChange"];
-        const [deviceNameChange, displayNameChange, idChange] = classNames.map(name => document.getElementsByClassName(name)[0]);
-        const theDevice = devices.find(device => device.displayName === eventKey)
-
-        deviceNameChange.value = theDevice.deviceName;
-        displayNameChange.value = theDevice.displayName;
-        idChange.value = theDevice.id;
-        setUpdateDevice({
-            deviceName: theDevice.deviceName,
-            displayName: theDevice.displayName,
-            id: theDevice.id,
-            wattFormat: theDevice.wattFormat,
-            deviceType: theDevice.deviceType,
-            mongoid: theDevice["_id"]
-        })
-    };
-
-    const handleGroupSelect = (eventKey) => {
-        setChosenGroup(eventKey)
-        setgroupDevices(groups[eventKey])
-    }; */
 
     const handleStateInput = (e, type) => {
         let setter;
@@ -297,28 +274,6 @@ export default ({ showWindow, method, devices, setDevices, identifier }) => {
                     </Form>
                 </Col>
             </> : <></>}
-            {method === "remove-device" ? <>
-                <Col xl={4} xs={11} className="controlPanelPop p-xl-5 p-4">
-                    <Row className="text-center text-center">
-                        <p style={{ fontSize: "20px" }}>Remove device</p>
-                    </Row>
-                    <i onClick={() => showWindow(false)} className="fa fa-times"></i>
-                    <Form onSubmit={(e) => makeDeviceRequest(e, "remove")}>
-                        <Form.Label>Select Device</Form.Label>
-                        <Dropdown onSelect={(eventKey) => setRemoveDropdown(eventKey)} className="mt-2 popDropDown">
-                            <Dropdown.Toggle variant="light" id="dropdown-basic" className="popDropDownToggle" style={{ textAlign: "start" }}>
-                                {removeDropdown}
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu>
-                                {devices.map(obj => {
-                                    return <Dropdown.Item key={obj.id} eventKey={obj.displayName}>{obj.displayName}</Dropdown.Item>
-                                })}
-                            </Dropdown.Menu>
-                        </Dropdown>
-                        <Button type="submit" className="mt-5">Remove device</Button>
-                    </Form>
-                </Col>
-            </> : <></>}
             {method === "add-group" ? <>
                 <Col xl={4} xs={11} className="controlPanelPop  p-xl-5 p-4">
                     <Row className="text-center text-center">
@@ -403,7 +358,6 @@ export default ({ showWindow, method, devices, setDevices, identifier }) => {
                     </Form>
                 </Col>
             </> : <></>}
-
         </Container>
     )
 };

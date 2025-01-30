@@ -91,7 +91,7 @@ const ControlPanel = () => {
                 <h3 className="mt-3">Control Panel</h3>
               </Col>
             </Container>
-            <Container className="mt-5">
+            <Container className="mt-md-5 mt-3">
               <Tabs defaultActiveKey="devices" id="devices-tabs" style={{ borderBottom: "0" }} className="tabHolder" fill={fill}>
                 <Tab eventKey="devices" title="Devices" className="ctrlContainer">
                   <DeviceSettings devices={devices} showPopUp={showPopUp} />
