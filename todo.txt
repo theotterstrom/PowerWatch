@@ -1,6 +1,1 @@
-
-2. centrera tooltip
-3. inte d-flex på group & all dates vid mobil
-4. kolla server logg
-5. schedule funkar inte jättebra om man inte har valen
-6. skapa ny endpoint för init där vi bara gör ett req och får all infomartion från 1 endpoint ist för 5
+1. när man ändrar powerhour ska den uppdatera dagens schema och även switcha relays

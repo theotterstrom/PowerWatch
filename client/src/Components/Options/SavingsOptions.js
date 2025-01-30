@@ -203,7 +203,7 @@ export default ({ initData }) => {
                         </Dropdown>
                         &nbsp;&nbsp;<i onClick={() => handleMonthSelect()} className="fa-solid fa-xmark mt-2" style={{ color: "white", fontSize: "40px", cursor: "pointer" }}></i>
                     </Container>
-                    <Container className="d-flex justify-content-between">
+                    <Container className="justify-content-between d-sm-flex d-block ">
                         <Container className="m-0 p-0 mt-4 d-lg-none d-flex">
                             <Dropdown onSelect={(eventKey) => handleSelect(eventKey, groups)}>
                                 <Dropdown.Toggle variant="primary" id="dropdown-basic">

@@ -43,13 +43,13 @@ const generatePowerData = (allDataStates, readings, temps, dateStates, devices) 
             const formatTomorrow = tomorrowDate.toISOString().slice(0, 10);
 
             const lastObjectList = readings.value.filter(obj => obj.date.split(" ")[0] === formatTomorrow);
-            let lastObject = lastObjectList[0];
+            let lastObject = lastObjectList.reverse()[0];
 
             const firstObjectList = readings.value.filter(obj => obj.date.split(" ")[0] === cur.date.split(" ")[0]);
-            let firstObject = firstObjectList[0];
+            let firstObject = firstObjectList.reverse()[0];
 
             if (!lastObject) {
-                lastObject = firstObjectList[firstObjectList.length - 1];
+                lastObject = firstObjectList.reverse()[0];
             };
 
             names.forEach(name => {
@@ -64,7 +64,6 @@ const generatePowerData = (allDataStates, readings, temps, dateStates, devices) 
             return acc;
         }, {}) : {};
     Object.values(readingsDataSource).forEach(array => array.sort((a, b) => new Date(a.date) - new Date(b.date)))
-      
     const tranformTemp = data => {
         const result = {};
         data.forEach(item => {

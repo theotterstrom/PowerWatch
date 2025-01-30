@@ -1,13 +1,12 @@
 import { Container, Row, Col, Form, Button, Dropdown } from "react-bootstrap";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MakeRequest from "../../Helpers/MakeRequest";
 
-export default ({ showWindow, method, devices, setDevices }) => {
+export default ({ showWindow, method, devices, setDevices, identifier }) => {
 
     const [newDevice, setNewDevice] = useState({});
     const [updateDevice, setUpdateDevice] = useState({});
     const [removeDropdown, setRemoveDropdown] = useState("");
-    const [chosenDevice, setChosenDevice] = useState(null);
     const [chosenGroup, setChosenGroup] = useState(null);
     const [groupDevices, setgroupDevices] = useState([]);
     const [newGroupDevices, setNewGroupDevices] = useState([]);
@@ -30,9 +29,8 @@ export default ({ showWindow, method, devices, setDevices }) => {
             endpoint = "addnewdevice";
             data = newDevice;
         } else if (type === "remove") {
-            removeId = devices.find(device => device.displayName === removeDropdown)?.id;
             endpoint = "removedevice"
-            data = { id: removeId };
+            data = { id: identifier };
         } else if (type === "update") {
             const requiredLength = newDevice.deviceType === "Thermometer" ? 5 : 6;
             if (Object.keys(updateDevice).length !== requiredLength || Object.values(newDevice).some(value => !value || value.trim() === "")) {
@@ -59,7 +57,28 @@ export default ({ showWindow, method, devices, setDevices }) => {
         showWindow(false);
     };
 
-    const handleChangeSelect = (eventKey) => {
+    useEffect(() => {
+        if (method === "change-device") {
+            const theDevice = devices.find(device => device.id === identifier);
+            const classNames = ["deviceNameChange", "displayNameChange", "idChange"];
+            const [deviceNameChange, displayNameChange, idChange] = classNames.map(name => document.getElementsByClassName(name)[0]);
+            deviceNameChange.value = theDevice.deviceName;
+            displayNameChange.value = theDevice.displayName;
+            idChange.value = theDevice.id;
+            setUpdateDevice({
+                deviceName: theDevice.deviceName,
+                displayName: theDevice.displayName,
+                id: theDevice.id,
+                wattFormat: theDevice.wattFormat,
+                deviceType: theDevice.deviceType,
+                mongoid: theDevice["_id"]
+            })
+        } else if (method === "change-group") {
+            setChosenGroup(identifier)
+            setgroupDevices(groups[identifier])
+        }
+    }, []);
+/*     const handleChangeSelect = (eventKey) => {
         setChosenDevice(eventKey);
         const classNames = ["deviceNameChange", "displayNameChange", "idChange"];
         const [deviceNameChange, displayNameChange, idChange] = classNames.map(name => document.getElementsByClassName(name)[0]);
@@ -81,7 +100,7 @@ export default ({ showWindow, method, devices, setDevices }) => {
     const handleGroupSelect = (eventKey) => {
         setChosenGroup(eventKey)
         setgroupDevices(groups[eventKey])
-    };
+    }; */
 
     const handleStateInput = (e, type) => {
         let setter;
@@ -219,18 +238,6 @@ export default ({ showWindow, method, devices, setDevices }) => {
                     </Row>
                     <i onClick={() => showWindow(false)} className="fa fa-times"></i>
                     <Form onSubmit={(e) => makeDeviceRequest(e, "update")}>
-                        <Form.Label>Select Device</Form.Label>
-                        <Dropdown onSelect={handleChangeSelect} className="mt-2 popDropDown" >
-                            <Dropdown.Toggle variant="light" id="dropdown-basic" className="popDropDownToggle" style={{ textAlign: "start" }}>
-                                {chosenDevice}
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu>
-                                {devices.map(obj => {
-                                    return <Dropdown.Item key={obj.id} eventKey={obj.displayName}>{obj.displayName}</Dropdown.Item>
-                                })}
-                            </Dropdown.Menu>
-                        </Dropdown>
-
                         <Form.Label className="mt-xl-4 mt-2">Device name</Form.Label>
                         <Form.Control type="text" name="deviceName" onChange={(e) => handleStateInput(e, "update-device")} className="deviceNameChange" ></Form.Control>
                         <Form.Label className="mt-xl-3 mt-2">Display name</Form.Label>
@@ -276,8 +283,17 @@ export default ({ showWindow, method, devices, setDevices }) => {
                                 <Dropdown.Item eventKey="Thermometer">Thermometer</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
-
-                        <Button type="submit" className="mt-xl-5 mt-4">Change device</Button>
+                        <Row>
+                            <Col className="justify-content-start d-flex">
+                            <Button type="submit" className="mt-xl-5 mt-5">Change device</Button>
+                            </Col>
+                            <Col className="justify-content-end d-flex">
+                            {!removeDropdown ? <Button onClick={() => setRemoveDropdown(identifier)} className="mt-5" variant="danger">Remove device</Button> : 
+                            <Button onClick={(e) => makeDeviceRequest(e, "remove")} className="mt-5" variant="danger">Are you sure you want to remove the device?</Button> 
+                            }
+                            </Col>
+                        </Row>
+                        
                     </Form>
                 </Col>
             </> : <></>}
@@ -349,69 +365,41 @@ export default ({ showWindow, method, devices, setDevices }) => {
                     </Row>
                     <i onClick={() => showWindow(false)} className="fa fa-times"></i>
                     <Form onSubmit={(e) => makeGroupRequest(e, 'change')}>
-                        <Form.Label>Select group</Form.Label>
-                        <Dropdown onSelect={handleGroupSelect} className="mt-2 popDropDown" >
-                            <Dropdown.Toggle variant="light" id="dropdown-basic" className="popDropDownToggle" style={{ textAlign: "start" }}>
-                                {chosenGroup}
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu>
-                                {Object.entries(groups).map(([groupName, members]) => {
-                                    return <Dropdown.Item key={groupName} eventKey={groupName}>{groupName}</Dropdown.Item>
-                                })}
-
-                            </Dropdown.Menu>
-                        </Dropdown>
-
-                        {chosenGroup ? <>
-                            <Form.Label className="mt-4">Members</Form.Label>
-                            <Row className="m-1 mt-0 ml-0 mb-0">
-                                <Col xl={9} style={{ backgroundColor: "white", color: "black", borderRadius: "5px", minHeight: "35px", padding: "10px" }}>
-                                    {groupDevices.map(member =>
-
-                                        <Container className="d-flex mt-2" key={member}>
-                                            <div>{member}</div>
-                                            &nbsp;&nbsp;&nbsp;
-                                            <i className="fa-solid fa-xmark mt-1" style={{ cursor: "pointer" }} onClick={() => removeGroupKey(member, "change")}></i>
-                                        </Container>
-                                    )}
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Form.Label className="mt-4">Select new members</Form.Label>
-                                <Dropdown onSelect={(e) => handleNewGroupAdd(e, "change")} className="mt-2 popDropDown" >
-                                    <Dropdown.Toggle variant="light" id="dropdown-basic" className="popDropDownToggle" style={{ textAlign: "start" }}>
-                                    </Dropdown.Toggle>
-                                    <Dropdown.Menu>
-                                        {devices.map(device => {
-                                            return <Dropdown.Item key={device.id} eventKey={device.displayName}>{device.displayName}</Dropdown.Item>
-                                        })}
-                                    </Dropdown.Menu>
-                                </Dropdown>
-                            </Row>
-                        </> : <></>}
-                        <Button type="submit" className="mt-5">Change group</Button>
-                    </Form>
-                </Col>
-            </> : <></>}
-            {method === "remove-group" ? <>
-                <Col xl={4} xs={11} className="controlPanelPop p-xl-5 p-4">
-                    <Row className="text-center text-center">
-                        <p style={{ fontSize: "20px" }}>Remove group</p>
-                    </Row>
-                    <i onClick={() => showWindow(false)} className="fa fa-times"></i>
-                    <Form onSubmit={(e) => makeGroupRequest(e, "remove")}>
-                        <Form.Label>Select Group</Form.Label>
-                        <Dropdown onSelect={(eventKey) => setRemoveGroup(eventKey)} className="mt-2 popDropDown" >
-                            <Dropdown.Toggle variant="light" id="dropdown-basic" className="popDropDownToggle" style={{ textAlign: "start" }}>
-                                {removeGroup}
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu>
-                                {Object.keys(groups).map(obj => {
-                                    return <Dropdown.Item key={obj} eventKey={obj}>{obj}</Dropdown.Item>
-                                })}
-                            </Dropdown.Menu>
-                        </Dropdown>
-                        <Button type="submit" className="mt-5">Remove group</Button>
+                        <h4>{chosenGroup}</h4>
+                        <Form.Label className="mt-4">Members</Form.Label>
+                        <Row className="m-1 mt-0 ml-0 mb-0">
+                            <Col xl={9} style={{ backgroundColor: "white", color: "black", borderRadius: "5px", minHeight: "35px", padding: "10px" }}>
+                                {groupDevices.map(member =>
+                                    <Row key={member}>
+                                        <Col xs={4}>{member}</Col>
+                                        <Col><i className="fa-solid fa-xmark mt-1" style={{ cursor: "pointer" }} onClick={() => removeGroupKey(member, "change")}></i></Col>
+                                    </Row>
+                                )}
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Form.Label className="mt-4">Select new members</Form.Label>
+                            <Dropdown onSelect={(e) => handleNewGroupAdd(e, "change")} className="mt-2 popDropDown" >
+                                <Dropdown.Toggle variant="light" id="dropdown-basic" className="popDropDownToggle" style={{ textAlign: "start" }}>
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                    {devices.map(device => {
+                                        return <Dropdown.Item key={device.id} eventKey={device.displayName}>{device.displayName}</Dropdown.Item>
+                                    })}
+                                </Dropdown.Menu>
+                            </Dropdown>
+                        </Row>
+                        <Row>
+                            <Col className="justify-content-start d-flex">
+                            <Button type="submit" className="mt-5">Change group</Button>
+                            </Col>
+                            <Col className="justify-content-end d-flex">
+                            {!removeGroup ? <Button onClick={() => setRemoveGroup(chosenGroup)} className="mt-5" variant="danger">Remove group</Button> : 
+                            <Button onClick={(e) => makeGroupRequest(e, "remove")} className="mt-5" variant="danger">Are you sure you want to remove the group?</Button> 
+                            }
+                            </Col>
+                        </Row>
+                        
                     </Form>
                 </Col>
             </> : <></>}

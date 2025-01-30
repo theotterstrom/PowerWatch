@@ -96,6 +96,10 @@ const EnergyWatch = () => {
   }, []);
 
   if (Object.keys(readings).length === 0 || Object.keys(savings).length === 0) {
+    setTimeout(async () => {
+   
+    }, 30000);
+
     return <>
       <div className="loading-container">
         <div className="loading-circle"></div>

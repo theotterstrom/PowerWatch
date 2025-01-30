@@ -12,6 +12,7 @@ export default ({ initData }) => {
 
     const [dropdownText, setDropdownText] = useState("Alla");
     const [monthText, setMonthText] = useState(month.value);
+    
 
     const setStartDateFunc = date => {
         if (date > new Date().toISOString()) {
@@ -173,7 +174,7 @@ export default ({ initData }) => {
                         </Dropdown>
                         &nbsp;&nbsp;<i onClick={() => handleMonthSelect()} className="fa-solid fa-xmark mt-2" style={{ color: "white", fontSize: "40px", cursor: "pointer" }}></i>
                     </Container>
-                    <Container className="justify-content-between d-flex">
+                    <Container className="justify-content-between d-sm-flex d-block">
 
                         <Container className="m-0 p-0 mt-4 d-lg-none d-flex">
                             <Dropdown onSelect={(eventKey) => handleSelect(eventKey, groups)}>

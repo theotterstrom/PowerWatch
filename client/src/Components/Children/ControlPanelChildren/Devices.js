@@ -1,4 +1,4 @@
-import { Container, Navbar, Nav, NavDropdown, Row, Col, Tab, Tabs } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 export default ({ initData }) => {
     const {
         showPopUp,
@@ -6,84 +6,65 @@ export default ({ initData }) => {
     } = initData;
     return (
         <Container>
-            <h4>Devices</h4>
-            <Row className="mb-4 mb-xl-0">
-                <Col xl={3}>
-                    <h5
-                        style={{ cursor: 'pointer' }}
-                        className="mt-4"
-                        onClick={() => showPopUp("add-device")}
-                    >
-                        <i className="fa fa-plus"></i>&nbsp;&nbsp;Add device
-                    </h5>
-                </Col>
-                <Col xl={4}>
-                    <h5
-                        style={{ cursor: 'pointer' }}
-                        className="mt-xl-4 mt-3"
-                        onClick={() => showPopUp("change-device")}
-                    >
-                        <i className="fa fa-pencil-square-o"></i>&nbsp;&nbsp;Change device
-                    </h5>
-                </Col>
-                <Col xl={3}>
-                    <h5
-                        style={{ cursor: 'pointer' }}
-                        className="mt-xl-4 mt-3"
-                        onClick={() => showPopUp("remove-device")}
-                    >
-                        <i className="fa-solid fa-xmark"></i>&nbsp;&nbsp;Remove device
-                    </h5>
-                </Col>
+            <Row>
+                <h5
+                    style={{ cursor: 'pointer' }}
+                    className="mt-4"
+                    onClick={() => showPopUp("add-device")}
+                >
+                    <i className="fa fa-plus"></i>&nbsp;&nbsp;Add device
+                </h5>
             </Row>
-            {window.innerWidth <= 768 ? <></> : <>
-                <Row className="mt-4 mb-2">
-                    <Col><b>Device name</b></Col>
-                    <Col><b>Display name</b></Col>
-                    <Col><b>Id</b></Col>
-                    <Col><b>Wattformat</b></Col>
-                    <Col><b>Device type</b></Col>
+            <Container className="d-md-none d-block">
+                {devices.map((device, index) => (
+                    <>
+                        <Container key={index} className="py-3 mt-3 text-center align-items-center" style={{ color: "white", borderBottom: "1px solid white", borderTop: index === 0 ? "1px solid white" : 0 }}>
+                            <Row className="d-flex justify-content-between">
+                                <Col className="text-start p-0">
+                                    <b>{device.displayName}</b>
+                                </Col>
+                                <Col className="text-end">
+                                    <i className="fa fa-pencil-square-o" style={{ cursor: "pointer" }} onClick={() => showPopUp("change-device", device.id)}></i>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <Row>Device name:</Row>
+                                    <Row>Id:</Row>
+                                    <Row>Wattformat:</Row>
+                                    <Row>Device type:</Row>
+                                </Col>
+                                <Col>
+                                    <Row>{device.deviceName}</Row>
+                                    <Row>{device.id}</Row>
+                                    <Row>{device.wattFormat || <br></br>}</Row>
+                                    <Row>{device.deviceType}</Row>
+                                </Col>
+                            </Row>
+                        </Container>
+                    </>
+                ))}
+            </Container>
+            <Container fluid className="mt-4 d-md-block d-none">
+                <Row className="py-2 text-white text-center">
+                    <Col xs={2}><b>Device name</b></Col>
+                    <Col xs={3}><b>Display name</b></Col>
+                    <Col xs={2}><b>Id</b></Col>
+                    <Col xs={2}><b>Wattformat</b></Col>
+                    <Col xs={2}><b>Device type</b></Col>
+
                 </Row>
-            </>}
-            {devices.map((obj, index) => (
-                window.innerWidth <= 768 ? <>
-                    <Col key={index} xs={12} style={{ border: "1px solid white", borderRadius: "5px" }} className="p-3 pt-2">
-                        <div className="mb-3"><b>{obj.displayName}</b></div>
-                        <Row>
-                            <Col xs={6}>
-                                <p className="m-1 p-0">Device Name:</p>
-                                <p className="m-1 p-0">Id:</p>
-                                <p className="m-1 p-0">Wattformat:</p>
-                                <p className="m-1 p-0">Device Type:</p>
-                            </Col>
-                            <Col xs={6}>
-                                <p className="m-1 p-0">{obj.deviceName}</p>
-                                <p className="m-1 p-0">{obj.id}</p>
-                                <p className="m-1 p-0">{obj.wattFormat || "None"}</p>
-                                <p className="m-1 p-0">{obj.deviceType}</p>
-                            </Col>
-                        </Row>
-                    </Col>
-                </> : <>
-                    <Row
-                        key={obj.id}
-                        className="pt-2 pb-2"
-                        style={{
-                            borderTop: '1px solid white',
-                            borderLeft: '1px solid white',
-                            borderRight: '1px solid white',
-                            borderBottom:
-                                index === devices.length - 1 ? '1px solid white' : 0,
-                        }}
-                    >
-                        <Col>{obj.deviceName}</Col>
-                        <Col>{obj.displayName}</Col>
-                        <Col>{obj.id}</Col>
-                        <Col>{obj.wattFormat}</Col>
-                        <Col>{obj.deviceType}</Col>
+                {devices.map((device, index) => (
+                    <Row key={index} className="py-3 mt-3 border bg-light text-center align-items-center" style={{ color: "black", border: "1px solid black", boxShadow: "5px 5px 5px", borderRadius: "5px" }}>
+                        <Col xs={2}>{device.deviceName}</Col>
+                        <Col xs={3}>{device.displayName}</Col>
+                        <Col xs={2}>{device.id}</Col>
+                        <Col xs={2}>{device.wattFormat}</Col>
+                        <Col xs={2}>{device.deviceType}</Col>
+                        <Col><i className="fa fa-pencil-square-o" style={{ cursor: "pointer" }} onClick={() => showPopUp("change-device", device.id)}></i></Col>
                     </Row>
-                </>
-            ))}
+                ))}
+            </Container>
         </Container>
-    )
+    );
 };

@@ -32,6 +32,13 @@ code {
 .power, .savings, .prices{
   color: white;
 }
+.ctrlContainer{
+  background-color: #004786;
+  padding: 30px;
+  border-radius: 0 20px 20px 20px;
+ 
+  box-shadow: 5px 5px 5px rgb(0, 0, 0);
+}
 .controlPanelContainer{
   background-color: #004786;
   padding: 30px;
@@ -82,7 +89,7 @@ code {
 }
 
 .powerHourInput{
-  height: 20px;
+  height: 30px;
 }
 
 .fa-times{
@@ -111,7 +118,6 @@ code {
 }
 .custom-dropdown .dropdown-menu {
   background-color: #004786;
-  border: 1px solid white; /* Optional: Remove border if not needed */
   border-top: 0;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
@@ -165,7 +171,7 @@ code {
   font-weight: bold; /* Optional: Highlight active tab */
 }
 .chartContainer{
-  height: 60vh;
+  height: 80vh;
   width: 110%;
 
 }
@@ -181,6 +187,8 @@ code {
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
+
+
 
   .mainContainer{
     overflow-x: hidden !important;
@@ -201,7 +209,16 @@ code {
 }
 
 @media (max-width: 767px) {
+  .tabHolder{
+    justify-content: space-evenly !important;
+  }
 
+  .ctrlContainer{
+    background-color: transparent;
+    border: 1px solid white;
+    box-shadow: 0 0 0 0;
+    border-top-right-radius: 0;
+  }
   .controlPanelPop {
     top: 5vh;
   }

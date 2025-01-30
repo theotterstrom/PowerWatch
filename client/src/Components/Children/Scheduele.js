@@ -9,7 +9,6 @@ const ScheduleOptions = React.memo(({ allDataStates }) => {
 
 export default ({ initData }) => {
   const { schedueles, prices, devicestatuses, devices } = initData;
-  console.log(schedueles)
   const [currentDevice, setCurrentDevice] = useState("Choose device");
   const [currentScheduele, setCurrentScheduele] = useState([]);
   const [currentPrice, setCurrentPrice] = useState([]);

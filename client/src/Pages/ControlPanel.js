@@ -8,8 +8,8 @@ import Groups from "../Components/Children/ControlPanelChildren/Groups";
 import Cloud from "../Components/Children/ControlPanelChildren/Cloud";
 import Header from "../Components/Children/NavBar";
 
-const PopUp = React.memo(({ showWindow, method, devices, setDevices }) => {
-  return <ControlPanelPop showWindow={showWindow} method={method} devices={devices} setDevices={setDevices} />
+const PopUp = React.memo(({ showWindow, method, devices, setDevices, identifier }) => {
+  return <ControlPanelPop showWindow={showWindow} method={method} devices={devices} setDevices={setDevices} identifier={identifier} />
 });
 
 const DeviceSettings = React.memo(({ showPopUp, devices }) => {
@@ -32,9 +32,21 @@ const NewNavBar = React.memo(() => {
 
 const ControlPanel = () => {
   const [devices, setDevices] = useState([]);
-  const [showWindow, setShowWindow] = useState(true);
+  const [showWindow, setShowWindow] = useState(false);
   const [method, setMethod] = useState(null);
   const [mobileShow, setMobileShow] = useState("Device Settings");
+  const [fill, setFill] = useState(window.innerWidth < 767);
+  const [identifier, setIdentifier] = useState(null);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setFill(window.innerWidth < 767);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     const fetchDevices = async () => {
@@ -46,9 +58,10 @@ const ControlPanel = () => {
     fetchDevices();
   }, []);
 
-  const showPopUp = (method) => {
-    setShowWindow(true)
-    setMethod(method)
+  const showPopUp = (method, identifier) => {
+    setShowWindow(true);
+    setMethod(method);
+    setIdentifier(identifier);
   };
 
   const groups = devices.reduce((acc, cur) => {
@@ -66,76 +79,37 @@ const ControlPanel = () => {
 
   return (<>
     {/* Header */}
-      <NewNavBar />
-
+    <NewNavBar />
     <img className="backgroundBlock" src="/images/power.jpg" />
     <div className="backgroundBlock"></div>
-
-    <Container className="mt-4 container-fluid savings pt-5 pb-5 mainContainer">
-      {window.innerWidth <= 768 ? <>
-
-        <main>
-          <Container className="m-0">
-            <Row className="justify-content-center text-center mt-4">
-              <h3>Control Panel</h3>
-            </Row>
-            <Row className="justify-content-center mt-4">
-              <Col xs={10}>
-                <Dropdown
-                  style={{ backgroundColor: "#f8f9fa", borderRadius: "5px" }}
-                  onSelect={(eventKey) => setMobileShow(eventKey)}
-                >
-                  <Dropdown.Toggle variant="light" style={{ width: "100%", textAlign: "start" }}>
-                    {mobileShow !== "start" ? mobileShow : "Select Panel"}
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    <Dropdown.Item eventKey="Device Settings">Device Settings</Dropdown.Item>
-                    <Dropdown.Item eventKey="Group Settings">Group Settings</Dropdown.Item>
-                    <Dropdown.Item eventKey="Cloud Settings">Cloud Settings</Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
+    <Container className="mt-4 container-fluid power pt-5 pb-5 mainContainer">
+      <Row className="justify-content-center">
+        <Col xl={8} lg={10} md={12} className="p-0  d-block">
+          <Container className="p-0 justify-content-center">
+            <Container className="container-fluid d-flex justify-content-center">
+              <Col xl={12} lg={12} md={12} sm={8} xs={8} className="text-center text-lg-start">
+                <h3 className="mt-3">Control Panel</h3>
               </Col>
-            </Row>
-          </Container>
-          {mobileShow === "Device Settings" &&
-            <Container className="controlPanelContainer">
-              <DeviceSettings devices={devices} showPopUp={showPopUp} />
             </Container>
-          }
-          {mobileShow === "Group Settings" &&
-            <Container className="controlPanelContainer">
-              <GroupSettings groups={groups} showPopUp={showPopUp} />
-            </Container>
-          }
-          {mobileShow === "Cloud Settings" &&
-            <Container className="controlPanelContainer">
-              <CloudSettings />
-            </Container>}
-        </main>
-
-      </> : <>
-        <Row className="justify-content-center">
-          <Col md={10} lg={8} className="p-0">
-            <Container className="p-0 mt-4">
-              <Tabs defaultActiveKey="devices" id="devices-tabs" style={{ borderBottom: "0" }}>
-                <Tab eventKey="devices" title="Devices" className="controlPanelContainer">
+            <Container className="mt-5">
+              <Tabs defaultActiveKey="devices" id="devices-tabs" style={{ borderBottom: "0" }} className="tabHolder" fill={fill}>
+                <Tab eventKey="devices" title="Devices" className="ctrlContainer">
                   <DeviceSettings devices={devices} showPopUp={showPopUp} />
                 </Tab>
-                <Tab eventKey="deviceGroups" title="Device Groups" className="controlPanelContainer">
+                <Tab eventKey="deviceGroups" title="Device Groups" className="ctrlContainer">
                   <GroupSettings groups={groups} showPopUp={showPopUp} />
                 </Tab>
-                <Tab eventKey="cloudSettings" title="Cloud Settings" className="controlPanelContainer">
+                <Tab eventKey="cloudSettings" title="Cloud Settings" className="ctrlContainer">
                   <CloudSettings />
                 </Tab>
               </Tabs>
             </Container>
-          </Col>
-        </Row>
-      </>}
-
+          </Container>
+        </Col>
+      </Row>
     </Container>
     <main>
-      {showWindow && <PopUp showWindow={setShowWindow} method={method} devices={devices} setDevices={setDevices} />}
+      {showWindow && <PopUp showWindow={setShowWindow} method={method} devices={devices} setDevices={setDevices} identifier={identifier} />}
     </main>
   </>
   );

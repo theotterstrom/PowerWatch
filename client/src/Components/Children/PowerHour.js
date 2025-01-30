@@ -1,10 +1,13 @@
 import axios from "axios";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import { useState } from 'react';
 import apiUrl from "../Helpers/APIWrapper";
 export default ({ initData }) => {
+    const [todaySchedule, setTodayScheduele] = useState(false);
     const { powerhour, togglePowerHour, devices } = initData;
     delete powerhour.value._id;
     const powerHourDevices = JSON.parse(JSON.stringify(devices.value)).filter(obj => obj.deviceType === "Relay");
+
     const setPowerHours = async () => {
         const floatCheckArr = JSON.parse(JSON.stringify(Object.values(powerhour.value)));
         if (floatCheckArr.some(obj => isNaN(obj))) {
@@ -12,7 +15,7 @@ export default ({ initData }) => {
         } else {
             try {
                 const setHourRes = await axios.post(`${apiUrl}/setpowerhour`, {
-                    data: powerhour.value,
+                    data: {...powerhour.value, today: todaySchedule},
                 }, {
                     withCredentials: true
                 });
@@ -85,14 +88,18 @@ export default ({ initData }) => {
                 <i onClick={() => togglePowerHour(false)} className="fa fa-times"></i>
                 <Form>
                     <Row className="justify-content-center">
-                        <Col lg={6}>
+                        <Col lg={6} md={6}>
                             {splitPowerHours()[0]}
                         </Col>
-                        <Col lg={6}>
+                        <Col lg={6}  md={6}>
 
                         {splitPowerHours()[1]}
                         </Col>
-                    </Row>
+                        </Row>
+                        <Container className="m-0 p-0 d-flex mt-4" style={{whiteSpace: "nowrap"}}>
+                            <Form.Check onChange={() => setTodayScheduele(true)} />
+                            &nbsp;<p>Set this scheduele for today</p>
+                        </Container>
                 </Form>
                 <Container className="container-fluid d-flex justify-content-center mt-5">
                     <Button onClick={() => setPowerHours()}>Set hours</Button>

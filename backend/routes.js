@@ -9,7 +9,8 @@ const {
     databaseFetch,
     databaseReplace,
     databaseInsert,
-    databaseRemove
+    databaseRemove,
+    createNewScheduele
 } = require('./helpers.js')
 const { ObjectId } = require("mongodb")
 
@@ -100,8 +101,8 @@ module.exports = ({ client, masterDb }) => {
             
             if(data.deviceType === "Relay"){
                 const fsDriveControl = await databaseFetch("powerhour", masterDb, customer, client);
-                fsDriveControl[`device-${data.deviceName}`] = "0";
-                await databaseReplace("powerhour", masterDb, customer, client, fsDriveControl);
+                fsDriveControl[0][`device-${data.deviceName}`] = "0";
+                await databaseReplace("powerhour", masterDb, customer, client, fsDriveControl[0]);
             };
             await databaseInsert("devices", masterDb, customer, client, newDevice);
             return res.status(200).json({ message: "Device added"});
@@ -115,11 +116,18 @@ module.exports = ({ client, masterDb }) => {
         const { customer } = req.cookies;
         try{
             const data = await requestDecrypter(req.body.data, masterDb);
-            const deviceIds = await databaseFetch("devices", masterDb, customer, client)
+            const devices = await databaseFetch("devices", masterDb, customer, client)
     
-            const deviceToBeDeleted = deviceIds.find(device => device.id === data.id);
+            const deviceToBeDeleted = devices.find(device => device.id === data.id);
             if(!deviceToBeDeleted){
                 return res.status(404).json({ message: "Device was not found"});
+            };
+
+            if(deviceToBeDeleted.deviceType === "Relay"){
+                const fsDriveControl = await databaseFetch("powerhour", masterDb, customer, client);
+                delete fsDriveControl[0][`device-${deviceToBeDeleted.deviceName}`];
+
+                await databaseReplace("powerhour", masterDb, customer, client, fsDriveControl[0]);
             };
             const idToBeRemoved = deviceToBeDeleted["_id"];
             
@@ -227,6 +235,7 @@ module.exports = ({ client, masterDb }) => {
         try {
             const { customer } = req.cookies;
            const fsDriveControl = await databaseFetch("powerhour", masterDb, customer, client);
+           console.log(fsDriveControl)
             res.json(fsDriveControl)
         } catch (e) {
             console.log(e)
@@ -237,22 +246,31 @@ module.exports = ({ client, masterDb }) => {
     router.post('/setpowerhour', authMiddleware, async (req, res) => {
         try {
             const { customer } = req.cookies;
-            delete req.body.data.secret;
+            const todayScheduele = JSON.parse(JSON.stringify(req.body.data)).today;
+            delete req.body.data.today;
             const customercollection = masterDb.collection("customerDbs");
             const customerDbName = await customercollection.findOne({ customerCookie: customer });
             const customerDb = client.db(customerDbName.name);
-            console.log(customerDbName)
-            const allEntries = await customercollection.find({})
-            console.log(allEntries)
-            console.log(customerDbName.name)
+    
             const powerHourCollection = customerDb.collection("powerhour");
             await powerHourCollection.drop();
             await powerHourCollection.insertOne(req.body.data);
-            const allPowerHour = await powerHourCollection.find({}).toArray();
-            console.log(allPowerHour)
+    
             res.status(200).json({ message: "Updated hours" });
+    
+            if (todayScheduele) {
+                const scheduleCollection = customerDb.collection("schedueles");
+
+                await scheduleCollection.deleteOne({ date: new Date().toISOString().split("T")[0] });
+
+    
+                setImmediate(() => {
+                    createNewScheduele(customerDb, req.body.data, scheduleCollection, client, customerDbName)
+                        .catch(err => console.error("Error creating new schedule:", err));
+                });
+            }
         } catch (e) {
-            console.log(e)
+            console.log(e);
             res.status(500).json({ error: "Failed to fetch device hours" });
         }
     });

@@ -21,7 +21,6 @@ const verticalLinePlugin = {
             ctx.setLineDash([5, 5]);
             ctx.stroke();
             ctx.restore();
-
             if (toolTip) {
                 toolTip.style.display = "block"
             }
@@ -68,9 +67,8 @@ const LineChart = ({ lineData }) => {
                         tooltipEl.style.fontSize = "14px";
                         tooltipEl.style.whiteSpace = "nowrap"
                         tooltipEl.style.transform = 'translateX(-50%) translateY(-80%)';
-                        tooltipEl.style.maxWidth = "300px"
-                        tooltipEl.style.minWidth = "300px";
-
+                        tooltipEl.style.maxWidth = "350px"
+                        tooltipEl.style.minWidth = "350px";
                         document.body.appendChild(tooltipEl);
                     }
                     const tooltipModel = context.tooltip;
@@ -79,7 +77,7 @@ const LineChart = ({ lineData }) => {
                         return;
                     }
                     tooltipEl.style.opacity = "1";
-                    
+
                     let tooltipText = `<div class="d-flex container-fluid text-center justify-content-center">${tooltipModel.title[0]}</div>`;
                     if (tooltipModel.dataPoints) {
                         tooltipModel.dataPoints.forEach(point => {
@@ -98,22 +96,19 @@ const LineChart = ({ lineData }) => {
                     }
 
                     tooltipEl.innerHTML = tooltipText;
-
-                    let toolTipWidth = 300;
-
+                    let toolTipWidth = 350;
                     const position = context.chart.canvas.getBoundingClientRect();
                     const newPostion = position.left + window.pageXOffset + tooltipModel.caretX;
                     tooltipEl.style.top = position.top + window.pageYOffset + 'px';
-
                     const maximumRight = "-" + toolTipWidth / 2;
                     const maximumLeft = toolTipWidth / 2;
 
-                    if (newPostion + 300 / 2 + 20 < window.innerWidth && newPostion > 300 / 2) {
+                    if (newPostion + toolTipWidth / 2 + 20 < window.innerWidth && newPostion > toolTipWidth / 2) {
                         tooltipEl.style.left = newPostion + 'px';
-                    } else if(newPostion + 300 / 2 + 20 < window.innerWidth && newPostion > maximumLeft){
-                        tooltipEl.style.left = 300 / 2 + "px";
-                    } else if (newPostion > 300 / 2 && newPostion){
-                        tooltipEl.style.right = "-" + 300 / 2 + "px";
+                    } else if (newPostion + toolTipWidth / 2 + 20 < window.innerWidth && newPostion > maximumLeft) {
+                        tooltipEl.style.left = toolTipWidth / 2 + "px";
+                    } else if (newPostion > toolTipWidth / 2 && newPostion) {
+                        tooltipEl.style.right = "-" + toolTipWidth / 2 + "px";
                     };
                 },
             },
