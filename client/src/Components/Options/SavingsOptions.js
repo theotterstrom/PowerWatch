@@ -129,8 +129,8 @@ export default ({ initData }) => {
 
     return (
         <>
-            <Row className="justify-content-center mt-sm-2 mt-md-2 mt-lg-3">
-                <Container className="d-lg-none d-md-block">
+            <Row className="justify-content-center  m-0 p-0 mt-sm-2 mt-md-2 mt-lg-3" style={{overflow:"hidden", maxWidth: "98vw"}}>
+                 <Container className="d-lg-none d-md-block p-0 m-0">
                     <Row>
                         <Col className="savingsText" >
                             <b>Total spending:</b><br></br>
@@ -145,8 +145,8 @@ export default ({ initData }) => {
                             {(totalSaved / 100).toFixed(2)} SEK
                         </Col>
                     </Row>
-                </Container>
-                <Col xl={8} lg={7} md={12} sm={10} xs={11} className="p-3 d-lg-block d-none">
+                </Container> 
+                <Col xl={8} lg={7} md={12} sm={10} xs={11} className="p-0 d-lg-block d-none">
                     <Row>
                         <Col className="savingsText" >
                             <b>Total spending:</b><br></br>
@@ -184,8 +184,9 @@ export default ({ initData }) => {
                             {splitFormChecks()[1]}
                         </Col>
                     </Row>
-                </Col>
-                <Col xl={4} lg={5} md={12} sm={10} xs={11} className="p-3 d-flex flex-column justify-content-between">
+                </Col> 
+                
+                 <Col xl={4} lg={5} md={12} sm={10} xs={11} className="d-flex flex-column justify-content-between mt-4 mt-lg-0">
                     <Form.Label>Start Date</Form.Label>
                     <Form.Control type="date" value={savingsstartdate.value} onChange={(e) => setSavingStartDateFunc(e.target.value)} />
                     <Form.Label className="mt-3">End Date</Form.Label>
@@ -203,7 +204,7 @@ export default ({ initData }) => {
                         &nbsp;&nbsp;<i onClick={() => handleMonthSelect()} className="fa-solid fa-xmark mt-2" style={{ color: "white", fontSize: "40px", cursor: "pointer" }}></i>
                     </Container>
                     <Container className="d-flex justify-content-between">
-                        <Container className="m-0 p-0 mt-4 d-lg-none d-md-flex">
+                        <Container className="m-0 p-0 mt-4 d-lg-none d-flex">
                             <Dropdown onSelect={(eventKey) => handleSelect(eventKey, groups)}>
                                 <Dropdown.Toggle variant="primary" id="dropdown-basic">
                                     {dropdownText}
@@ -219,12 +220,12 @@ export default ({ initData }) => {
                             </Dropdown>
                             &nbsp;<p className="mt-1">Group</p>
                         </Container>
-                        <Container className="m-0 p-0 d-flex mt-4">
+                        <Container className="m-0 p-0 d-flex mt-4" style={{whiteSpace: "nowrap"}}>
                             <Form.Check onChange={() => allsavingsdate.set(!allsavingsdate.value)} />
                             &nbsp;<p>Show all dates</p>
                         </Container>
                     </Container>
-                </Col>
+                </Col> 
             </Row>
         </>
     );

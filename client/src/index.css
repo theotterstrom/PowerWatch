@@ -13,6 +13,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow: overlay;
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
   
 }
 .titleHolder{
@@ -121,32 +123,7 @@ code {
 
 }
 
-.toolTipParent {
-  display: flex;
-  justify-content: flex-start; /* Optional: Adjust horizontal alignment */
-  align-items: flex-end; /* Aligns the bottom of the child to the bottom of the parent */
-  position: absolute;
-  white-space: nowrap; /* Prevent line breaks */
-  max-width: 70% !important;
-}
-
-.toolTipContainer {
-  background-color: rgba(0, 0, 0, 0.9);
-  border-radius: 20px;
-  position: absolute;
-  padding: 10px 30px 20px 20px;
-  font-size: 14px;
-  pointer-events: none;
-  max-width: 100%; /* Optional: Avoid overflowing if the width is too large */
-  white-space: nowrap; /* Ensure no line breaks */
-}
-
-.toolTipContainer i {
-  font-size: 8px;
-  white-space: nowrap; /* Prevent label from wrapping */
-}
-
-.toolTipContainer::after {
+#chartjs-tooltip::after {
   content: '';
   position: absolute;
   bottom: -10px; /* Position below the div */
@@ -187,7 +164,11 @@ code {
   color: black !important;/* Active tab text color */
   font-weight: bold; /* Optional: Highlight active tab */
 }
+.chartContainer{
+  height: 60vh;
+  width: 110%;
 
+}
 
 /* Spin animation */
 @keyframes spin {
@@ -208,8 +189,8 @@ code {
 
   .chartContainer{
     height: 60vh;
-    left: 5vw;
-    width: 150vw;
+    width: 120%;
+    margin-left: -80px;
   }
 
   .savingsText{
@@ -248,18 +229,16 @@ code {
   .nav-item{
     font-size: 14px;
   }
-  .toolTipContainer::after {
-    display:none;
-  }
+
 
   .powerHourWindow{
     top: 1vh;
   }
 
   .chartContainer{
-    width: 150vw;
     height: 600px;
-
+    max-width: 120vw;
+    margin-left: -20px;
   }
 
 
@@ -271,4 +250,9 @@ code {
     border: 0; /* Optional: Remove border if not needed */
   }
 
+}
+@media (max-width: 525px) {
+  .chartContainer{
+    width: 110%;
+  }
 }

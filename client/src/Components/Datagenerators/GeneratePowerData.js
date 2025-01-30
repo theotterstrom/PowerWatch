@@ -1,5 +1,4 @@
-const options = require('./ChartOptions');
-const generatePowerData = (allDataStates, readings, temps, dateStates, chartStates, devices) => {
+const generatePowerData = (allDataStates, readings, temps, dateStates, devices) => {
 
     const {
         startdate,
@@ -141,8 +140,7 @@ const generatePowerData = (allDataStates, readings, temps, dateStates, chartStat
     };
 
     return {
-        chartData,
-        chartOptions: options(window.innerWidth <= 1024, "Watt", chartStates)
+        chartData
     };
 };
 

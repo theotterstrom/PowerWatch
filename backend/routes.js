@@ -361,18 +361,18 @@ module.exports = ({ client, masterDb }) => {
 
     router.get('/fdsf8f9an3', async (req, res) => {
         try {
-            console.log("He")
+
             const { timestamp, hash: clientHash } = req.query;
             if (!timestamp || !clientHash) {
                 return res.status(400).send({ message: 'Missing timestamp or hash.' });
             }
             const allowed = checkKeyRouteCredentials(timestamp, clientHash);
-            console.log("He")
+
             if (allowed && req.query.session === "n41e3HGsg2V3vg") {
                 const key = await getKey(masterDb);
                 return res.status(200).json({ session: key });
             };
-            console.log("He")
+         
             return res.status(401).json({ message: "Unauthorized" });
         } catch (e) {
             console.error(e)
@@ -388,9 +388,24 @@ module.exports = ({ client, masterDb }) => {
             const prices = await databaseFetch("prices", masterDb, "uj4SFc4XFMkeXXySI55gzG51", client);
             const schedueles = await databaseFetch("schedueles", masterDb, "uj4SFc4XFMkeXXySI55gzG51", client);
             const tempreadings = await databaseFetch("temp_readings", masterDb,"uj4SFc4XFMkeXXySI55gzG51", client, 0, 5000);
-            const allLists = [readings, savings, prices, schedueles, tempreadings]
+            const powerhour = await databaseFetch("powerhour", masterDb,"uj4SFc4XFMkeXXySI55gzG51", client);
+            console.log("HEJ")
+            console.log(powerhour)
+            const allLists = [readings, savings, prices, schedueles, tempreadings, powerhour]
             res.status(200).json( {array: allLists} );
         };  
+    });
+
+    router.get('/initdata', authMiddleware, async (req, res) => {
+        const { customer } = req.cookies;
+        const readings = await databaseFetch("power_readings", masterDb, customer, client, 0, 5000);
+        const savings = await databaseFetch("savings", masterDb, customer, client, 0, 5000);
+        const prices = await databaseFetch("prices", masterDb, customer, client);
+        const schedueles = await databaseFetch("schedueles", masterDb, customer, client);
+        const tempreadings = await databaseFetch("temp_readings", masterDb,customer, client, 0, 5000);
+        const devices = await databaseFetch("devices", masterDb,customer, client);
+        const allLists = [readings, savings, prices, schedueles, tempreadings, devices]
+        res.status(200).json({ data: allLists });
     });
 
     router.get('/check-auth', authMiddleware, (req, res) => {

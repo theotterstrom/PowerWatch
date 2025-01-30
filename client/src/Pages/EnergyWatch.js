@@ -15,7 +15,6 @@ import {
   PointElement,
   LinearScale,
   Title,
-  Tooltip,
   Legend,
 } from 'chart.js';
 
@@ -73,74 +72,22 @@ const EnergyWatch = () => {
   useEffect(() => {
     const run = async () => {
       try {
-/*         const storedPrices = localStorage.getItem("prices");
-        const storedSchedueles = localStorage.getItem("schedueles");
-        const storedDeviceStatuses = localStorage.getItem("devicestatuses");
-        const storedSavings = localStorage.getItem("savings");
-        const storedReadings = localStorage.getItem("readings");
-        const storedTemps = localStorage.getItem("temps");
-        const storedDevices = localStorage.getItem("devices");
-        const allContent = 
-        storedPrices.length > 0 && 
-        storedDeviceStatuses.length > 0 && 
-        storedSavings.length > 0 && 
-        storedReadings.length > 0 && 
-        storedTemps.length > 0 && 
-        storedDevices.length > 0;
-
-        if (allContent && storedPrices && storedSchedueles && storedDeviceStatuses && storedSavings && storedReadings && storedTemps  && storedDevices) {
-          setPrices(JSON.parse(storedPrices));
-          setSchedueles(JSON.parse(storedSchedueles));
-          setDeviceStatuses(JSON.parse(storedDeviceStatuses));
-          setSavings(JSON.parse(storedSavings));
-          setReadings(JSON.parse(storedReadings));
-          setTemps(JSON.parse(storedTemps));
-          return;
-        }; */
-
-        const urlList = ["prices", "schedueles", "devicestatuses", "devices"];
-        const [pricesRes, scheduelesRes, deviceStatusRes, deviceRes] = await Promise.all(
-          urlList.map((name) => axios.get(`${apiUrl}/${name}`, {
+        const [initDataRes, deviceStatusRes] = await Promise.all([
+          axios.get(`${apiUrl}/initdata`, {
             withCredentials: true
-          }))
-        );
-
-        const paginationUrls = ["savings?offset=", "readings?offset=", "temperatures?offset="];
-        let ackReqs = {
-          savings: [],
-          readings: [],
-          temps: [],
-        };
-
-        for (let i = 0; true; i += 400) {
-          const [offSetSavings, offSetReadings, offSetTemps] = await Promise.all(
-            paginationUrls.map((url) => axios.get(`${apiUrl}/${url}${i}`, {
-              withCredentials: true
-            }))
-          );
-          if ([offSetSavings, offSetReadings, offSetTemps].every((req) => req.data.length === 0)) {
-            break;
-          }
-          ackReqs.savings = ackReqs.savings.concat(offSetSavings.data);
-          ackReqs.readings = ackReqs.readings.concat(offSetReadings.data);
-          ackReqs.temps = ackReqs.temps.concat(offSetTemps.data);
-        };
-
-        setPrices(pricesRes.data);
-        setSchedueles(scheduelesRes.data);
+          }),
+          axios.get(`${apiUrl}/devicestatuses`, {
+            withCredentials: true
+          })
+        ])
+        const [readings, savings, prices, schedules, tempreadings, devices] = initDataRes.data.data
+        setPrices(prices);
+        setSchedueles(schedules);
         setDeviceStatuses(deviceStatusRes.data);
-        setDevices(deviceRes.data);
-        setSavings(ackReqs.savings.reverse());
-        setReadings(ackReqs.readings.reverse());
-        setTemps(ackReqs.temps);
-
-        localStorage.setItem("prices", JSON.stringify(pricesRes.data));
-        localStorage.setItem("schedueles", JSON.stringify(scheduelesRes.data));
-        localStorage.setItem("devicestatuses", JSON.stringify(deviceStatusRes.data));
-        localStorage.setItem("savings", JSON.stringify(ackReqs.savings.reverse()));
-        localStorage.setItem("readings", JSON.stringify(ackReqs.readings.reverse()));
-        localStorage.setItem("temps", JSON.stringify(ackReqs.temps));
-        localStorage.setItem("devices", JSON.stringify(deviceRes.data));
+        setDevices(devices);
+        setSavings(savings.reverse());
+        setReadings(readings.reverse());
+        setTemps(tempreadings);
       } catch (e) {
         console.error("Error fetching data:", e);
       }
@@ -184,10 +131,10 @@ const EnergyWatch = () => {
     },
   };
 
-  ChartJS.register(LineElement, PointElement, LinearScale, Title, Tooltip, Legend, verticalLinePlugin);
+  ChartJS.register(LineElement, PointElement, LinearScale, Title, Legend, verticalLinePlugin);
 
   window.addEventListener("touchend", () => {
-    const toolTipContainer = document.getElementsByClassName("toolTipContainer")[0];
+    const toolTipContainer = document.getElementById("chartjs-tooltip");
     if(!toolTipContainer) return;
     setTimeout(() => {
       toolTipContainer.style.display = "none"

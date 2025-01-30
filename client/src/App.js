@@ -6,6 +6,7 @@ import EnergyWatch from './Pages/EnergyWatch';
 import ControlPanel from "./Pages/ControlPanel";
 import NotFound from './Pages/NotFound';
 import ProtectedRoute from "./Components/Helpers/ProtectedRoute";
+import ChartPage from './Pages/ChartPage';
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
             <ControlPanel />
           </ProtectedRoute>
         } />
+        <Route path="/chartex" element={<ChartPage/>} />
         <Route path="*" element={<NotFound />} /> {/* Handle 404s */}
       </Routes>
     </Router>

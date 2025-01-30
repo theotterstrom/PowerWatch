@@ -1,18 +1,17 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import generatePowerData from "../Datagenerators/GeneratePowerData";
 import { Container, Row, Col } from "react-bootstrap";
-import { Line } from "react-chartjs-2";
 import PowerOptions from "../Options/PowerOptions";
-import ToolTip from "./ToolTip";
-
-const ToolTipChild = React.memo(({ chartStates, page }) => {
-  const initData = useMemo(() => ({ chartStates, page }), [chartStates, page]);
-  return <ToolTip initData={initData} />
-});
+import LineGenerator from './LineGenerator';
 
 const PowerOptionChild = React.memo(({ allDataStates, dateStates, devices }) => {
   const initData = useMemo(() => ({ allDataStates, dateStates, devices }), [allDataStates, dateStates, devices]);
   return <PowerOptions initData={initData} />
+});
+
+const LineChild = React.memo(({ lineDataProp }) => {
+  const lineData = useMemo(() => ({ lineDataProp }), [lineDataProp]);
+  return <LineGenerator lineData={lineData} />
 });
 
 export default ({ initData }) => {
@@ -30,16 +29,6 @@ export default ({ initData }) => {
   const [endDate, setEndDate] = useState(new Date().toISOString().split("T")[0]);
   const [allDates, setAllDates] = useState(false);
   const [month, setMonth] = useState("None");
-
-  const [currentDate, setCurrentDate] = useState(null);
-  const [dataValues, setCurrentDataValues] = useState([]);
-  const [chartY, setChartY] = useState(null);
-
-  const chartStates = useMemo(() => ({
-    currentdate: { value: currentDate, set: setCurrentDate },
-    datavalues: { value: dataValues, set: setCurrentDataValues },
-    charty: { value: chartY, set: setChartY }
-  }), [currentDate, dataValues, chartY]);
 
   const allDataStates = useMemo(() => {
     const dynamicStates = Object.fromEntries(
@@ -68,7 +57,7 @@ export default ({ initData }) => {
     month: { value: month, set: setMonth }
   }), [startDate, endDate, allDates, month]);
 
-  const { chartData, chartOptions } = generatePowerData(allDataStates, readings, temps, dateStates, chartStates, devices);
+  const { chartData } = generatePowerData(allDataStates, readings, temps, dateStates, devices);
 
   return (
     <Container className="mt-4 container-fluid power pt-5 pb-5 mainContainer">
@@ -81,10 +70,7 @@ export default ({ initData }) => {
               </Col>
             </Container>
             <PowerOptionChild allDataStates={allDataStates} dateStates={dateStates} devices={devices} />
-            <Container className="chartContainer p-0 m-0">
-              <ToolTipChild chartStates={chartStates} page={"power"} />
-              <Line height={200} data={chartData} options={chartOptions} className="mt-md-3 powerChart" />
-            </Container>
+            <LineChild lineDataProp={chartData} /> 
           </Container>
         </Col>
       </Row>

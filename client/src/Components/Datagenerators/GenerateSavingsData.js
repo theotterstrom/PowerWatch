@@ -1,5 +1,4 @@
-const options = require('./ChartOptions');
-const generateSavingsData = (allDataStates, savings, dateStates, chartStates, devices) => {
+const generateSavingsData = (allDataStates, savings, dateStates, devices) => {
 
     const {
         savingsstartdate,
@@ -39,7 +38,7 @@ const generateSavingsData = (allDataStates, savings, dateStates, chartStates, de
             if (index === 0) {
                 names.forEach(name => acc[name] = []);
             }
-            
+
             names.forEach(name => {
                 const realCost = cur.values[name].realCost;
                 const averageCost = cur.values[name].averageCost;
@@ -47,7 +46,7 @@ const generateSavingsData = (allDataStates, savings, dateStates, chartStates, de
                 sum2 += allDataStates[name]?.value ? averageCost : 0;
 
                 const date = cur.date.split(" ")[0];
-                if(acc[name]){
+                if (acc[name]) {
                     const existingIndex = acc[name].findIndex(obj => obj.date === date);
                     if (existingIndex === -1) {
                         acc[name].push({ date, realCost, averageCost });
@@ -125,7 +124,6 @@ const generateSavingsData = (allDataStates, savings, dateStates, chartStates, de
 
     return {
         savingsData,
-        savingsOptions: options(window.innerWidth <= 1024, 'Kostnad', chartStates),
         totalSpending,
         totalSaved: totalSpending[1] - totalSpending[0]
     }

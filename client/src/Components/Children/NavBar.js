@@ -45,6 +45,7 @@ export default ({ states }) => {
         };
         fetchData();
     }, []);
+    
 
     const apiData = useMemo(() => ({
         powerhour: { value: powerHour, set: setPowerHour },
@@ -98,7 +99,7 @@ export default ({ states }) => {
                 position: "fixed",
                 top: 0,
                 left: 0,
-                width: "99.1vw",
+                width: "100vw",
                 zIndex: 100,
                 borderBottomLeftRadius: "10px",
                 borderBottomRightRadius: "10px",

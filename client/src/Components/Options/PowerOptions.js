@@ -16,7 +16,7 @@ export default ({ initData }) => {
     const setStartDateFunc = date => {
         if (date > new Date().toISOString()) {
             alert("Date cannot be greater than todays date")
-        } else if(new Date(date) > new Date(enddate.value)){
+        } else if (new Date(date) > new Date(enddate.value)) {
             alert("Date cannot be earlier than end date")
         } else {
             startdate.set(date);
@@ -25,7 +25,7 @@ export default ({ initData }) => {
     const setEndDateFunc = date => {
         if (date > new Date().toISOString()) {
             alert("Date cannot be greater than todays date")
-        } else if(new Date(date) < new Date(startdate.value)){
+        } else if (new Date(date) < new Date(startdate.value)) {
             alert("Date cannot be earlier than start date")
         } else {
             enddate.set(date);
@@ -126,8 +126,8 @@ export default ({ initData }) => {
 
     return (
         <>
-            <Row className="justify-content-center mt-sm-2 mt-md-2 mt-lg-3">
-                <Col xl={8} lg={7} md={12} sm={10} xs={11} className="p-3 d-lg-block d-none">
+            <Row className="justify-content-center m-0 p-0 mt-sm-2 mt-md-2 mt-lg-3" style={{ overflow: "hidden", maxWidth: "98vw" }}>
+                <Col xl={8} lg={7} md={12} sm={10} xs={12} className="p-3 d-lg-block d-none">
                     <Row className="p-0 m-0" style={{ height: "100%" }}>
                         <Col className="d-flex flex-column">
                             {splitFormChecks()[0]}
@@ -154,12 +154,14 @@ export default ({ initData }) => {
                     </Row>
 
                 </Col>
-                <Col xl={4} lg={5} md={12} sm={10} xs={11} className="p-3 d-flex flex-column justify-content-between">
+                <Col xl={4} lg={5} md={12} sm={10} xs={11} className="d-flex flex-column justify-content-between">
+
                     <Form.Label>Start Date</Form.Label>
                     <Form.Control type="date" value={startdate.value} onChange={(e) => setStartDateFunc(e.target.value)} />
                     <Form.Label className="mt-3">End Date</Form.Label>
                     <Form.Control type="date" value={enddate.value} onChange={(e) => setEndDateFunc(e.target.value)} />
                     <Form.Label className="mt-3">Month filter</Form.Label>
+
                     <Container className="d-flex p-0 m-0">
                         <Dropdown onSelect={handleMonthSelect} className="mt-2" style={{ width: "85%" }}>
                             <Dropdown.Toggle variant="light" id="dropdown-basic" style={{ width: "100%", textAlign: "start", height: "35px", padding: "0 0 0 20px" }}>
@@ -190,7 +192,7 @@ export default ({ initData }) => {
                             &nbsp;<p className="mt-1">Group</p>
                         </Container>
 
-                        <Container className="m-0 p-0 d-flex mt-4">
+                        <Container className="m-0 p-0 d-flex mt-4" style={{whiteSpace: "nowrap"}}>
                             <Form.Check onChange={() => alldates.set(!alldates.value)} />
                             &nbsp;<p>Show all dates</p>
                         </Container>
