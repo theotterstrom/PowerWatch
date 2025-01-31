@@ -35,12 +35,12 @@ const ControlPanel = () => {
   const [showWindow, setShowWindow] = useState(false);
   const [method, setMethod] = useState(null);
   const [mobileShow, setMobileShow] = useState("Device Settings");
-  const [fill, setFill] = useState(window.innerWidth < 767);
+  const [fill, setFill] = useState(window.innerWidth < 768);
   const [identifier, setIdentifier] = useState(null);
 
   useEffect(() => {
     const handleResize = () => {
-      setFill(window.innerWidth < 767);
+      setFill(window.innerWidth < 768);
     };
     window.addEventListener("resize", handleResize);
     return () => {
@@ -91,8 +91,8 @@ const ControlPanel = () => {
                 <h3 className="mt-3">Control Panel</h3>
               </Col>
             </Container>
-            <Container className="mt-md-5 mt-3">
-              <Tabs defaultActiveKey="deviceGroups" id="devices-tabs" style={{ borderBottom: "0" }} className="tabHolder" fill={fill}>
+            <Container className="mt-md-5 mt-4">
+              <Tabs defaultActiveKey="devices" id="devices-tabs" style={{ borderBottom: "0" }} className="tabHolder" fill={fill}>
                 <Tab eventKey="devices" title="Devices" className="ctrlContainer p-md-4 p-2">
                   <DeviceSettings devices={devices} showPopUp={showPopUp} />
                 </Tab>

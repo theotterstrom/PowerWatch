@@ -6,10 +6,10 @@ export default ({ initData }) => {
 
     return (
         <Container className="p-0 m-0">
-            <Row xl={3} className="p-2">
+            <Row xl={3} className="px-2">
                 <h5
                     style={{ cursor: 'pointer' }}
-                    className="mt-4"
+                    className="mt-2"
                     onClick={() => showPopUp("add-group")}
                 >
                     <i className="fa fa-plus"></i>&nbsp;&nbsp;Add group
@@ -32,16 +32,16 @@ export default ({ initData }) => {
                                 <i className="fa fa-pencil-square-o" style={{ cursor: "pointer" }} onClick={() => showPopUp("change-group", groupName)}></i>
                             </Col>
                         </Row>
-                        <Row className="mt-3 p-3" style={{border: "2px solid rgb(0, 97, 188)"}}>
-                            <Row className="d-flex justify-content-center"><b>Members</b></Row>
-                            <Col className="text-center p-0 mt-3">
+                        <Row className="mt-3 p-3" style={{borderRadius: "5px", border: "1px solid white",background: "rgb(0, 33, 83)", color: "white"}}>
+                            <Row className="text-start"><b className="m-0 p-0">Members</b></Row>
+                            <Col className="text-start p-0 mt-3">
                                 {members.filter((_, i) => i % 2 === 0).map(member => (
-                                    <p key={`${groupName}-${member}`} className="m-1">{member}</p>
+                                    <p key={`${groupName}-${member}`} className="m-1" style={{whiteSpace: "nowrap"}}>&#x2022;&nbsp;{member}</p>
                                 ))}
                             </Col>
-                            <Col className="text-center mt-3">
+                            <Col className="text-start p-0 mt-3">
                                 {members.filter((_, i) => i % 2 !== 0).map(member => (
-                                    <p key={`${groupName}-${member}-alt`} className="m-1">{member}</p>
+                                    <p key={`${groupName}-${member}-alt`} className="m-1 " style={{whiteSpace: "nowrap"}}>&#x2022;&nbsp;{member}</p>
                                 ))}
                             </Col>
                         </Row>
@@ -59,18 +59,18 @@ export default ({ initData }) => {
                 {Object.entries(groups).map(([groupName, members]) => (
                     <Row
                         key={groupName} // Unique key for each group
-                        className="py-3 mt-3 border bg-light text-center align-items-center"
+                        className="py-3 mt-3 border bg-light text-start align-items-center"
                         style={{ color: "black", border: "1px solid black", boxShadow: "5px 5px 5px", borderRadius: "5px" }}
                     >
-                        <Col xs={3}>{groupName}</Col>
+                        <Col xs={3} className="text-center">{groupName}</Col>
                         <Col>
                             {members.filter((_, i) => i % 2 === 0).map(member => (
-                                <p key={`${groupName}-${member}`} className="m-1">{member}</p>
+                                <p key={`${groupName}-${member}`} className="m-1">&#x2022;&nbsp;{member}</p>
                             ))}
                         </Col>
                         <Col>
                             {members.filter((_, i) => i % 2 !== 0).map(member => (
-                                <p key={`${groupName}-${member}-alt`} className="m-1">{member}</p>
+                                <p key={`${groupName}-${member}-alt`} className="m-1">&#x2022;&nbsp;{member}</p>
                             ))}
                         </Col>
                         <Col>

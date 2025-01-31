@@ -49,10 +49,10 @@ export default ({ initData }) => {
     };
 
     return (
-        <Container className="m-0 p-3 pt-0 pb-0 p-0 mt-md-5 mt-3">
+        <Container className="m-0 p-0 mt-sm-2 mt-md-2 mt-lg-3">
             <Row>
                 <Container className="d-sm-block d-md-flex">
-                    <Col xl={3} lg={4} md={4} xs={12} className="p-3">
+                    <Col xl={3} lg={4} md={4} xs={12} className="px-3 py-2">
                         <Form.Label>Date</Form.Label>
                         <Form.Control
                             type="date"
@@ -60,7 +60,7 @@ export default ({ initData }) => {
                             onChange={(e) => setPriceDate(e.target.value)}
                         />
                     </Col>
-                    <Col xl={3} lg={4} md={4} xs={12} className="p-3">
+                    <Col xl={3} lg={4} md={4} xs={12} className="px-3 py-2">
                         <Form.Label>Device</Form.Label>
                         <Dropdown onSelect={handlePriceSelect}>
                             <Dropdown.Toggle variant="primary" id="dropdown-basic">
@@ -71,44 +71,13 @@ export default ({ initData }) => {
                             </Dropdown.Menu>
                         </Dropdown>
                     </Col>
-
-                    <Col xl={3} lg={4} md={4} xs={12} className="p-3">
-                    Status<br></br>
-                    {currentdevicestatus.value}
+                    <Col xl={3} lg={4} md={4} xs={12} className="px-3 py-2">
+                        Status<br />
+                        {currentdevicestatus.value}
                     </Col>
                 </Container>
+
             </Row>
         </Container>
-
-        /*         <Row className="mt-lg-5 mt-4">
-                    <Col xl={3} lg={4} md={6} xs={8}>
-                        <Form.Label>Date</Form.Label>
-                        <Form.Control
-                            style={{ height: "30px" }}
-                            type="date"
-                            value={pricedate.value}
-                            onChange={(e) => setPriceDate(e.target.value)}
-                        />
-                    </Col>
-                    <Col xs={8}>
-                        <Row>
-                            <Col lg={5} xs={10} xl={5} md={10} className="mt-lg-0 mt-3">
-                                <Form.Label>Device</Form.Label>
-                                <Dropdown onSelect={handlePriceSelect}>
-                                    <Dropdown.Toggle variant="primary" id="dropdown-basic">
-                                        {currentdevice.value}
-                                    </Dropdown.Toggle>
-                                    <Dropdown.Menu>
-                                        {scheduleDevices.map(obj => (<Dropdown.Item eventKey={obj.displayName}>{obj.displayName}</Dropdown.Item>))}
-                                    </Dropdown.Menu>
-                                </Dropdown>
-                            </Col>
-                            <Col xs={5} className="mt-lg-0 mt-3">
-                                Status<br></br>
-                                {currentdevicestatus.value}
-                            </Col>
-                        </Row>
-                    </Col>
-                </Row> */
     );
 };

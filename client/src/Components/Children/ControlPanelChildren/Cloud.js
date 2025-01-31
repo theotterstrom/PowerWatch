@@ -31,7 +31,7 @@ export default () => {
     };
 
     return (<>
-        <Container className="mt-3">
+        <Container className="mt-2">
             <h4>Cloud settings</h4>
             <Form onSubmit={setSettings} className="mt-5" style={{ paddingBottom: "20px" }}>
                 <Form.Label>Shelly-url</Form.Label>

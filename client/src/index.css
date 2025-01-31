@@ -15,7 +15,13 @@ body {
   overflow: overlay;
   max-width: 100vw !important;
   overflow-x: hidden !important;
-  
+  transition: none  !important;
+}
+*{
+  transition: top 0.5s ease, width 0.5s ease;
+}
+.headerBar{
+  transition: none  !important;
 }
 .titleHolder{
   font-family: 'LaRevis', sans-serif;
@@ -43,7 +49,6 @@ code {
   background-color: #004786;
   padding: 30px;
   border-radius: 0 20px 20px 20px;
- 
   box-shadow: 5px 5px 5px rgb(0, 0, 0);
 }
 .backgroundBlock{
@@ -54,11 +59,12 @@ code {
   width: 100vw;
   height: 100vh;
   z-index: -1;
+  transition: none  !important;
 }
 .tab-content{
   margin: 0 !important;
   padding: 0 !important;
-  border-top: 1px solid white;
+  border-top: 0;
 }
 
 .powerHourWindow{
@@ -76,7 +82,7 @@ code {
   position: fixed;
   border-radius: 20px;
   top: 10vh;
-  z-index: 100;
+  z-index: 1000000;
 }
 
 .logOutWindow{
@@ -159,7 +165,8 @@ code {
 
 /* Add a solid background for inactive tabs */
 .nav-tabs .nav-link {
-  background-color: #000000; /* Default background color for inactive tabs */
+  background-color: transparent; /* Default background color for inactive tabs */
+  border: 1px solid white !important;
   opacity: 1; /* Ensure no transparency */
   color: white !important;
   transition: background-color 0.3s ease; /* Optional: Add a smooth hover effect */
@@ -174,7 +181,6 @@ code {
 .chartContainer{
   height: 80vh;
   width: 110%;
-
 }
 
 /* Spin animation */
@@ -188,7 +194,6 @@ code {
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
-
 
 
   .mainContainer{
@@ -210,6 +215,9 @@ code {
 }
 
 @media (max-width: 767px) {
+  .tab-content{
+    border-top: 1px solid white;
+  }
   .tabHolder{
     justify-content: space-evenly !important;
   }
@@ -221,7 +229,7 @@ code {
     border-top-right-radius: 0;
   }
   .controlPanelPop {
-    top: 5vh;
+    top: 2vh;
   }
 
   .popDropDown{
@@ -245,7 +253,7 @@ code {
     display: none;
   }
   .nav-item{
-    font-size: 12px;
+    font-size: 15px;
   }
 
 
@@ -272,5 +280,25 @@ code {
 @media (max-width: 525px) {
   .chartContainer{
     width: 110%;
+  }
+}
+@media (max-width: 424px) {
+  .nav-item{
+    font-size: 13px;
+  }
+}
+@media (max-width: 388px) {
+  .nav-item{
+    font-size: 11px;
+  }
+}
+@media (max-width: 388px) {
+  .nav-item{
+    font-size: 10px;
+  }
+}
+@media (max-width: 388px) {
+  .nav-item{
+    font-size: 8px;
   }
 }

@@ -1,1 +1,0 @@
-1. när man ändrar powerhour ska den uppdatera dagens schema och även switcha relays

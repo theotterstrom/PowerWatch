@@ -138,7 +138,7 @@ const LineChart = ({ lineData }) => {
                 },
                 title: {
                     display: window.innerWidth <= 767 ? false : true,
-                    text: lineData.lineDataProp.datasets[0].label.includes("real") ? "SEK" : "W",
+                    text: lineData.lineDataProp.datasets[0]?.label.includes("real") ? "SEK" : "W",
                     color: "white"
                 },
                 ticks: {
@@ -184,7 +184,7 @@ const LineChart = ({ lineData }) => {
 
     const { lineDataProp } = lineData;
     return (
-        <div className="p-4 shadow-lg rounded-xl chartContainer">
+        <div className="p-4 shadow-lg rounded-xl chartContainer" >
             <div style={{ height: "100%" }}>
                 <Line data={lineDataProp} options={chartOptions} />
             </div>

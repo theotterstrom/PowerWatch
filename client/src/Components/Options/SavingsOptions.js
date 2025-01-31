@@ -129,7 +129,7 @@ export default ({ initData }) => {
 
     return (
         <>
-            <Row className="justify-content-center  m-0 p-0 mt-sm-2 mt-md-2 mt-lg-3" style={{overflow:"hidden", maxWidth: "98vw"}}>
+            <Row className="justify-content-center  m-0 p-0 mt-sm-2 mt-md-2 mt-lg-3" style={{ maxWidth: "98vw"}}>
                  <Container className="d-lg-none d-md-block p-0 m-0">
                     <Row>
                         <Col className="savingsText" >
@@ -147,7 +147,7 @@ export default ({ initData }) => {
                     </Row>
                 </Container> 
                 <Col xl={8} lg={7} md={12} sm={10} xs={11} className="p-0 d-lg-block d-none">
-                    <Row>
+                    <Row className="m-2 mt-0 mb-0 mr-0">
                         <Col className="savingsText" >
                             <b>Total spending:</b><br></br>
                             <b>Average price:</b><br></br>

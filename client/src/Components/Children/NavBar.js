@@ -100,10 +100,11 @@ export default ({ states }) => {
                 top: 0,
                 left: 0,
                 width: "100vw",
-                zIndex: 100,
+                zIndex: 10000,
                 borderBottomLeftRadius: "10px",
                 borderBottomRightRadius: "10px",
             }}
+            className="headerBar"
             variant="dark"
             expand="lg"
             expanded={expanded}

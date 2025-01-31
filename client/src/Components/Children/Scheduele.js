@@ -48,7 +48,7 @@ export default ({ initData }) => {
             <ScheduleOptions allDataStates={allDataStates} />
             <Row className="justify-content-center">
               <Col lg={6} xl={6}>
-                <Container className="schedueleContainer p-3 mt-4">
+                <Container className="schedueleContainer p-3 mt-md-4 mt-0">
                   <h4>Scheduele</h4>
                   <Container className="mt-4">
                     <Row>

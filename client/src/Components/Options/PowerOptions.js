@@ -127,7 +127,8 @@ export default ({ initData }) => {
 
     return (
         <>
-            <Row className="justify-content-center m-0 p-0 mt-sm-2 mt-md-2 mt-lg-3" style={{ overflow: "hidden", maxWidth: "98vw" }}>
+            <Row className="justify-content-center m-0 p-0 mt-sm-2 mt-md-2 mt-lg-3" style={{ maxWidth: "98vw" }}>
+                {/* Deskktop */}
                 <Col xl={8} lg={7} md={12} sm={10} xs={12} className="p-3 d-lg-block d-none">
                     <Row className="p-0 m-0" style={{ height: "100%" }}>
                         <Col className="d-flex flex-column">
@@ -141,7 +142,7 @@ export default ({ initData }) => {
                                         </Dropdown.Toggle>
                                         <Dropdown.Menu>
                                             {Object.entries(groups).map(([groupName, members]) => (<Dropdown.Item key={groupName} eventKey={groupName} >{groupName}</Dropdown.Item>))}
-                                            <Dropdown.Item eventKey="Alla">Alla</Dropdown.Item>
+                                            <Dropdown.Item eventKey="Alla">Allsa</Dropdown.Item>
                                         </Dropdown.Menu>
                                     </Dropdown>
                                     &nbsp;<p className="mt-1">Group</p>
@@ -176,6 +177,7 @@ export default ({ initData }) => {
                     </Container>
                     <Container className="justify-content-between d-sm-flex d-block">
 
+                        {/* Mobile */}
                         <Container className="m-0 p-0 mt-4 d-lg-none d-flex">
                             <Dropdown onSelect={(eventKey) => handleSelect(eventKey, groups)}>
                                 <Dropdown.Toggle variant="primary" id="dropdown-basic">

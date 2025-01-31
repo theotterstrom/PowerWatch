@@ -155,7 +155,7 @@ export default ({ showWindow, method, devices, setDevices, identifier }) => {
     return (
         <Container className="container-fluid d-flex justify-content-center align-items-center">
             {method === "add-device" ? <>
-                <Col xs={11} xl={4} className="controlPanelPop p-xl-5 p-4">
+                <Col xl={5} lg={5} md={8} sm={9} xs={11} className="controlPanelPop p-xl-5 p-4">
                     <Row className="text-center text-center">
                         <p style={{ fontSize: "20px" }}>Add device</p>
                     </Row>
@@ -178,8 +178,8 @@ export default ({ showWindow, method, devices, setDevices, identifier }) => {
                                 {newDevice.wattFormat || "Select Format"}
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
-                                <Dropdown.Item eventKey="Milliwatt">Milliwatt</Dropdown.Item>
-                                <Dropdown.Item eventKey="Watthour">Watthour</Dropdown.Item>
+                                <Dropdown.Item eventKey="Watt">Watt</Dropdown.Item>
+                                <Dropdown.Item eventKey="Kilowatt">Kilowatt</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
 
@@ -209,7 +209,7 @@ export default ({ showWindow, method, devices, setDevices, identifier }) => {
                 </Col>
             </> : <></>}
             {method === "change-device" ? <>
-                <Col xl={4} xs={11} className="controlPanelPop  p-xl-5 p-4">
+                <Col xl={5} lg={5} md={8} sm={9} xs={11} className="controlPanelPop  px-xl-5 p-4">
                     <Row className="text-center text-center">
                         <p style={{ fontSize: "20px" }}>Change device</p>
                     </Row>
@@ -233,8 +233,8 @@ export default ({ showWindow, method, devices, setDevices, identifier }) => {
                                 {updateDevice.wattFormat || "Select Format"}
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
-                                <Dropdown.Item eventKey="Milliwatt">Milliwatt</Dropdown.Item>
-                                <Dropdown.Item eventKey="Watthour">Watthour</Dropdown.Item>
+                                <Dropdown.Item eventKey="Watt">Watt</Dropdown.Item>
+                                <Dropdown.Item eventKey="Kilowatt">Kilowatt</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
 
@@ -275,7 +275,7 @@ export default ({ showWindow, method, devices, setDevices, identifier }) => {
                 </Col>
             </> : <></>}
             {method === "add-group" ? <>
-                <Col xl={4} xs={11} className="controlPanelPop  p-xl-5 p-4">
+                <Col  xl={5} lg={5} md={8} sm={9} xs={11}className="controlPanelPop  p-xl-5 p-4">
                     <Row className="text-center text-center">
                         <p style={{ fontSize: "20px" }}>Add Group</p>
                     </Row>
@@ -314,16 +314,16 @@ export default ({ showWindow, method, devices, setDevices, identifier }) => {
                 </Col>
             </> : <></>}
             {method === "change-group" ? <>
-                <Col xl={4} xs={11} className="controlPanelPop  p-xl-5 p-4">
+                <Col xl={5} lg={5} md={8} sm={9} xs={11} className="controlPanelPop  p-xl-5 p-4">
                     <Row className="text-center text-center">
                         <p style={{ fontSize: "20px" }}>Change group</p>
                     </Row>
                     <i onClick={() => showWindow(false)} className="fa fa-times"></i>
                     <Form onSubmit={(e) => makeGroupRequest(e, 'change')}>
                         <h4>{chosenGroup}</h4>
-                        <Form.Label className="mt-4">Members</Form.Label>
+                        <Form.Label className="mt-1">Members</Form.Label>
                         <Row className="m-1 mt-0 ml-0 mb-0">
-                            <Col xl={9} style={{ backgroundColor: "white", color: "black", borderRadius: "5px", minHeight: "35px", padding: "10px" }}>
+                            <Col xl={12} lg={12} md={12} sm={12} xs={12}  style={{ backgroundColor: "white", color: "black", borderRadius: "5px", minHeight: "35px", padding: "10px" }}>
                                 {groupDevices.map(member =>
                                     <Row key={member}>
                                         <Col xs={8} style={{whiteSpace: "nowrap"}}>{member}</Col>

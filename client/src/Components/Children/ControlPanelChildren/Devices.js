@@ -6,10 +6,10 @@ export default ({ initData }) => {
     } = initData;
     return (
         <Container className="p-0 m-0">
-            <Row  xl={3} className="p-2">
+            <Row  xl={3} className="px-2">
                 <h5
                     style={{ cursor: 'pointer' }}
-                    className="mt-4"
+                    className="mt-2"
                     onClick={() => showPopUp("add-device")}
                 >
                     <i className="fa fa-plus"></i>&nbsp;&nbsp;Add device

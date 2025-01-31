@@ -61,9 +61,9 @@ const readDevices = async (customer, client) => {
                 continue;
             };
             const currentDevice = devices.find(device => device.deviceName === name);
-            if (currentDevice.wattFormat === "Watthour") {
+            if (currentDevice.wattFormat === "Kilowatt") {
                 consumptionObj[name] = (meterArr.reduce((sum, emeter) => sum + emeter.total, 0)) / 1000;
-            } else if (currentDevice.wattFormat === "Milliwatt") {
+            } else if (currentDevice.wattFormat === "Watt") {
                 consumptionObj[name] = (meterArr.reduce((sum, emeter) => sum + emeter.total, 0)) / 60000;
             };
         };
