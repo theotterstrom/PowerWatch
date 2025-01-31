@@ -142,7 +142,7 @@ export default ({ initData }) => {
                                         </Dropdown.Toggle>
                                         <Dropdown.Menu>
                                             {Object.entries(groups).map(([groupName, members]) => (<Dropdown.Item key={groupName} eventKey={groupName} >{groupName}</Dropdown.Item>))}
-                                            <Dropdown.Item eventKey="Alla">Allsa</Dropdown.Item>
+                                            <Dropdown.Item eventKey="Alla">Alla</Dropdown.Item>
                                         </Dropdown.Menu>
                                     </Dropdown>
                                     &nbsp;<p className="mt-1">Group</p>
