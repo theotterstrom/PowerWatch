@@ -129,7 +129,7 @@ export default ({ states }) => {
                         <Nav.Link onClick={() => showPage("scheduele")} style={{ color: "white" }} className="ms-lg-2">
                             Prices & Schedules
                         </Nav.Link>
-                        <NavDropdown className="custom-dropdown" title="More" id="nav-dropdown" style={{ color: "white" }}>
+                        <NavDropdown className="custom-dropdown menumore" title="More" id="nav-dropdown" style={{ color: "white" }}>
                             <NavDropdown.Item style={{ backgroundColor: "#004786", color: "white" }} onClick={() => showPowerHourFunc()}>
                                 Set power hours
                             </NavDropdown.Item>

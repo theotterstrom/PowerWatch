@@ -278,27 +278,24 @@ code {
 
 }
 @media (max-width: 525px) {
-  .chartContainer{
+  .chartContainer {
     width: 110%;
   }
 }
+
 @media (max-width: 424px) {
-  .nav-item{
+  .nav-item:not(.menumore) {
     font-size: 13px;
   }
 }
+
 @media (max-width: 388px) {
-  .nav-item{
+  .nav-item:not(.menumore) {
     font-size: 11px;
   }
 }
-@media (max-width: 388px) {
-  .nav-item{
+@media (max-width: 349px) {
+  .nav-item:not(.menumore) {
     font-size: 10px;
-  }
-}
-@media (max-width: 388px) {
-  .nav-item{
-    font-size: 8px;
   }
 }
