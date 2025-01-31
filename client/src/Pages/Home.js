@@ -82,12 +82,13 @@ const Home = () => {
 
   return (
     <Container className="mt-5">
-      <h2 className="text-center">Welcome to EnergyWatch</h2>
+      <h2 className="text-center" style={{color: "white"}}>Welcome to EnergyWatch</h2>
       <Row className="justify-content-center">
-        <Col md={6} className="form-container">
-
+        <Col md={8} className="form-container" style={{background: "black", color: "white"}}>
+        <img className="backgroundBlock" src="/images/power.jpg" />
+        <div className="backgroundBlock"></div>
           {!isAuthenticated ? (
-            <Tabs activeKey={key} onSelect={(k) => setKey(k)} className="mb-3">
+            <Tabs activeKey={key} onSelect={(k) => setKey(k)} className="mb-3" >
               <Tab eventKey="login" title="Login" className="tab-content">
                 <Form className="mt-4" onSubmit={handleLoginSubmit} >
                   <Form.Group controlId="formBasicEmail">

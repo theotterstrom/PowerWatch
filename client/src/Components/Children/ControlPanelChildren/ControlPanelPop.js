@@ -31,6 +31,7 @@ export default ({ showWindow, method, devices, setDevices, identifier }) => {
         } else if (type === "remove") {
             endpoint = "removedevice"
             data = { id: identifier };
+            removeId = identifier;
         } else if (type === "update") {
             const requiredLength = newDevice.deviceType === "Thermometer" ? 5 : 6;
             if (Object.keys(updateDevice).length !== requiredLength || Object.values(newDevice).some(value => !value || value.trim() === "")) {
@@ -47,6 +48,7 @@ export default ({ showWindow, method, devices, setDevices, identifier }) => {
                 newDeviceArray = devices.concat(newDevice);
             } else if (type === "remove") {
                 newDeviceArray = devices.filter(device => device.id !== removeId);
+                console.log(newDeviceArray)
             } else if (type === "update") {
                 newDeviceArray = devices.filter(device => device["_id"] !== updateDevice.mongoid);
                 newDeviceArray.push(updateDevice);
