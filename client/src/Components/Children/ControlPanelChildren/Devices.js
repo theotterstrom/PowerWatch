@@ -17,7 +17,9 @@ export default ({ initData }) => {
             </Row>
             {/* Mobile */}
             <Container className="d-md-none d-block">
-                {devices.map((device, index) => (
+                {devices
+                .sort((a, b) => a.deviceName.localeCompare(b.deviceName))
+                .map((device, index) => (
                     <>
                         <Container key={index} className="py-3 mt-3 text-center align-items-center" style={{ color: "white", borderBottom: index === devices.length - 1 ? 0 : "1px solid white", borderTop: index === 0 ? "1px solid white" : 0 }}>
                             <Row className="d-flex justify-content-between">

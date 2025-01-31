@@ -218,7 +218,7 @@ export default ({ showWindow, method, devices, setDevices, identifier }) => {
                     <i onClick={() => showWindow(false)} className="fa fa-times"></i>
                     <Form onSubmit={(e) => makeDeviceRequest(e, "update")}>
                         <Form.Label className="mt-xl-4 mt-2">Device name</Form.Label>
-                        <Form.Control type="text" name="deviceName" onChange={(e) => handleStateInput(e, "update-device")} className="deviceNameChange" ></Form.Control>
+                        <Form.Control type="text" name="deviceName" onChange={(e) => handleStateInput(e, "update-device")} className="deviceNameChange" disabled={true}></Form.Control>
                         <Form.Label className="mt-xl-3 mt-2">Display name</Form.Label>
                         <Form.Control type="text" name="displayName" onChange={(e) => handleStateInput(e, "update-device")} className="displayNameChange"></Form.Control>
                         <Form.Label className="mt-xl-3 mt-2">Id</Form.Label>

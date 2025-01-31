@@ -120,7 +120,7 @@ const generatePowerData = (allDataStates, readings, temps, dateStates, devices) 
         const [dataSource, unit] = currentDevice.deviceType === "Relay" ? [readingsDataSource, "value"] : [tempDataSource, "avgTemp"];
         return state.value && {
             label: currentDevice.displayName,
-            data: dataSource[deviceName].map((d) => d[unit].toFixed(2)),
+            data: dataSource[deviceName]?.map((d) => d[unit].toFixed(2)),
             borderColor: borderColors[index],
             fill: false,
             tension: 0.4
