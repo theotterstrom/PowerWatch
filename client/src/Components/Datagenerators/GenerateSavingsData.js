@@ -84,7 +84,7 @@ const generateSavingsData = (allDataStates, savings, dateStates, devices) => {
         const currentDevice = devices.value.find(obj => obj.deviceName === deviceName);
         const realCost = state.value && {
             label: currentDevice.displayName + " real",
-            data: savingsDataSource[deviceName].map((d) => (d["realCost"] / 100).toFixed(2)),
+            data:  savingsDataSource[deviceName] ? savingsDataSource[deviceName].map((d) => (d["realCost"] / 100).toFixed(2)) : [],
             borderColor: borderColors[colorIndex],
             fill: false,
             tension: 0.4
@@ -92,7 +92,7 @@ const generateSavingsData = (allDataStates, savings, dateStates, devices) => {
         colorIndex++;
         const averageCost = state.value && {
             label: currentDevice.displayName + " average",
-            data: savingsDataSource[deviceName].map((d) => (d["averageCost"] / 100).toFixed(2)),
+            data: savingsDataSource[deviceName] ? savingsDataSource[deviceName].map((d) => (d["averageCost"] / 100).toFixed(2)) : [],
             borderColor: borderColors[colorIndex],
             fill: false,
             tension: 0.4
