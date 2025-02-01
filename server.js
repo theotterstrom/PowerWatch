@@ -40,7 +40,8 @@ const httpsOptions = process.env.NODE_ENV === "development" ? {
 } : {
   key: fs.readFileSync('/root/PowerWatch/ssl/private.key'),
   cert: fs.readFileSync('/root/PowerWatch/ssl/certificate.crt'),
-  ca: fs.readFileSync('/root/PowerWatch/ssl/intermediate-certificate.crt')
+  passphrase: process.env.passphrase,
+  ca: fs.readFileSync('/root/PowerWatch/ssl/intermediate-cert.crt')
 };
 
 let server;
