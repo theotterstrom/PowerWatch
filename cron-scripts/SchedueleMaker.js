@@ -5,7 +5,7 @@ const client = new MongoClient(process.env.mongouri);
 const makeScheduele = async (customer, client) => {
     try{
         const db = client.db(customer.name);
-        const powerHourCollection = db.collection("powerhours");
+        const powerHourCollection = db.collection("powerhour");
         const powerHourObj = (await powerHourCollection.find({}).toArray())[0];
 
         const collection = db.collection("prices");
@@ -15,7 +15,6 @@ const makeScheduele = async (customer, client) => {
         const tomorrowsDate = dateObject.toLocaleDateString("se-SV", { timeZone: "Europe/Stockholm" });
         const { values: tomorrowPrices } = await collection.findOne({ date: tomorrowsDate });
         console.log("Fetched prices of tomorrow");
-        
         const sortedHours = tomorrowPrices.sort((a, b) => a.price - b.price);
         const deviceSettings = Object.fromEntries(Object.entries(powerHourObj).filter(([key, value]) => key.startsWith("device-")));
         let newScheduele = {};

@@ -35,7 +35,6 @@ const readDevices = async (customer, client) => {
         const tempCollection = db.collection("temp_readings");
         const deviceCollection = db.collection("devices");
         const devices = await deviceCollection.find({}).toArray();
-        
         const urls = devices.map(device => `${customer.shellyUrl}/device/status?id=${device.id}&auth_key=${customer.shellyToken}`);
 
         let results = [];
@@ -43,6 +42,7 @@ const readDevices = async (customer, client) => {
             results.push(await fetchReading(url));
             await sleep(2000);
         };
+
         console.log("Fetched all device statuses")
 
         const resultObj = devices.reduce((acc, cur, index) => {

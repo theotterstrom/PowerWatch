@@ -45,7 +45,7 @@ const runCronForCustomer = (customer, client) => {
     }, {
         timezone: "Europe/Stockholm"
     });
-    cron.schedule("10 * * * *", async () => {
+    cron.schedule("5 * * * *", async () => {
         try {
             await calculateSavings(customer, client);
         } catch (e) {

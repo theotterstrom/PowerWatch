@@ -17,6 +17,7 @@ const newCalculateSavings = async (customer, client) => {
 
         let hour1, hour2, dayPrices, schedueles, databaseDate;
         const currentHour = new Date().toLocaleTimeString("se-SV", { timeZone: "Europe/Stockholm" }).split(":")[0].padStart(2, '0');
+
         if(currentHour === '00'){
             const dateObject = new Date();
             dateObject.setDate(dateObject.getDate() - 1);
@@ -52,7 +53,6 @@ const newCalculateSavings = async (customer, client) => {
         if(Object.keys(savingsObject).length === 0){
             return;
         };
-        
         const insertSavings = await savingsCollection.insertOne({ values: savingsObject, date: `${databaseDate} ${currentHour === '00' ? '23-00' : currentHour-1 + "-" + currentHour }` });
         console.log("Inserted savings into database");
     } catch(e){
