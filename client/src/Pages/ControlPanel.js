@@ -27,7 +27,7 @@ const CloudSettings = React.memo(() => {
 });
 
 const NewNavBar = React.memo(() => {
-  return <Header />
+  return <Header states={{ isAuthenticated: true }}/>
 })
 
 const ControlPanel = () => {

@@ -1,10 +1,18 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useMemo } from "react";
 import { Container, Row, Col, Form, Button, Tabs, Tab } from "react-bootstrap";
 import '../Styles/Home.css';
 import requestMaker from "../Components/Helpers/MakeRequest";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import apiUrl from "../Components/Helpers/APIWrapper";
+import NavBar from "../Components/Children/NavBar";
+import HomePage from "../Components/Children/Home"
+
+const NavBarChild = React.memo(({ isAuthenticated, setCurrentHomePage }) => {
+  const initData = useMemo(() => ({ isAuthenticated, setCurrentHomePage }), [isAuthenticated, setCurrentHomePage]);
+  return <NavBar states={initData} />
+});
+
 
 const Home = () => {
 
@@ -18,6 +26,8 @@ const Home = () => {
   const [create1, setCreate1] = useState('');
   const [create2, setCreate2] = useState('');
   const [create3, setCreate3] = useState('');
+
+  const [currentPage, setCurrentHomePage] = useState("Home");
 
   const navigate = useNavigate();
 
@@ -73,7 +83,7 @@ const Home = () => {
 
   const redirect = (e) => {
     e.preventDefault();
-    navigate("/energywatch");
+    navigate("/monitor");
   };
 
   useEffect(() => {
@@ -81,78 +91,43 @@ const Home = () => {
   }, []);
 
   return (
-    <Container className="mt-5">
-      <h2 className="text-center" style={{color: "white"}}>Welcome to EnergyWatch</h2>
-      <Row className="justify-content-center">
-        <Col md={8} className="form-container" style={{background: "black", color: "white"}}>
-        <img className="backgroundBlock" src="/images/power.jpg" />
-        <div className="backgroundBlock"></div>
-          {!isAuthenticated ? (
-            <Tabs activeKey={key} onSelect={(k) => setKey(k)} className="mb-3" >
-              <Tab eventKey="login" title="Login" className="tab-content">
-                <Form className="mt-4" onSubmit={handleLoginSubmit} >
-                  <Form.Group controlId="formBasicEmail">
-                    <Form.Label>Email address</Form.Label>
-                    <Form.Control type="email" placeholder="Enter email" required onChange={(e) => setLogin1(e.target.value)} />
-                  </Form.Group>
+    <>
 
-                  <Form.Group controlId="formBasicPassword">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" placeholder="Password" required onChange={(e) => setLogin2(e.target.value)} />
-                  </Form.Group>
+      <NavBarChild isAuthenticated={isAuthenticated} setCurrentHomePage={setCurrentHomePage} />
+      <Row>
+        <Col xl={8} lg={8} md={10} xs={12} className="p-0 d-flex container-fluid">
+          <Container className="homeContainer p-0" style={{ maxWidth: "100%" }}>
+            <div className="backgroundBlockHome"></div>
 
-                  <Button variant="primary" type="submit" className="submit-btn mt-3">
-                    Log In
-                  </Button>
-                </Form>
-              </Tab>
-              <Tab eventKey="register" title="Register" className="tab-content">
-                <Form className="mt-4" onSubmit={handleUserCreate}>
+            <div style={{ width: "100%", minHeight: "200px", overflow: "hidden" }}>
+              <img
+                src="/images/home.jpg"
+                style={{
+                  width: "100%",
+                  minHeight: "200px",
+                  height: "auto",
+                  display: "block",
+                  objectFit: "cover"
+                }}
+                alt="Home"
+              />
+            </div>
 
-                  <Form.Group controlId="formBasicEmailReg">
-                    <Form.Label>Email address</Form.Label>
-                    <Form.Control type="email" placeholder="Enter email" required onChange={(e) => setCreate1(e.target.value)} />
-                  </Form.Group>
-                  <Form.Group controlId="formCustomerIdReg">
-                    <Form.Label>Customer Id</Form.Label>
-                    <Form.Control type="string" placeholder="Enter customer id" required onChange={(e) => setCreate3(e.target.value)} />
-                  </Form.Group>
-
-                  <Form.Group controlId="formBasicPasswordReg">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" placeholder="Password" required onChange={(e) => setCreate2(e.target.value)} />
-                  </Form.Group>
-
-                  <Button variant="primary" type="submit" className="submit-btn mt-3">
-                    Register
-                  </Button>
-                </Form>
-              </Tab>
-            </Tabs>
-          ) : (
-            <Tabs activeKey={inKey} onSelect={(k) => setInKey(k)}>
-              <Tab eventKey="purpose" title="Purpose" className="tab-content">
-                The purpose of this website is to track the energyconsumption of our houses in Mörtvik, Sweden.
-              </Tab>
-              <Tab eventKey="technology" title="Technology" className="tab-content">
-                On every large power-consuming device, we've installed a <a href="https://www.shelly.com/products/shelly-plus-1-x1">shelly-switch</a> that
-                tracks and controls the power consumption of that device.
-                <Row className="mt-3"></Row>
-                Furthermore, this application scrapes the web for the power prices of tomorrow,
-                checks the cheapest hours and sets a scheduele for each device depending on the cheapest hours.
-                <Row className="mt-3"></Row>
-                In summary, this application saves money, displays power consumption and savings and controls the devices mentioned above.
-              </Tab>
-              <Tab eventKey="project" title="Project" className="tab-content">
-                <Form onSubmit={redirect}>
-                  <Button variant="primary" type="submit" className="submit-btn">EnergyWatch</Button>
-                </Form>
-              </Tab>
-            </Tabs>
-          )}
+            <Container className="justify-content-start d-flex mx-5 my-xl-5 my-4 homeTitle">
+              <p style={{whiteSpace: "nowrap"}}>{currentPage}</p>
+            </Container>
+            <main>
+              {currentPage === "Home" && <HomePage currentPage={currentPage} />}
+              {currentPage === "Log In" && <HomePage currentPage={currentPage} />}
+              {currentPage === "Create Account" && <HomePage currentPage={currentPage} />}
+              {currentPage === "Help" && <HomePage currentPage={currentPage} />}
+              {currentPage === "FAQ" && <HomePage currentPage={currentPage} />}
+              {currentPage === "Powerwatch" && <HomePage currentPage={currentPage} />}
+            </main>
+          </Container>
         </Col>
       </Row>
-    </Container>
+    </>
   );
 };
 

@@ -61,6 +61,22 @@ code {
   z-index: -1;
   transition: none  !important;
 }
+.homeContainer{
+  background-color: rgb(255, 255, 255);
+  color: black;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+.backgroundBlockHome{
+  background-color: rgba(0, 14, 43, 0.9);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  transition: none  !important;
+}
 .tab-content{
   margin: 0 !important;
   padding: 0 !important;
@@ -73,7 +89,7 @@ code {
   position: fixed;
   border-radius: 20px;
   top: 10vh;
-  z-index: 100;
+  z-index: 1000000;
 }
 
 .controlPanelPop {
@@ -182,7 +198,18 @@ code {
   height: 80vh;
   width: 110%;
 }
+.lineItem{
+  border-bottom: 1px solid black;
+  width: 40%; 
+}
+.homeTitle{
+  color: white;
+  font-size: 48px;
+  position: absolute;
+  top: 60px;
 
+  width: 10vw !important;
+}
 /* Spin animation */
 @keyframes spin {
   0% {
@@ -215,11 +242,26 @@ code {
 }
 
 @media (max-width: 767px) {
+  .homeContainer{
+    background-color: transparent;
+    color: white;
+  }
+  .backgroundBlockHome{
+    background-color: rgba(0, 14, 43, 1);
+  }
+  .lineItem{
+    border-bottom: 1px solid white;
+    width: 80%; 
+  }
   .tab-content{
     border-top: 1px solid white;
   }
   .tabHolder{
     justify-content: space-evenly !important;
+  }
+  .homeTitle{
+    font-size: 28px;
+    top: 75px;
   }
 
   .ctrlContainer{
@@ -275,7 +317,9 @@ code {
   .custom-dropdown .dropdown-menu {
     border: 0; /* Optional: Remove border if not needed */
   }
-
+  .navBarButton{
+    margin-right: 30px;
+  }
 }
 @media (max-width: 525px) {
   .chartContainer {

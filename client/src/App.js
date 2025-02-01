@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from './Pages/Home';
-import EnergyWatch from './Pages/EnergyWatch';
+import PowerWatch from './Pages/PowerWatch';
 import ControlPanel from "./Pages/ControlPanel";
 import NotFound from './Pages/NotFound';
 import ProtectedRoute from "./Components/Helpers/ProtectedRoute";
@@ -13,9 +13,9 @@ const App = () => {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/energywatch" element={
+        <Route path="/monitor" element={
           <ProtectedRoute>
-            <EnergyWatch />
+            <PowerWatch />
           </ProtectedRoute>
         } />
         <Route path="/controlpanel" element={

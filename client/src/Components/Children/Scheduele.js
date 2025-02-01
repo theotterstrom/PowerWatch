@@ -54,7 +54,7 @@ export default ({ initData }) => {
                     <Row>
                       {numbers.map((number) => (
                         <Col key={number} xs={3} className="text-center mb-3">
-                          {currentScheduele.includes(number) ?
+                          {currentScheduele  && currentScheduele.includes(number) ?
                             <div style={{ backgroundColor: "darkgreen", borderRadius: "90px" }}>
                               {number}
                             </div> : <>

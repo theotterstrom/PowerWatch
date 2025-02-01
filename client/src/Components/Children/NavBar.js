@@ -20,6 +20,8 @@ export default ({ states }) => {
     const navigate = useNavigate();
     const location = useLocation();
     let setCurrentPage = states?.setCurrentPage;
+    const isAuthenticated = states?.isAuthenticated;
+    const setCurrentHomePage = states?.setCurrentHomePage;
 
     const [showPowerHour, setShowPowerHour] = useState(false);
     const [powerHour, setPowerHour] = useState([]);
@@ -29,7 +31,7 @@ export default ({ states }) => {
 
     if (!setCurrentPage) {
         setCurrentPage = (page) => {
-            navigate('/energywatch', { state: { pageSet: page } });
+            navigate('/monitor', { state: { pageSet: page } });
         };
     };
     useEffect(() => {
@@ -43,9 +45,11 @@ export default ({ states }) => {
             setDevices(deviceRes.data);
             setPowerHour(powerhourRes.data[0]);
         };
-        fetchData();
+        if (isAuthenticated) {
+            fetchData();
+        };
     }, []);
-    
+
 
     const apiData = useMemo(() => ({
         powerhour: { value: powerHour, set: setPowerHour },
@@ -111,37 +115,89 @@ export default ({ states }) => {
             onToggle={() => setExpanded(!expanded)}
         >
             <Container>
-                <Navbar.Brand onClick={() => showPage("power")} style={{ cursor: "pointer" }}>
+                <Navbar.Brand onClick={() => navigate("/")} style={{ cursor: "pointer" }}>
                     <div className="titleHolder">
                         <img style={{ height: "40px" }} src="/images/new1.png" alt="EnergyWatch Logo" />
                         &nbsp;powerwatch
                     </div>
                 </Navbar.Brand>
-                <Navbar.Toggle aria-controls="navbar-nav" className="navBarButton" />
-                <Navbar.Collapse id="navbar-nav" className="ms-lg-5">
-                    <Nav className="me-auto">
-                        <Nav.Link onClick={() => showPage("power")} style={{ color: "white" }}>
-                            Power & Temperature
-                        </Nav.Link>
-                        <Nav.Link onClick={() => showPage("savings")} style={{ color: "white" }} className="ms-lg-2">
-                            Savings
-                        </Nav.Link>
-                        <Nav.Link onClick={() => showPage("scheduele")} style={{ color: "white" }} className="ms-lg-2">
-                            Prices & Schedules
-                        </Nav.Link>
-                        <NavDropdown className="custom-dropdown menumore" title="More" id="nav-dropdown" style={{ color: "white" }}>
-                            <NavDropdown.Item style={{ backgroundColor: "#004786", color: "white" }} onClick={() => showPowerHourFunc()}>
-                                Set power hours
-                            </NavDropdown.Item>
-                            <NavDropdown.Item style={{ backgroundColor: "#004786", color: "white" }} onClick={() => showPage("control")} className="mt-2">
-                                Control Panel
-                            </NavDropdown.Item>
-                            <NavDropdown.Item className="mt-2" style={{ backgroundColor: "#004786", color: "white" }} onClick={() => handleLogout()}>
-                                Log Out
-                            </NavDropdown.Item>
-                        </NavDropdown>
-                    </Nav>
-                </Navbar.Collapse>
+
+                {isAuthenticated ? <>
+                    <Navbar.Toggle aria-controls="navbar-nav" className="navBarButton" />
+                    <Navbar.Collapse id="navbar-nav" className="ms-lg-5">
+                        <Nav className="me-auto">
+                            <Nav.Link onClick={() => navigate("/")} style={{ color: "white" }}>
+                                Home
+                            </Nav.Link>
+                            <Nav.Link onClick={() => showPage("power")} style={{ color: "white" }}>
+                                Power & Temperature
+                            </Nav.Link>
+                            <Nav.Link onClick={() => showPage("savings")} style={{ color: "white" }} className="ms-lg-2">
+                                Savings
+                            </Nav.Link>
+                            <Nav.Link onClick={() => showPage("scheduele")} style={{ color: "white" }} className="ms-lg-2">
+                                Prices & Schedules
+                            </Nav.Link>
+                            <NavDropdown className="custom-dropdown menumore" title="More" id="nav-dropdown" style={{ color: "white" }}>
+                                <NavDropdown.Item style={{ backgroundColor: "#004786", color: "white" }} onClick={() => showPowerHourFunc()}>
+                                    Set power hours
+                                </NavDropdown.Item>
+                                <NavDropdown.Item style={{ backgroundColor: "#004786", color: "white" }} onClick={() => showPage("control")} className="mt-2">
+                                    Control Panel
+                                </NavDropdown.Item>
+                                <NavDropdown.Item className="mt-2" style={{ backgroundColor: "#004786", color: "white" }} onClick={() => handleLogout()}>
+                                    Log Out
+                                </NavDropdown.Item>
+                            </NavDropdown>
+                        </Nav>
+                    </Navbar.Collapse>
+                </> : <>
+                    <Navbar.Toggle aria-controls="navbar-nav" className="navBarButton" />
+                    <Navbar.Collapse id="navbar-nav" className="ms-lg-5">
+                        <Nav className="me-auto">
+                            <Nav.Link onClick={() => {
+                                setExpanded(false)
+                                setCurrentHomePage("Home")
+                            }} style={{ color: "white" }}>
+                                Home
+                            </Nav.Link>
+                            <Nav.Link onClick={() => {
+                                setExpanded(false);
+                                setCurrentHomePage("Log In");
+                            }} style={{ color: "white" }} className="ms-lg-2">
+                                Log In
+                            </Nav.Link>
+                            <Nav.Link onClick={() => {
+                                setExpanded(false);
+                                setCurrentHomePage("Create Account")
+                            }} style={{ color: "white" }} className="ms-lg-2">
+                                Create Account
+                            </Nav.Link>
+
+                            <NavDropdown className="custom-dropdown menumore" title="More" id="nav-dropdown" style={{ color: "white" }}>
+                                <NavDropdown.Item style={{ backgroundColor: "#004786", color: "white" }} onClick={() => {
+                                    setExpanded(false)
+                                    setCurrentHomePage("Help")
+                                }}>
+                                    Help Center
+                                </NavDropdown.Item>
+                                <NavDropdown.Item style={{ backgroundColor: "#004786", color: "white" }} onClick={() => {
+                                    setExpanded(false)
+                                    setCurrentHomePage("FAQ")
+                                }} className="mt-2">
+                                    FAQ
+                                </NavDropdown.Item>
+                                <NavDropdown.Item className="mt-2" style={{ backgroundColor: "#004786", color: "white" }} onClick={() => {
+                                    setExpanded(false)
+                                    setCurrentHomePage("Powerwatch")
+                                }}>
+                                    Powerwatch
+                                </NavDropdown.Item>
+                            </NavDropdown>
+                        </Nav>
+                    </Navbar.Collapse>
+                </>}
+
             </Container>
         </Navbar>
         <main>

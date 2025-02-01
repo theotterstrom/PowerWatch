@@ -5,23 +5,25 @@ import apiUrl from "../Helpers/APIWrapper";
 export default ({ initData }) => {
     const [todaySchedule, setTodayScheduele] = useState(false);
     const { powerhour, togglePowerHour, devices } = initData;
-    delete powerhour.value._id;
+    if(powerhour.value){
+        delete powerhour.value._id;
+    };
+
     const powerHourDevices = JSON.parse(JSON.stringify(devices.value)).filter(obj => obj.deviceType === "Relay");
 
     const setPowerHours = async () => {
-        const floatCheckArr = JSON.parse(JSON.stringify(Object.values(powerhour.value)));
+        const floatCheckArr = JSON.parse(JSON.stringify(Object.values(powerhour?.value)));
         if (floatCheckArr.some(obj => isNaN(obj))) {
-            alert("All values must be integers or decimals")
+            alert("All values must be integers")
         } else {
             try {
                 const setHourRes = await axios.post(`${apiUrl}/setpowerhour`, {
-                    data: {...powerhour.value, today: todaySchedule},
+                    data: {...powerhour?.value, today: todaySchedule},
                 }, {
                     withCredentials: true
                 });
                 alert("Hours were set")
                 togglePowerHour(false);
-                powerhour.value.secret = '';
             } catch (e) {
                 console.log(e)
                 alert("Something went wrong when setting hours.")
@@ -61,7 +63,7 @@ export default ({ initData }) => {
                         type="text"
                         placeholder={`Enter powerhour for ${obj.displayName}`}
                         name={`device-${obj.deviceName}`}
-                        value={powerhour.value[`device-${obj.deviceName}`]}
+                        value={powerhour.value ? powerhour?.value[`device-${obj.deviceName}`] : null}
                     /></Col>
             </div>
             );
@@ -76,7 +78,7 @@ export default ({ initData }) => {
                         type="text"
                         placeholder={`Enter powerhour for ${obj.displayName}`}
                         name={`device-${obj.deviceName}`}
-                        value={powerhour.value[`device-${obj.deviceName}`]}
+                        value={powerhour.value ? powerhour?.value[`device-${obj.deviceName}`] : null}
                     /></Col>
             </div>)
         return [firstHalfForms, secondHalfForms];

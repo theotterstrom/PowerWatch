@@ -35,11 +35,11 @@ const SchedueleChild = React.memo(({ schedueles, prices, devicestatuses, devices
 });
 
 const NavBarChild = React.memo(({ setCurrentPage }) => {
-  const states = useMemo(() => ({ setCurrentPage }), [setCurrentPage]);
+  const states = useMemo(() => ({ setCurrentPage, isAuthenticated: true }), [setCurrentPage]);
   return <NavBar states={states} />
 })
 
-const EnergyWatch = () => {
+const PowerWatch = () => {
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -66,7 +66,7 @@ const EnergyWatch = () => {
   }), [savings, prices, schedueles, temps, readings, deviceStatuses, devices]);
 
   useEffect(() => {
-    navigate('/energywatch', { state: { pageSet: currentPage } });
+    navigate('/monitor', { state: { pageSet: currentPage } });
   }, [currentPage]);
 
   useEffect(() => {
@@ -147,7 +147,7 @@ const EnergyWatch = () => {
 
   return (
     <div>
-      <NavBarChild setCurrentPage={setCurrentPage} />
+      <NavBarChild setCurrentPage={setCurrentPage}  />
       <img className="backgroundBlock" src="/images/power.jpg" />
       <div className="backgroundBlock"></div>
       <main>
@@ -159,4 +159,4 @@ const EnergyWatch = () => {
   );
 };
 
-export default EnergyWatch;
+export default PowerWatch;
