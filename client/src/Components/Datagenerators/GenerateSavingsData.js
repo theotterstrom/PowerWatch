@@ -29,25 +29,25 @@ const generateSavingsData = (allDataStates, savings, dateStates, devices) => {
         return obj.date.split(" ")[0] >= savingsstartdate.value && obj.date.split(" ")[0] <= savingsenddate.value;
     });
 
-    const [totalSpending, savingsDataSource] = filteredSavings.reduce(
-        ([totals, acc], cur, index) => {
+    const [totalSpending, savingsDataSource] = filteredSavings.reduce(([totals, acc], cur, index) => {
             let sum1 = 0;
             let sum2 = 0;
-            const names = Object.keys(cur.values);
+            const names =  devices.value.filter(obj => obj.deviceType === "Relay").map(obj => obj.deviceName);
 
             if (index === 0) {
                 names.forEach(name => acc[name] = []);
             }
 
             names.forEach(name => {
-                const realCost = cur.values[name].realCost;
-                const averageCost = cur.values[name].averageCost;
+                const realCost = cur.values[name]?.realCost || null;
+                const averageCost = cur.values[name]?.averageCost || null;
                 sum1 += allDataStates[name]?.value ? realCost : 0;
                 sum2 += allDataStates[name]?.value ? averageCost : 0;
 
-                const date = cur.date.split(" ")[0];
                 if (acc[name]) {
+                    const date = cur.date.split(" ")[0];
                     const existingIndex = acc[name].findIndex(obj => obj.date === date);
+
                     if (existingIndex === -1) {
                         acc[name].push({ date, realCost, averageCost });
                     } else {
@@ -58,9 +58,7 @@ const generateSavingsData = (allDataStates, savings, dateStates, devices) => {
             });
 
             return [[totals[0] + sum1, totals[1] + sum2], acc];
-        },
-        [[0, 0], {}]
-    );
+        }, [[0, 0], {}]);
 
     Object.values(savingsDataSource).forEach(array => array.sort((a, b) => new Date(a.date) - new Date(b.date)))
     let dateList = [];

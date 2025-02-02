@@ -4,16 +4,17 @@ const generatePowerData = (allDataStates, readings, temps, dateStates, devices) 
         startdate,
         enddate,
         alldates,
-        month
+        month,
+        timefilter
     } = dateStates;
 
     const monthFilterFunc = () => {
         const monthArr = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-        if(month.value !== "None"){
+        if (month.value) { 
             const monthName = month.value.split(" ")[1];
             let monthNumber = monthArr.findIndex(month => month === monthName);
             monthNumber++;
-            return { value: true, month: monthNumber}
+            return { value: true, month: monthNumber }
         };
         return { value: false };
     };
@@ -22,14 +23,15 @@ const generatePowerData = (allDataStates, readings, temps, dateStates, devices) 
 
     const readingsDataSource = readings.value.length > 0 ? readings.value
         .filter(obj => {
-            if(alldates.value){
-                return true;
-            } else if(monthFilter.value){
+            if (timefilter.value === "dates") {
+                return (obj.date.split(" ")[0] >= startdate.value && obj.date.split(" ")[0] <= enddate.value)
+            } else if (timefilter.value === "month") {
                 return parseInt(obj.date.split("-")[1]) === monthFilter.month;
-            };
-            return (obj.date.split(" ")[0] >= startdate.value && obj.date.split(" ")[0] <= enddate.value)
+            } else if (timefilter.value === "day") {
+                return obj.date.split(" ")[0] === startdate.value;
+            }
         })
-        .reduce((acc, cur, index) => {
+        .reduce((acc, cur, index, array) => {
             if (Object.values(acc)[0] && Object.values(acc)[0].some(obj => obj.date === cur.date.split(" ")[0])) {
                 return acc;
             };
@@ -37,10 +39,25 @@ const generatePowerData = (allDataStates, readings, temps, dateStates, devices) 
             if (index === 0) {
                 names.forEach(name => acc[name] = []);
             };
-
             const tomorrowDate = new Date(cur.date.split(" ")[0])
             tomorrowDate.setDate(tomorrowDate.getDate() + 1);
             const formatTomorrow = tomorrowDate.toISOString().slice(0, 10);
+
+            if (timefilter.value === "day") {
+                let firstObject;
+                let lastObject = cur;
+                if (cur.date.split(" ")[1] !== "00") {
+                    firstObject = array[index - 1];
+                };
+                names.forEach(name => {
+                    let value = firstObject?.values[name] - lastObject?.values[name];
+                    acc[name].push({
+                        date: cur.date,
+                        value: isNaN(value) ? 0 : value
+                    })
+                });
+                return acc;
+            };
 
             const lastObjectList = readings.value.filter(obj => obj.date.split(" ")[0] === formatTomorrow);
             let lastObject = lastObjectList.reverse()[0];
@@ -63,23 +80,25 @@ const generatePowerData = (allDataStates, readings, temps, dateStates, devices) 
 
             return acc;
         }, {}) : {};
+    
     Object.values(readingsDataSource).forEach(array => array.sort((a, b) => new Date(a.date) - new Date(b.date)))
+
     const tranformTemp = data => {
         const result = {};
         data.forEach(item => {
-            const day = item.date.split(" ")[0];
+            const timeUnit = item.date.split(" ")[timefilter.value === "day" ? 1 : 0];
             const values = item.value;
             Object.entries(values).forEach(([name, temp]) => {
                 if (!result[name]) {
                     result[name] = [];
                 }
-                const existingDay = result[name].find(entry => entry.date === day);
+                const existingDay = result[name].find(entry => entry.date === timeUnit);
                 if (existingDay) {
                     const currentCount = existingDay.count || 1;
                     existingDay.avgTemp = ((existingDay.avgTemp * currentCount) + temp) / (currentCount + 1);
                     existingDay.count = currentCount + 1;
                 } else {
-                    result[name].push({ date: day, avgTemp: temp, count: 1 });
+                    result[name].push({ date: timeUnit, avgTemp: temp, count: 1 });
                 }
             });
         });
@@ -91,13 +110,15 @@ const generatePowerData = (allDataStates, readings, temps, dateStates, devices) 
     };
 
     const tempDataSource = tranformTemp(temps.value.filter(obj => {
-        if(alldates.value){
-            return true;
-        } else if(monthFilter.value){
+        if (timefilter.value === "date") {
+            return (obj.date.split(" ")[0] >= startdate.value && obj.date.split(" ")[0] <= enddate.value)
+        } else if (timefilter.value === "month") {
             return parseInt(obj.date.split("-")[1]) === monthFilter.month;
-        };
-        return (obj.date.split(" ")[0] >= startdate.value && obj.date.split(" ")[0] <= enddate.value);
+        } else if (timefilter.value === "day") {
+            return obj.date.split(" ")[0] === startdate.value
+        }
     }));
+
 
     let dateList = [];
     let startingDate = new Date("2024-12-22");
@@ -118,6 +139,7 @@ const generatePowerData = (allDataStates, readings, temps, dateStates, devices) 
     const chartDataSets = Object.entries(allDataStates).map(([deviceName, state], index) => {
         const currentDevice = devices.value.find(obj => obj.deviceName === deviceName);
         const [dataSource, unit] = currentDevice.deviceType === "Relay" ? [readingsDataSource, "value"] : [tempDataSource, "avgTemp"];
+
         return state.value && {
             label: currentDevice.displayName,
             data: dataSource[deviceName]?.map((d) => d[unit].toFixed(2)),
@@ -126,14 +148,15 @@ const generatePowerData = (allDataStates, readings, temps, dateStates, devices) 
             tension: 0.4
         }
     });
+    const hourArr = Array.from({ length: 24 }, (_, i) => i);
+
     const chartData = {
-        labels: dateList.filter(date => {
-            if(alldates.value){
-                return true
-            } else if(monthFilter.value){
+        labels: timefilter.value === "day" ? hourArr : dateList.filter(date => {
+            if (timefilter.value === "dates") {
+                return (date.split(" ")[0] >= startdate.value && date.split(" ")[0] <= enddate.value)
+            } else if (timefilter.value === "month") {
                 return parseInt(date.split("-")[1]) === monthFilter.month
-            };
-            return (date >= startdate.value && date <= enddate.value);
+            }
         }),
         datasets: chartDataSets.filter(Boolean),
     };

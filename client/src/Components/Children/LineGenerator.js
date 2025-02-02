@@ -69,6 +69,7 @@ const LineChart = ({ lineData }) => {
                         tooltipEl.style.transform = 'translateX(-50%) translateY(-80%)';
                         tooltipEl.style.maxWidth = "350px"
                         tooltipEl.style.minWidth = "350px";
+                        tooltipEl.style.zIndex = 10000;
                         document.body.appendChild(tooltipEl);
                     }
                     const tooltipModel = context.tooltip;

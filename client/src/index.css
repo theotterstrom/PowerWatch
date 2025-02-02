@@ -195,7 +195,7 @@ code {
   font-weight: bold; /* Optional: Highlight active tab */
 }
 .chartContainer{
-  height: 80vh;
+  height: 70vh;
   width: 110%;
 }
 .lineItem{
@@ -209,6 +209,15 @@ code {
   top: 60px;
 
   width: 10vw !important;
+}
+.powerOptionsDrop{
+  overflow: hidden;
+  transition: height 1s ease;
+}
+.powerDateB{
+ 
+  cursor: pointer;
+  border-radius: 5px;
 }
 /* Spin animation */
 @keyframes spin {
