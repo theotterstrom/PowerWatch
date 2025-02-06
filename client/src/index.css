@@ -274,7 +274,7 @@ body {
 
 .chartContainer {
   height: 70vh;
-  width: 110%;
+
 }
 
 .lineItem {
@@ -302,6 +302,11 @@ body {
 }
 
 
+.chartText br {
+  margin-bottom: 8px; /* Adjust for desired spacing */
+  display: block;
+  content: "";
+}
 
 .chartTextVals{
   color: var(--newBlue1);
@@ -310,6 +315,7 @@ body {
   cursor: pointer;
   border-radius: var(--bodyRadius);
 }
+
 .chartTextVals:hover{
   background-color: var(--newBlue2);
   color: white;
@@ -322,6 +328,11 @@ body {
   border: 2px solid var(--newBlue2);
   border-radius: var(--bodyRadius);
   background-color: rgba(0,0,0,0.5);
+  position: absolute;
+  width: 100%;
+  transition: max-height 0.7s ease;
+
+  overflow: hidden;
 }
 
 /* Spin animation */
@@ -345,7 +356,6 @@ body {
 
   .chartContainer {
     height: 60vh;
-    width: 120%;
     margin-left: -80px;
   }
 
@@ -431,7 +441,6 @@ body {
 
   .chartContainer {
     height: 600px;
-    max-width: 120vw;
     margin-left: -20px;
   }
 
@@ -456,7 +465,7 @@ body {
 
 @media (max-width: 525px) {
   .chartContainer {
-    width: 110%;
+
   }
   .chartText{
     font-size: 18px;

@@ -96,22 +96,22 @@ const PowerWatch = () => {
     run();
   }, []);
 
-  if (Object.keys(readings).length === 0 || Object.keys(savings).length === 0) {
-    setTimeout(async () => {
+  // if (Object.keys(readings).length === 0 || Object.keys(savings).length === 0) {
+  //   setTimeout(async () => {
 
-    }, 30000);
+  //   }, 30000);
 
-    return <>
-      <div className="loading-container">
-        <div className="loading-circle"></div>
-        <div className="backGroundHolder">
-          <div className="backgroundBlock m-0 p-0">
-          </div>
-          <img src="/images/power.jpg" className="backgroundImg" alt="Home" />
-        </div>
-      </div>
-    </>;
-  };
+  //   return <>
+  //     <div className="loading-container">
+  //       <div className="loading-circle"></div>
+  //       <div className="backGroundHolder">
+  //         <div className="backgroundBlock m-0 p-0">
+  //         </div>
+  //         <img src="/images/power.jpg" className="backgroundImg" alt="Home" />
+  //       </div>
+  //     </div>
+  //   </>;
+  // };
 
   const verticalLinePlugin = {
     id: 'verticalLinePlugin',
@@ -158,13 +158,11 @@ const PowerWatch = () => {
         <img src="/images/power.jpg" className="backgroundImg" alt="Home" />
       </div>
 
-      <div className="d-flex justify-content-center">
-        <Col xl={8} md={10} xs={11} className="m-0 p-0">
-          <main className="m-0 p-0">
+      <div className="d-flex justify-content-center m-0 p-0"  style={{ zIndex: 100, width: "100vw", color: "white" }}>
+        <Col xl={8} md={10} xs={11} className="mx-0 my-5 p-0">
             {currentPage === "power" && <PowerChild readings={apiData.readingsState} temps={apiData.tempsState} devices={apiData.devices} />}
             {currentPage === "savings" && <SavingsChild savings={apiData.savingsState} devices={apiData.devices} />}
             {currentPage === "scheduele" && <SchedueleChild schedueles={apiData.scheduelesState} prices={apiData.pricesState} devicestatuses={apiData.devicestatusesState} devices={apiData.devices} />}
-          </main>
         </Col>
       </div>
 

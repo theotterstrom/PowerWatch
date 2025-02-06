@@ -15,7 +15,7 @@ export default ({ initData }) => {
     const [expanded, setExpanded] = useState(false);
 
     const [currentGroup, setGroup] = useState("Alla");
-    const [currentPanel, setCurrentPanel] = useState("devices");
+    const [currentPanel, setCurrentPanel] = useState("empty");
 
     const [currentFilter, setCurrentFilter] = useState("Mellan datum");
     const filterArr = ["Mellan datum", "Månad", "Timmar per dag"];
@@ -183,29 +183,60 @@ export default ({ initData }) => {
         });
     };
 
+    window.addEventListener('click', (event) => {
+        const powerOptionPanel = document.getElementsByClassName("powerOptionPanel")[0];
+        const chartTextVals = Array.from(document.getElementsByClassName("chartTextVals"));
+        const excludeArrow = Array.from(document.getElementsByClassName("exludeArrow"));
+
+        const excludeElements = [powerOptionPanel, ...chartTextVals, ...excludeArrow];
+
+        // Check if event target is inside any of the excluded elements
+        if (!excludeElements.some(el => el.contains(event.target))) {
+            setExpanded(false);
+            setCurrentPanel("empty");
+        } else {
+            setExpanded(true);
+        }
+    });
+
     return (
         <>
-            <Row className="mt-5 bg-danger">
-                <Col xl={6} lg={6} className="m-0 p-0">
-                    <Container className="pt-5 chartText">
+            <Row className="my-5 mx-0 p-0 justify-content-center justify-content-lg-start text-lg-start text-center">
+                <Col xl={6} lg={6} md={9} sm={10} className="m-0 p-0 mt-lg-3 mt-2 ">
+                    <Container className="chartText">
                         {`Du konsumerade `}
-                        <span className="chartTextVals p-2" onClick={() => setCurrentPanel("power")}>{filterStr.watt}</span><br></br>
+                        <span className="chartTextVals p-1" onClick={() => {
+                            setCurrentPanel("power")
+                            setExpanded(true)
+                        }}>{filterStr.watt}</span><br></br>
                         {` ${currentFilter === "Timmar per dag" ? "den" : currentFilter === "Månad" ? "under" : "mellan"} `}
-                        <span className="chartTextVals p-2" onClick={() => setCurrentPanel("time")}>{spanTitle}</span><br></br>
+                        <span className="chartTextVals p-1" onClick={() => {
+                            setCurrentPanel("time")
+                            setExpanded(true)
+                        }}>{spanTitle}</span><br></br>
                         {` fördelat på `}
-                        <span className="chartTextVals p-2" onClick={() => setCurrentPanel("devices")}>{filterStr.deviceNo} enheter.</span>
-
+                        <span className="chartTextVals p-1" onClick={() => {
+                            setCurrentPanel("devices")
+                            setExpanded(true)
+                        }}>{filterStr.deviceNo} enheter.</span>
                     </Container>
                 </Col>
-                <Col xl={6} lg={6} md={12} className="m-0 p-0 mt-lg-5 mt-xl-0 mt-md-4">
-
-                    <Container className="powerOptionPanel py-4" >
-
+                <Col xl={6} lg={6} md={9} sm={10} className="m-0 p-0 mt-lg-3 mt-4  position-relative">
+                    <Container className="powerOptionPanel py-4" style={{ maxHeight: expanded ? "300px" : "0" }}>
+                        <div onClick={() => {
+                            setCurrentPanel(expanded ? "empty" : "time");
+                            setExpanded(!expanded);
+                        }} className="position-absolute" style={{ right: "20px", top: "10px", cursor: "pointer" }}>
+                            <i className={expanded ? "fa fa-arrow-up exludeArrow" : "fa fa-arrow-down exludeArrow"} ></i>
+                        </div>
+                        {currentPanel === "empty" ? <>
+                            <p className="text-center" style={{ marginTop: "-12px", height: "200px", pointerEvents: "none" }}>Alternativ</p>
+                        </> : <></>}
                         {currentPanel === "time" ? <>
-                            <div className="d-flex justify-content-center p-0 m-0">
-                                <Button className="mx-1" variant="transparent" style={{ color: "white" }} onClick={prevFilter}><i class="fa-solid fa-arrow-left"></i></Button>
+                            <div className="d-flex justify-content-center" style={{ marginTop: "-12px" }}>
+                                <Button className="" variant="transparent" style={{ color: "white", marginTop: "-12px" }} onClick={prevFilter}><i class="fa-solid fa-arrow-left"></i></Button>
                                 <p className="text-center" style={{ width: "150px" }}>{currentFilter}</p>
-                                <Button className="mx-1" variant="transparent" style={{ color: "white" }} onClick={nextFilter}><i class="fa-solid fa-arrow-right"></i></Button>
+                                <Button className="" variant="transparent" style={{ color: "white", marginTop: "-12px" }} onClick={nextFilter}><i class="fa-solid fa-arrow-right"></i></Button>
                             </div>
                             <Row className="d-flex justify-content-center">
                                 <Col xl={8}>
@@ -231,35 +262,10 @@ export default ({ initData }) => {
                                     </>}
                                 </Col>
                             </Row>
-
-
-                            {/*                             <Container className="m-0 p-0 mt-4 d-lg-block d-none" style={{
-                                opacity: timefilter.value === "dates" ? "100%" : "0", // 500px is an arbitrary large value
-                                transition: "opacity 0.5s ease",
-
-                            }}>
-                                <Form.Label>Start Date</Form.Label>
-                                <Form.Control type="date" value={startdate.value} onChange={(e) => setStartDateFunc(e.target.value)} />
-                                <Form.Label className="mt-3">End Date</Form.Label>
-                                <Form.Control type="date" value={enddate.value} onChange={(e) => setEndDateFunc(e.target.value)} />
-                            </Container>
-
-                            <Container className="m-0 p-0 mt-4 d-lg-none d-block" style={{
-                                height: timefilter.value === "dates" ? "170px" : "0", // 500px is an arbitrary large value
-                                transition: "height 0.5s ease",
-                                overflow: "hidden"
-                            }}>
-                                <Form.Label>Start Date</Form.Label>
-                                <Form.Control type="date" value={startdate.value} onChange={(e) => setStartDateFunc(e.target.value)} />
-                                <Form.Label className="mt-3">End Date</Form.Label>
-                                <Form.Control type="date" value={enddate.value} onChange={(e) => setEndDateFunc(e.target.value)} />
-                            </Container> */}
                         </> : <></>}
-
                         {currentPanel === "devices" ? <>
-                            <p className="m-0 p-0 text-center">Enheter</p>
+                            <p className="text-center" style={{ marginTop: "-12px", height: "200px", pointerEvents: "none" }}>Enheter</p>
                             <Row className="m-0 p-0 mt-3 d-flex justify-content-start" style={{ height: "100%" }}>
-
                                 <Col xxl={4} xl={6} lg={6} md={4} >
                                     {splitFormChecks().firstHalfForms}
                                 </Col>
@@ -306,16 +312,7 @@ export default ({ initData }) => {
                                                         {groupName}
                                                     </div>
                                                 ))}
-                                            <div
-                                                className="mt-1"
-                                                style={{
-                                                    cursor: "pointer",
-                                                    borderRadius: "4px",
-                                                    background: currentGroup === "Alla" ? "white" : "transparent",
-                                                    color: currentGroup === "Alla" ? "black" : "inherit"
-                                                }}
-                                                onClick={() => handleSelect("Alla", groups)}
-                                            >
+                                            <div className="mt-1" style={{ cursor: "pointer", borderRadius: "4px", background: currentGroup === "Alla" ? "white" : "transparent", color: currentGroup === "Alla" ? "black" : "inherit" }} onClick={() => handleSelect("Alla", groups)}>
                                                 Alla
                                             </div>
                                         </Col>
@@ -323,11 +320,9 @@ export default ({ initData }) => {
                                 </Col>
                             </Row>
                         </> : <></>}
-
                         {currentPanel === "power" ? <>
-                            <p className="m-0 p-0 text-center">Förbrukning per enhet</p>
+                            <p className="text-center" style={{ marginTop: "-12px", height: "200px", pointerEvents: "none" }}>Förbrukning per enhet</p>
                             <Container className="mt-3">
-
                                 {Object.entries(filterData.consumption).map(([deviceName, consumption]) => (
                                     <Row className="justify-content-center">
                                         <Col xl={4}>
@@ -337,216 +332,12 @@ export default ({ initData }) => {
                                             {consumption.toFixed(2)} kwH
                                         </Col>
                                     </Row>
-                                )
-
-                                )}
+                                ))}
                             </Container>
                         </> : <></>}
                     </Container>
                 </Col>
             </Row>
-
-
-            {/*             <Container className="d-flex justify-content-lg-start justify-content-center m-0 p-0">
-                <Button onClick={() => setExpanded(!expanded)} variant="transparent" style={{ color: "white" }}>
-                    Filter options {expanded ? '▲' : '▼'}
-                </Button>
-            </Container>
-
-
-            <Container className="powerOptionsDrop p-0 m-0" style={{
-                maxHeight: expanded ? "400px" : "0", // 500px is an arbitrary large value
-                transition: "max-height 1s ease",
-                overflow: "hidden",
-            }}>
-                <Container className="d-flex justify-content-center p-0 m-0">
-                    <Button className="mx-4" variant="transparent" style={{ color: "white" }} onClick={prevFilter}><i class="fa-solid fa-arrow-left"></i></Button>
-                    <p className="text-center mt-3 bg-dan" style={{ width: "100px" }}>{currentFilter}</p>
-                    <Button className="mx-4" variant="transparent" style={{ color: "white" }} onClick={nextFilter}><i class="fa-solid fa-arrow-right"></i></Button>
-                </Container>
-                <Col className="p-0">
-
-                    <Container className="mt-5 pt-5 chartText">
-                        {`Du har spenderat `}
-                        <span className="chartTextVals p-2" onClick={() => showSideBar("watt")}>{filterStr.watt}</span><br></br>
-                        {` under perioden `}
-                        <span className="chartTextVals p-2" onClick={() => showSideBar("time")}>{filterStr.interval}</span><br></br>
-                        {` fördelat på `}
-                        <span className="chartTextVals p-2" onClick={() => showSideBar("devices")}>{filterStr.deviceNo}</span>
-                        {` enheter.`}
-                    </Container>
-                </Col> */}
-            {/*                 {currentFilter === "Devices" &&
-                    <Row className="m-0 p-0 mt-sm-2 mt-md-2 mt-lg-3 d-flex justify-content-start" style={{ height: "100%" }}>
-
-                        <Col xl={4} lg={4} xs={6} className="d-lg-block d-md-none d-sm-none d-xs-block">
-                            {splitFormChecks().firstHalfForms}
-                        </Col>
-
-                        <Col xl={4} lg={4} xs={6} className="d-lg-block d-md-none d-sm-none d-xs-block">
-                            {splitFormChecks().secondHalfForms}
-                        </Col>
-
-                        <Col md={4} sm={4} xs={4} className="d-lg-none d-md-block d-sm-block d-none">
-                            {splitFormChecks().firstThirdForms}
-                        </Col>
-                        <Col md={4} sm={4} xs={4} className="d-lg-none d-md-block d-sm-block d-none">
-                            {splitFormChecks().secondThirdForms}
-                        </Col>
-                        <Col md={4} sm={4} xs={4} className="d-lg-none d-md-block d-sm-block d-none">
-                            {splitFormChecks().thirdThirdForms}
-                        </Col>
-
-                        <Col xl={0} lg={0} md={2} sm={2} xs={1} className="d-lg-none d-block"></Col>
-                        <Col xl={4} lg={4} md={8} sm={8} xs={10} className="p-2 mt-lg-0 mt-4" style={{ border: "1px solid white", borderRadius: "5px", color: "white" }}>
-                            <Col sm={12} xs={12} className="text-center"><b>Groups</b></Col>
-                            <Row className="text-center mt-2">
-                                <Col>
-                                    {Object.entries(groups)
-                                        .filter((_, index) => index % 2 === 0)
-                                        .map(([groupName]) => (
-                                            <div
-                                                key={groupName}
-                                                className="mt-1"
-                                                style={{
-                                                    cursor: "pointer",
-                                                    borderRadius: "4px",
-                                                    background: currentGroup === groupName ? "white" : "transparent",
-                                                    color: currentGroup === groupName ? "black" : "inherit"
-                                                }}
-                                                onClick={() => handleSelect(groupName, groups)}
-                                            >
-                                                {groupName}
-                                            </div>
-                                        ))}
-                                </Col>
-                                <Col>
-                                    {Object.entries(groups)
-                                        .filter((_, index) => index % 2 !== 0)
-                                        .map(([groupName]) => (
-                                            <div
-                                                key={groupName}
-                                                className="mt-1"
-                                                style={{
-                                                    cursor: "pointer",
-                                                    borderRadius: "4px",
-                                                    background: currentGroup === groupName ? "white" : "transparent",
-                                                    color: currentGroup === groupName ? "black" : "inherit"
-                                                }}
-                                                onClick={() => handleSelect(groupName, groups)}
-                                            >
-                                                {groupName}
-                                            </div>
-                                        ))}
-                                    <div
-                                        className="mt-1"
-                                        style={{
-                                            cursor: "pointer",
-                                            borderRadius: "4px",
-                                            background: currentGroup === "Alla" ? "white" : "transparent",
-                                            color: currentGroup === "Alla" ? "black" : "inherit"
-                                        }}
-                                        onClick={() => handleSelect("Alla", groups)}
-                                    >
-                                        Alla
-                                    </div>
-                                </Col>
-                            </Row>
-                        </Col>
-                    </Row>}
-                {currentFilter === "Dates" &&
-                    <Row className="m-0 p-0 mt-sm-2 mt-md-2 mt-lg-3 d-flex justify-content-start" style={{ height: "100%" }}>
-                        <Row>
-                            <Col xl={4} lg={4} md={12}>
-                                <Container onClick={() => timefilter.set("dates")} className="py-lg-3 py-1 px-2 powerDateB" style={{ border: timefilter.value === "dates" && "1px solid white" }}>
-                                    <b>Between two dates</b>
-                                </Container>
-
-                                <Container className="m-0 p-0 mt-4 d-lg-block d-none" style={{
-                                    opacity: timefilter.value === "dates" ? "100%" : "0", // 500px is an arbitrary large value
-                                    transition: "opacity 0.5s ease",
-
-                                }}>
-                                    <Form.Label>Start Date</Form.Label>
-                                    <Form.Control type="date" value={startdate.value} onChange={(e) => setStartDateFunc(e.target.value)} />
-                                    <Form.Label className="mt-3">End Date</Form.Label>
-                                    <Form.Control type="date" value={enddate.value} onChange={(e) => setEndDateFunc(e.target.value)} />
-                                </Container>
-
-                                <Container className="m-0 p-0 mt-4 d-lg-none d-block" style={{
-                                    height: timefilter.value === "dates" ? "170px" : "0", // 500px is an arbitrary large value
-                                    transition: "height 0.5s ease",
-                                    overflow: "hidden"
-                                }}>
-                                    <Form.Label>Start Date</Form.Label>
-                                    <Form.Control type="date" value={startdate.value} onChange={(e) => setStartDateFunc(e.target.value)} />
-                                    <Form.Label className="mt-3">End Date</Form.Label>
-                                    <Form.Control type="date" value={enddate.value} onChange={(e) => setEndDateFunc(e.target.value)} />
-                                </Container>
-
-                            </Col>
-                            <Col xl={4} lg={4} md={12}>
-                                <Container onClick={() => timefilter.set("month")} className="py-lg-3 py-1  powerDateB" style={{ border: timefilter.value === "month" && "1px solid white" }}>
-                                    <b>Specific month</b>
-                                </Container>
-
-                                <Container className="m-0 p-0 mt-4 d-lg-block d-none" style={{
-                                    opacity: timefilter.value === "month" ? "100%" : "0", // 500px is an arbitrary large value
-                                    transition: "opacity 0.5s ease",
-                                }}>
-                                    <Form.Label>Month</Form.Label>
-                                    <Dropdown onSelect={(eventKey) => month.set(eventKey)} className="mt-2" style={{ width: "100%", overflow: "visible" }}>
-                                        <Dropdown.Toggle variant="light" id="dropdown-basic" style={{ width: "100%", textAlign: "start", height: "35px", padding: "0 0 0 20px" }}>
-                                            {generateMonthOptions().firstMonth}
-                                        </Dropdown.Toggle>
-                                        <Dropdown.Menu>
-                                            {generateMonthOptions().months}
-                                        </Dropdown.Menu>
-                                    </Dropdown>
-                                </Container>
-
-                                <Container className="m-0 p-0 mt-4 d-lg-none d-block" style={{
-                                    height: timefilter.value === "month" ? "100px" : "0", // 500px is an arbitrary large value
-                                    transition: "height 0.5s ease",
-                                    overflow: "hidden"
-
-                                }}>
-                                    <Form.Label>Month</Form.Label>
-                                    <Dropdown onSelect={(eventKey) => month.set(eventKey)} className="mt-2" style={{ width: "100%", overflow: "visible" }}>
-                                        <Dropdown.Toggle variant="light" id="dropdown-basic" style={{ width: "100%", textAlign: "start", height: "35px", padding: "0 0 0 20px" }}>
-                                            {generateMonthOptions().firstMonth}
-                                        </Dropdown.Toggle>
-                                        <Dropdown.Menu>
-                                            {generateMonthOptions().months}
-                                        </Dropdown.Menu>
-                                    </Dropdown>
-                                </Container>
-
-                            </Col>
-                            <Col xl={4} lg={4} md={12}>
-                                <Container onClick={() => timefilter.set("day")} className="py-lg-3 py-1  powerDateB" style={{ border: timefilter.value === "day" && "1px solid white" }}>
-                                    <b>Hours in a day</b>
-                                </Container>
-
-                                <Container className="m-0 p-0 mt-4 d-lg-block d-none" style={{
-                                    opacity: timefilter.value === "day" ? "100%" : "0", // 500px is an arbitrary large value
-                                    transition: "opacity 0.5s ease"
-                                }}>
-                                    <Form.Label>Date</Form.Label>
-                                    <Form.Control type="date" value={startdate.value} onChange={(e) => setStartDateFunc(e.target.value)} />
-                                </Container>
-                                <Container className="m-0 p-0 mt-1 d-lg-none d-block" style={{
-                                    height: timefilter.value === "day" ? "100px" : "0", // 500px is an arbitrary large value
-                                    transition: "height 0.5s ease",
-                                    overflow: "hidden"
-                                }}>
-                                    <Form.Label>Date</Form.Label>
-                                    <Form.Control type="date" value={startdate.value} onChange={(e) => setStartDateFunc(e.target.value)} />
-                                </Container>
-                            </Col>
-                        </Row>
-                    </Row>} */}
-            {/*    </Container> */}
         </>
     );
 };

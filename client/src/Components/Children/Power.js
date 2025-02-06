@@ -66,12 +66,10 @@ export default ({ initData }) => {
   const { chartData, filterStr, filterData } = generatePowerData(allDataStates, readings, temps, dateStates, devices);
 
   return (<>
-    <Container className="mt-4 container-fluid power pt-xl-5 pt-lg-3 pt-md-2 pt-0 pb-5 mainContainer d-block px-0 mx-0">
-      <Row className="justify-content-center">
-        <PowerOptionChild allDataStates={allDataStates} dateStates={dateStates} devices={devices} filterStr={filterStr} filterData={filterData} />
-        {/*          <LineChild lineDataProp={chartData} /> */}
-      </Row>
-    </Container>
+    <div className="mx-0 my-5 p-0">
+      <PowerOptionChild allDataStates={allDataStates} dateStates={dateStates} devices={devices} filterStr={filterStr} filterData={filterData} />
+      <LineChild lineDataProp={chartData} /> 
+    </div>
   </>
   );
 };

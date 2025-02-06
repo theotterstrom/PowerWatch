@@ -24,7 +24,6 @@ const getCustomers = async () => {
 
 const runCronForCustomer = (customer, client) => {
 
-
     cron.schedule("50 23 * * *", async () => {
         try {
             await fetchPrices(customer, client);
