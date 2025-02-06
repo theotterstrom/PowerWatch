@@ -1,7 +1,8 @@
 import { Container, Row, Col, Form, Dropdown, Button } from "react-bootstrap";
 import React, { useState, useEffect } from "react";
+
 export default ({ initData }) => {
-    const { allDataStates, dateStates, devices } = initData;
+    const { allDataStates, dateStates, devices, filterStr, filterData } = initData;
 
     const {
         alldates,
@@ -12,9 +13,27 @@ export default ({ initData }) => {
     } = dateStates;
 
     const [expanded, setExpanded] = useState(false);
-    const [currentFilter, setCurrentFilter] = useState("Dates");
+
     const [currentGroup, setGroup] = useState("Alla");
-    const filterArr = ["Devices", "Dates"];
+    const [currentPanel, setCurrentPanel] = useState("devices");
+
+    const [currentFilter, setCurrentFilter] = useState("Mellan datum");
+    const filterArr = ["Mellan datum", "Månad", "Timmar per dag"];
+
+    const [spanTitle, setSpanTitle] = useState(filterStr.timeStr.interval)
+
+    useEffect(() => {
+        if (currentFilter === "Mellan datum") {
+            timefilter.set("dates")
+            setSpanTitle(filterStr.timeStr.interval)
+        } else if (currentFilter === "Månad") {
+            timefilter.set("month")
+            setSpanTitle(filterStr.timeStr.month)
+        } else if (currentFilter === "Timmar per dag") {
+            timefilter.set("day")
+            setSpanTitle(filterStr.timeStr.day)
+        }
+    }, [currentFilter])
 
     const setStartDateFunc = date => {
         if (date > new Date().toISOString()) {
@@ -81,7 +100,7 @@ export default ({ initData }) => {
 
     const splitFormChecks = () => {
         const totalDevices = devices.value.length;
-        const firstHalfSize = Math.ceil(totalDevices / 2); // Ensures first half is larger if odd
+        const firstHalfSize = Math.ceil(totalDevices / 2);
         const secondHalfSize = Math.floor(totalDevices / 2);
 
         const firstHalf = devices.value.slice(0, firstHalfSize);
@@ -166,7 +185,169 @@ export default ({ initData }) => {
 
     return (
         <>
-            <Container className="d-flex justify-content-lg-start justify-content-center m-0 p-0">
+            <Row className="mt-5 bg-danger">
+                <Col xl={6} lg={6} className="m-0 p-0">
+                    <Container className="pt-5 chartText">
+                        {`Du konsumerade `}
+                        <span className="chartTextVals p-2" onClick={() => setCurrentPanel("power")}>{filterStr.watt}</span><br></br>
+                        {` ${currentFilter === "Timmar per dag" ? "den" : currentFilter === "Månad" ? "under" : "mellan"} `}
+                        <span className="chartTextVals p-2" onClick={() => setCurrentPanel("time")}>{spanTitle}</span><br></br>
+                        {` fördelat på `}
+                        <span className="chartTextVals p-2" onClick={() => setCurrentPanel("devices")}>{filterStr.deviceNo} enheter.</span>
+
+                    </Container>
+                </Col>
+                <Col xl={6} lg={6} md={12} className="m-0 p-0 mt-lg-5 mt-xl-0 mt-md-4">
+
+                    <Container className="powerOptionPanel py-4" >
+
+                        {currentPanel === "time" ? <>
+                            <div className="d-flex justify-content-center p-0 m-0">
+                                <Button className="mx-1" variant="transparent" style={{ color: "white" }} onClick={prevFilter}><i class="fa-solid fa-arrow-left"></i></Button>
+                                <p className="text-center" style={{ width: "150px" }}>{currentFilter}</p>
+                                <Button className="mx-1" variant="transparent" style={{ color: "white" }} onClick={nextFilter}><i class="fa-solid fa-arrow-right"></i></Button>
+                            </div>
+                            <Row className="d-flex justify-content-center">
+                                <Col xl={8}>
+                                    {currentFilter === "Mellan datum" && <>
+                                        <Form.Label>Start Datum</Form.Label>
+                                        <Form.Control type="date" value={startdate.value} onChange={(e) => setStartDateFunc(e.target.value)} />
+                                        <Form.Label className="mt-3">Slut Datum</Form.Label>
+                                        <Form.Control type="date" value={enddate.value} onChange={(e) => setEndDateFunc(e.target.value)} />
+                                    </>}
+                                    {currentFilter === "Månad" && <>
+                                        <Dropdown onSelect={(eventKey) => month.set(eventKey)} className="mt-2" style={{ width: "100%", overflow: "visible" }}>
+                                            <Dropdown.Toggle variant="light" id="dropdown-basic" style={{ width: "100%", textAlign: "start", height: "35px", padding: "0 0 0 20px" }}>
+                                                {generateMonthOptions().firstMonth}
+                                            </Dropdown.Toggle>
+                                            <Dropdown.Menu>
+                                                {generateMonthOptions().months}
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                    </>}
+                                    {currentFilter === "Timmar per dag" && <>
+                                        <Form.Label>Date</Form.Label>
+                                        <Form.Control type="date" value={startdate.value} onChange={(e) => setStartDateFunc(e.target.value)} />
+                                    </>}
+                                </Col>
+                            </Row>
+
+
+                            {/*                             <Container className="m-0 p-0 mt-4 d-lg-block d-none" style={{
+                                opacity: timefilter.value === "dates" ? "100%" : "0", // 500px is an arbitrary large value
+                                transition: "opacity 0.5s ease",
+
+                            }}>
+                                <Form.Label>Start Date</Form.Label>
+                                <Form.Control type="date" value={startdate.value} onChange={(e) => setStartDateFunc(e.target.value)} />
+                                <Form.Label className="mt-3">End Date</Form.Label>
+                                <Form.Control type="date" value={enddate.value} onChange={(e) => setEndDateFunc(e.target.value)} />
+                            </Container>
+
+                            <Container className="m-0 p-0 mt-4 d-lg-none d-block" style={{
+                                height: timefilter.value === "dates" ? "170px" : "0", // 500px is an arbitrary large value
+                                transition: "height 0.5s ease",
+                                overflow: "hidden"
+                            }}>
+                                <Form.Label>Start Date</Form.Label>
+                                <Form.Control type="date" value={startdate.value} onChange={(e) => setStartDateFunc(e.target.value)} />
+                                <Form.Label className="mt-3">End Date</Form.Label>
+                                <Form.Control type="date" value={enddate.value} onChange={(e) => setEndDateFunc(e.target.value)} />
+                            </Container> */}
+                        </> : <></>}
+
+                        {currentPanel === "devices" ? <>
+                            <p className="m-0 p-0 text-center">Enheter</p>
+                            <Row className="m-0 p-0 mt-3 d-flex justify-content-start" style={{ height: "100%" }}>
+
+                                <Col xxl={4} xl={6} lg={6} md={4} >
+                                    {splitFormChecks().firstHalfForms}
+                                </Col>
+                                <Col xxl={4} xl={6} lg={6} md={4}>
+                                    {splitFormChecks().secondHalfForms}
+                                </Col>
+                                <Col xxl={4} xl={12} lg={12} md={4} className="p-2 mt-xxl-0 mt-lg-4 mt-md-0" style={{ border: "1px solid white", borderRadius: "5px", color: "white" }}>
+                                    <Col sm={12} xs={12} className="text-center"><b>Groups</b></Col>
+                                    <Row className="text-center mt-2">
+                                        <Col>
+                                            {Object.entries(groups)
+                                                .filter((_, index) => index % 2 === 0)
+                                                .map(([groupName]) => (
+                                                    <div
+                                                        key={groupName}
+                                                        className="mt-1"
+                                                        style={{
+                                                            cursor: "pointer",
+                                                            borderRadius: "4px",
+                                                            background: currentGroup === groupName ? "white" : "transparent",
+                                                            color: currentGroup === groupName ? "black" : "inherit"
+                                                        }}
+                                                        onClick={() => handleSelect(groupName, groups)}
+                                                    >
+                                                        {groupName}
+                                                    </div>
+                                                ))}
+                                        </Col>
+                                        <Col>
+                                            {Object.entries(groups)
+                                                .filter((_, index) => index % 2 !== 0)
+                                                .map(([groupName]) => (
+                                                    <div
+                                                        key={groupName}
+                                                        className="mt-1"
+                                                        style={{
+                                                            cursor: "pointer",
+                                                            borderRadius: "4px",
+                                                            background: currentGroup === groupName ? "white" : "transparent",
+                                                            color: currentGroup === groupName ? "black" : "inherit"
+                                                        }}
+                                                        onClick={() => handleSelect(groupName, groups)}
+                                                    >
+                                                        {groupName}
+                                                    </div>
+                                                ))}
+                                            <div
+                                                className="mt-1"
+                                                style={{
+                                                    cursor: "pointer",
+                                                    borderRadius: "4px",
+                                                    background: currentGroup === "Alla" ? "white" : "transparent",
+                                                    color: currentGroup === "Alla" ? "black" : "inherit"
+                                                }}
+                                                onClick={() => handleSelect("Alla", groups)}
+                                            >
+                                                Alla
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                </Col>
+                            </Row>
+                        </> : <></>}
+
+                        {currentPanel === "power" ? <>
+                            <p className="m-0 p-0 text-center">Förbrukning per enhet</p>
+                            <Container className="mt-3">
+
+                                {Object.entries(filterData.consumption).map(([deviceName, consumption]) => (
+                                    <Row className="justify-content-center">
+                                        <Col xl={4}>
+                                            {devices.value.find(device => device.deviceName === deviceName)?.displayName}:
+                                        </Col>
+                                        <Col xl={4} className="text-end">
+                                            {consumption.toFixed(2)} kwH
+                                        </Col>
+                                    </Row>
+                                )
+
+                                )}
+                            </Container>
+                        </> : <></>}
+                    </Container>
+                </Col>
+            </Row>
+
+
+            {/*             <Container className="d-flex justify-content-lg-start justify-content-center m-0 p-0">
                 <Button onClick={() => setExpanded(!expanded)} variant="transparent" style={{ color: "white" }}>
                     Filter options {expanded ? '▲' : '▼'}
                 </Button>
@@ -179,11 +360,23 @@ export default ({ initData }) => {
                 overflow: "hidden",
             }}>
                 <Container className="d-flex justify-content-center p-0 m-0">
-                    <Button className="mx-4" variant="transparent" style={{ color: "white" }} onClick={prevFilter}>⯇</Button>
+                    <Button className="mx-4" variant="transparent" style={{ color: "white" }} onClick={prevFilter}><i class="fa-solid fa-arrow-left"></i></Button>
                     <p className="text-center mt-3 bg-dan" style={{ width: "100px" }}>{currentFilter}</p>
-                    <Button className="mx-4" variant="transparent" style={{ color: "white" }} onClick={nextFilter}>⯈</Button>
+                    <Button className="mx-4" variant="transparent" style={{ color: "white" }} onClick={nextFilter}><i class="fa-solid fa-arrow-right"></i></Button>
                 </Container>
-                {currentFilter === "Devices" &&
+                <Col className="p-0">
+
+                    <Container className="mt-5 pt-5 chartText">
+                        {`Du har spenderat `}
+                        <span className="chartTextVals p-2" onClick={() => showSideBar("watt")}>{filterStr.watt}</span><br></br>
+                        {` under perioden `}
+                        <span className="chartTextVals p-2" onClick={() => showSideBar("time")}>{filterStr.interval}</span><br></br>
+                        {` fördelat på `}
+                        <span className="chartTextVals p-2" onClick={() => showSideBar("devices")}>{filterStr.deviceNo}</span>
+                        {` enheter.`}
+                    </Container>
+                </Col> */}
+            {/*                 {currentFilter === "Devices" &&
                     <Row className="m-0 p-0 mt-sm-2 mt-md-2 mt-lg-3 d-flex justify-content-start" style={{ height: "100%" }}>
 
                         <Col xl={4} lg={4} xs={6} className="d-lg-block d-md-none d-sm-none d-xs-block">
@@ -352,8 +545,8 @@ export default ({ initData }) => {
                                 </Container>
                             </Col>
                         </Row>
-                    </Row>}
-            </Container>
+                    </Row>} */}
+            {/*    </Container> */}
         </>
     );
 };

@@ -10,7 +10,7 @@ const generatePowerData = (allDataStates, readings, temps, dateStates, devices) 
 
     const monthFilterFunc = () => {
         const monthArr = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-        if (month.value) { 
+        if (month.value) {
             const monthName = month.value.split(" ")[1];
             let monthNumber = monthArr.findIndex(month => month === monthName);
             monthNumber++;
@@ -80,7 +80,7 @@ const generatePowerData = (allDataStates, readings, temps, dateStates, devices) 
 
             return acc;
         }, {}) : {};
-    
+
     Object.values(readingsDataSource).forEach(array => array.sort((a, b) => new Date(a.date) - new Date(b.date)))
 
     const tranformTemp = data => {
@@ -118,7 +118,7 @@ const generatePowerData = (allDataStates, readings, temps, dateStates, devices) 
             return obj.date.split(" ")[0] === startdate.value
         }
     }));
-
+    console.log(readings.value.length)
 
     let dateList = [];
     let startingDate = new Date("2024-12-22");
@@ -161,8 +161,62 @@ const generatePowerData = (allDataStates, readings, temps, dateStates, devices) 
         datasets: chartDataSets.filter(Boolean),
     };
 
+
+    const wattAndDate = Object.entries(readingsDataSource).reduce(([watt, dateObject], [deviceName, deviceValues], index) => {
+        if(index === 0){
+            Object.keys(readingsDataSource).map(deviceName => watt[deviceName] = 0);
+        };
+        const device = devices.value.find(obj => obj.deviceName === deviceName);
+        if (!device) return [watt, dateObject]; // Handle missing devices
+        if(!chartData.datasets.map(obj => obj.label).includes(device.displayName)) return [watt, dateObject];
+        for (const value of deviceValues) {
+            const date = new Date(value.date);
+    
+            if (device.wattFormat === "Watt") {
+                watt[deviceName] += isNaN(value.value) ? 0 : (value.value / 1000);
+            } else if (device.wattFormat === "Kilowatt") {
+                watt[deviceName] += isNaN(value.value) ? 0 : value.value;
+            }
+            
+            if (date < dateObject.startDate) {
+                dateObject.startDate = date;
+            }
+            if (date > dateObject.endDate) {
+                dateObject.endDate = date;
+            }
+        }
+    
+        return [watt, dateObject];
+    }, [{}, { startDate: new Date(), endDate: 0}]);
+
+    const formatDate = (dateStr) => {
+        const months = ["Januari", "Februari", "Mars", "April", "Maj", "Juni", "Juli", "Augusti", "September", "Oktober", "November", "December"];
+        const [year, month, day] = dateStr.split('-');
+        return `${parseInt(day, 10)} ${months[parseInt(month, 10) - 1]} ${year}`;
+    };
+
+    const intervalStr = `${new Date(wattAndDate[1].startDate).toISOString().split("T")[0]} - ${new Date(wattAndDate[1].endDate).toISOString().split("T")[0]}`
+    const dayString = formatDate(startdate.value);
+
+    const summedWatts = Object.values(wattAndDate[0]).length > 0 ? Object.values(wattAndDate[0]).reduce((sum, cur) => {
+       return sum += cur
+    }) : 0;
+    console.log(chartData)
     return {
-        chartData
+        chartData,
+        filterStr: {
+            timeStr: {
+                interval: intervalStr,
+                month: month.value,
+                day: dayString
+            },
+            deviceNo: chartData.datasets.length,
+            watt: `${summedWatts.toFixed(2)} kwH` 
+        },
+        filterData: {
+            devices: Object.keys(readingsDataSource),
+            consumption: wattAndDate[0]
+        }
     };
 };
 

@@ -1,12 +1,29 @@
+@font-face {
+  font-family: 'kolikolight';  /* Set a custom name */
+  src: url('../src/Styles/koliko-Light.ttf') format('truetype'); /* Path to .ttf file */
+  font-weight: normal;
+  font-style: normal;
+  letter-spacing: 1.5px;
+}
 
 @font-face {
-  font-family: 'LaRevis'; /* Name of the font */
-  src: url('../src/Styles/La\ Revis.otf') format('opentype'); /* Relative path to the font file */
+  font-family: 'kolikoregular';  /* Set a custom name */
+  src: url('../src/Styles/koliko-Regular.ttf') format('truetype'); /* Path to .ttf file */
+  font-weight: bold;
+  font-style: normal;
+  letter-spacing: 1.5px;
 }
-@font-face {
-  font-family: 'Chilia'; /* Name of the font */
-  src: url('../src/Styles/ChiliaStamp-Regular.otf') format('opentype'); /* Relative path to the font file */
+
+:root{
+  --newGray: #f2f6f9;
+  --newDarkGray:#666768;
+  --newBlack: #2e2e2e;
+  --newBlue1: #1e90ff;
+  --newBlue2: #004786;
+  --newBlue3: #000a32;
+  --bodyRadius: 10px;
 }
+
 body {
   margin: 0;
   font-family: andale mono, monospace !important;
@@ -15,59 +32,104 @@ body {
   overflow: overlay;
   max-width: 100vw !important;
   overflow-x: hidden !important;
-  transition: none  !important;
-}
-*{
-  transition: top 0.5s ease, width 0.5s ease;
-}
-.headerBar{
-  transition: none  !important;
-}
-.titleHolder{
-  font-family: 'LaRevis', sans-serif;
-}
-html {
-  overflow: overlay;
-  overflow-y: scroll;
+  transition: none !important;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+* {
+  transition: top 0.5s ease, width 0.5s ease;
 }
-.power, .savings, .prices{
+
+.menuButton:hover, .startToggle:hover{
+  background-color: var(--newBlue1) !important;
+}
+.startToggle {
+  transition: all 0.3s ease-in-out; /* Smooth transition */
+  border: 0 !important;
+}
+.dropdown-fade {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.dropdown-fade.show {
+  opacity: 1;
+}
+/* When dropdown is active (open) */
+.dropdown.show .startToggle {
+  background-color: var(--newBlue1); /* Optional background */
+  border: 0 !important;
+  letter-spacing: 6px;  /* Increase spacing */
+}
+
+.headerBar {
+  font-weight: bold !important;
+  letter-spacing: 4px !important;
+  font-family: kolikolight, sans-serif !important;
   color: white;
+  transition: none !important;
+  top: 2vh;
+  background-color: var(--newBlue2);
+  position: fixed;
+  border-radius: var(--bodyRadius);
 }
-.ctrlContainer{
-  background-color: #004786;
-  padding: 30px;
-  border-radius: 0 20px 20px 20px;
- 
-  box-shadow: 5px 5px 5px rgb(0, 0, 0);
-}
-.controlPanelContainer{
-  background-color: #004786;
-  padding: 30px;
-  border-radius: 0 20px 20px 20px;
-  box-shadow: 5px 5px 5px rgb(0, 0, 0);
-}
-.backgroundBlock{
-  background-color: rgba(0, 14, 43, 0.6);
+
+
+.backGroundHolder{
   position: fixed;
   top: 0;
-  left: 0;
+  z-index: -2; 
+}
+.backgroundImg{
+  object-fit: cover;
   width: 100vw;
   height: 100vh;
-  z-index: -1;
-  transition: none  !important;
 }
-.homeContainer{
+.power,
+.savings,
+.prices {
+  color: white;
+}
+.navBarButton {
+  border: 1px solid white !important;
+}
+.navbar-toggler-icon {
+    filter: invert(1); /* Makes it white */
+}
+.carousel-indicators, .carousel-control-prev, .carousel-control-next{
+  display: none !important;
+}
+.navbar-toggler-icon{
+  color: white !important;
+}
+.ctrlContainer {
+  background-color: #004786;
+  padding: 30px;
+  border-radius: 0 20px 20px 20px;
+  box-shadow: 5px 5px 5px rgb(0, 0, 0);
+}
+
+.controlPanelContainer {
+  background-color: #004786;
+  padding: 30px;
+  border-radius: 0 20px 20px 20px;
+  box-shadow: 5px 5px 5px rgb(0, 0, 0);
+}
+
+.backgroundBlock {
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(to top, rgba(0, 0, 0, 1) 30%, rgba(0, 0, 0, 0) 100%);
+  position: fixed;
+}
+
+.homeContainer {
   background-color: rgb(255, 255, 255);
   color: black;
   border-bottom-right-radius: 5px;
   border-bottom-left-radius: 5px;
 }
-.backgroundBlockHome{
+
+.backgroundBlockHome {
   background-color: rgba(0, 14, 43, 0.9);
   position: fixed;
   top: 0;
@@ -75,15 +137,16 @@ code {
   width: 100vw;
   height: 100vh;
   z-index: -1;
-  transition: none  !important;
+  transition: none !important;
 }
-.tab-content{
+
+.tab-content {
   margin: 0 !important;
   padding: 0 !important;
   border-top: 0;
 }
 
-.powerHourWindow{
+.powerHourWindow {
   background-color: rgba(0, 0, 0, 0.9);
   color: white;
   position: fixed;
@@ -101,7 +164,7 @@ code {
   z-index: 1000000;
 }
 
-.logOutWindow{
+.logOutWindow {
   background-color: rgba(0, 0, 0, 0.97);
   color: white;
   position: fixed;
@@ -111,11 +174,11 @@ code {
   font-size: 18px;
 }
 
-.powerHourInput{
+.powerHourInput {
   height: 30px;
 }
 
-.fa-times{
+.fa-times {
   font-size: 30px;
   position: absolute;
   top: 10px;
@@ -135,74 +198,91 @@ code {
   width: 100px;
   height: 100px;
   border: 10px solid #ccc;
-  border-top: 10px solid #3498db; /* Color of the spinning section */
+  border-top: 10px solid #3498db;
+  /* Color of the spinning section */
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
+
 .custom-dropdown .dropdown-menu {
   background-color: #004786;
   border-top: 0;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+  border: 0 !important;
 }
 
 .custom-dropdown .dropdown-item {
   background-color: #004786;
-  color: white;
+  color: white ;
 
+}
+.custom-dropdown .dropdown-toggle::after, .startToggle::after {
+  display: none !important;
 }
 
 #chartjs-tooltip::after {
   content: '';
   position: absolute;
-  bottom: -10px; /* Position below the div */
+  bottom: -10px;
+  /* Position below the div */
   left: 50%;
   transform: translateX(-50%);
   width: 0;
   height: 0;
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
-  border-top: 10px solid black; /* Match the div's background color */
+  border-top: 10px solid black;
+  /* Match the div's background color */
 }
+
 .custom-dropdown .dropdown-item:hover {
-  background-color: rgb(0, 34, 102); /* Optional: Add hover effect */
+  background-color: rgb(0, 34, 102);
+  /* Optional: Add hover effect */
 }
 
-.popDropDown{
-
+.popDropDown {
   width: 100%;
-  border-radius: "5px";
-
+  border-radius: var(--bodyRadius);
 }
-.popDropDownToggle{
 
+.popDropDownToggle {
   width: 50%;
 }
 
 /* Add a solid background for inactive tabs */
 .nav-tabs .nav-link {
-  background-color: transparent; /* Default background color for inactive tabs */
+  background-color: transparent;
+  /* Default background color for inactive tabs */
   border: 1px solid white !important;
-  opacity: 1; /* Ensure no transparency */
+  opacity: 1;
+  /* Ensure no transparency */
   color: white !important;
-  transition: background-color 0.3s ease; /* Optional: Add a smooth hover effect */
+  transition: background-color 0.3s ease;
+  /* Optional: Add a smooth hover effect */
 }
 
 /* Change the appearance of the active tab */
 .nav-tabs .nav-link.active {
-  background-color: #007bff; /* Active tab background */
-  color: black !important;/* Active tab text color */
-  font-weight: bold; /* Optional: Highlight active tab */
+  background-color: #007bff;
+  /* Active tab background */
+  color: black !important;
+  /* Active tab text color */
+  font-weight: bold;
+  /* Optional: Highlight active tab */
 }
-.chartContainer{
+
+.chartContainer {
   height: 70vh;
   width: 110%;
 }
-.lineItem{
+
+.lineItem {
   border-bottom: 1px solid black;
-  width: 40%; 
+  width: 40%;
 }
-.homeTitle{
+
+.homeTitle {
   color: white;
   font-size: 48px;
   position: absolute;
@@ -210,20 +290,46 @@ code {
 
   width: 10vw !important;
 }
-.powerOptionsDrop{
+
+.powerOptionsDrop {
   overflow: hidden;
   transition: height 1s ease;
 }
-.powerDateB{
- 
+
+.powerDateB {
   cursor: pointer;
   border-radius: 5px;
 }
+
+
+
+.chartTextVals{
+  color: var(--newBlue1);
+  font-weight: bold;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  cursor: pointer;
+  border-radius: var(--bodyRadius);
+}
+.chartTextVals:hover{
+  background-color: var(--newBlue2);
+  color: white;
+}
+.chartText{
+  font-size: 24px;
+}
+
+.powerOptionPanel{
+  border: 2px solid var(--newBlue2);
+  border-radius: var(--bodyRadius);
+  background-color: rgba(0,0,0,0.5);
+}
+
 /* Spin animation */
 @keyframes spin {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -232,18 +338,18 @@ code {
 @media (min-width: 768px) and (max-width: 991px) {
 
 
-  .mainContainer{
+  .mainContainer {
     overflow-x: hidden !important;
   }
 
 
-  .chartContainer{
+  .chartContainer {
     height: 60vh;
     width: 120%;
     margin-left: -80px;
   }
 
-  .savingsText{
+  .savingsText {
     text-align: right;
 
   }
@@ -251,47 +357,56 @@ code {
 }
 
 @media (max-width: 767px) {
-  .homeContainer{
+  .homeContainer {
     background-color: transparent;
     color: white;
   }
-  .backgroundBlockHome{
+  .chartText{
+    font-size: 25px;
+  }
+  .backgroundBlockHome {
     background-color: rgba(0, 14, 43, 1);
   }
-  .lineItem{
+
+  .lineItem {
     border-bottom: 1px solid white;
-    width: 80%; 
+    width: 80%;
   }
-  .tab-content{
+
+  .tab-content {
     border-top: 1px solid white;
   }
-  .tabHolder{
+
+  .tabHolder {
     justify-content: space-evenly !important;
   }
-  .homeTitle{
+
+  .homeTitle {
     font-size: 28px;
     top: 75px;
   }
 
-  .ctrlContainer{
+  .ctrlContainer {
     background-color: transparent;
     border: 1px solid white;
     box-shadow: 0 0 0 0;
     border-top-right-radius: 0;
   }
+
   .controlPanelPop {
     top: 2vh;
   }
 
-  .popDropDown{
+  .popDropDown {
     width: 100%;
 
   }
-  .popDropDownToggle{
+
+  .popDropDownToggle {
     width: 100%;
   }
-  
-  .controlPanelContainer{
+
+  .controlPanelContainer {
     background-color: transparent;
     box-shadow: 0 0 0 0;
     padding: 30px;
@@ -300,39 +415,51 @@ code {
     font-size: 12px;
     padding: 0 !important;
   }
-  .controlPanelContainer h4{
+
+  .controlPanelContainer h4 {
     display: none;
   }
-  .nav-item{
+
+  .nav-item {
     font-size: 15px;
   }
 
 
-  .powerHourWindow{
+  .powerHourWindow {
     top: 1vh;
   }
 
-  .chartContainer{
+  .chartContainer {
     height: 600px;
     max-width: 120vw;
     margin-left: -20px;
   }
 
 
-  .savingsText{
+  .savingsText {
     text-align: right;
   }
 
   .custom-dropdown .dropdown-menu {
-    border: 0; /* Optional: Remove border if not needed */
+    border: 0;
+    /* Optional: Remove border if not needed */
   }
-  .navBarButton{
-    margin-right: 30px;
+
+
+}
+
+@media (max-width: 600px) {
+  .chartText{
+    font-size: 20px;
   }
 }
+
 @media (max-width: 525px) {
   .chartContainer {
     width: 110%;
+  }
+  .chartText{
+    font-size: 18px;
   }
 }
 
@@ -340,15 +467,25 @@ code {
   .nav-item:not(.menumore) {
     font-size: 13px;
   }
+  .chartText{
+    font-size: 16px;
+  }
 }
 
 @media (max-width: 388px) {
   .nav-item:not(.menumore) {
     font-size: 11px;
   }
+  .chartText{
+    font-size: 14px;
+  }
 }
+
 @media (max-width: 349px) {
   .nav-item:not(.menumore) {
     font-size: 10px;
+  }
+  .chartText{
+    font-size: 12px;
   }
 }

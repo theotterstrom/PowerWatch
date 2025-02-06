@@ -8,6 +8,7 @@ import Scheduele from "../Components/Children/Scheduele";
 import apiUrl from '../Components/Helpers/APIWrapper'
 import NavBar from "../Components/Children/NavBar";
 import { useLocation, useNavigate } from 'react-router-dom';
+import { Container, Row, Col } from "react-bootstrap";
 
 import {
   Chart as ChartJS,
@@ -97,14 +98,17 @@ const PowerWatch = () => {
 
   if (Object.keys(readings).length === 0 || Object.keys(savings).length === 0) {
     setTimeout(async () => {
-   
+
     }, 30000);
 
     return <>
       <div className="loading-container">
         <div className="loading-circle"></div>
-        <img className="backgroundBlock" src="/images/power.jpg" />
-        <div className="backgroundBlock"></div>
+        <div className="backGroundHolder">
+          <div className="backgroundBlock m-0 p-0">
+          </div>
+          <img src="/images/power.jpg" className="backgroundImg" alt="Home" />
+        </div>
       </div>
     </>;
   };
@@ -139,23 +143,32 @@ const PowerWatch = () => {
 
   window.addEventListener("touchend", () => {
     const toolTipContainer = document.getElementById("chartjs-tooltip");
-    if(!toolTipContainer) return;
+    if (!toolTipContainer) return;
     setTimeout(() => {
       toolTipContainer.style.display = "none"
     }, 200)
   });
 
   return (
-    <div>
-      <NavBarChild setCurrentPage={setCurrentPage}  />
-      <img className="backgroundBlock" src="/images/power.jpg" />
-      <div className="backgroundBlock"></div>
-      <main>
-        {currentPage === "power" && <PowerChild readings={apiData.readingsState} temps={apiData.tempsState} devices={apiData.devices} />}
-        {currentPage === "savings" && <SavingsChild savings={apiData.savingsState} devices={apiData.devices}/>}
-        {currentPage === "scheduele" && <SchedueleChild schedueles={apiData.scheduelesState} prices={apiData.pricesState} devicestatuses={apiData.devicestatusesState} devices={apiData.devices} />}
-      </main>
-    </div>
+    <>
+      <NavBarChild setCurrentPage={setCurrentPage} />
+      <div className="backGroundHolder">
+        <div className="backgroundBlock m-0 p-0">
+        </div>
+        <img src="/images/power.jpg" className="backgroundImg" alt="Home" />
+      </div>
+
+      <div className="d-flex justify-content-center">
+        <Col xl={8} md={10} xs={11} className="m-0 p-0">
+          <main className="m-0 p-0">
+            {currentPage === "power" && <PowerChild readings={apiData.readingsState} temps={apiData.tempsState} devices={apiData.devices} />}
+            {currentPage === "savings" && <SavingsChild savings={apiData.savingsState} devices={apiData.devices} />}
+            {currentPage === "scheduele" && <SchedueleChild schedueles={apiData.scheduelesState} prices={apiData.pricesState} devicestatuses={apiData.devicestatusesState} devices={apiData.devices} />}
+          </main>
+        </Col>
+      </div>
+
+    </>
   );
 };
 

@@ -4,8 +4,8 @@ import { Container, Row, Col } from "react-bootstrap";
 import PowerOptions from "../Options/PowerOptions";
 import LineGenerator from './LineGenerator';
 
-const PowerOptionChild = React.memo(({ allDataStates, dateStates, devices }) => {
-  const initData = useMemo(() => ({ allDataStates, dateStates, devices }), [allDataStates, dateStates, devices]);
+const PowerOptionChild = React.memo(({ allDataStates, dateStates, devices, filterStr, filterData }) => {
+  const initData = useMemo(() => ({ allDataStates, dateStates, devices, filterStr, filterData }), [allDataStates, dateStates, devices, filterStr, filterData]);
   return <PowerOptions initData={initData} />
 });
 
@@ -27,14 +27,14 @@ export default ({ initData }) => {
   const monthNames = [
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
-];
+  ];
 
   const [startDate, setStartDate] = useState(oneWeekAgoDate.toISOString().split("T")[0]);
   const [endDate, setEndDate] = useState(new Date().toISOString().split("T")[0]);
   const [allDates, setAllDates] = useState(false);
   const [month, setMonth] = useState(`${today.getFullYear()} ${monthNames[today.getMonth()]}`);
   const [timeFilter, setTimeFilter] = useState("dates");
-  
+
   const allDataStates = useMemo(() => {
     const dynamicStates = Object.fromEntries(
       Object.entries(states).map(([key, value]) => [
@@ -54,7 +54,7 @@ export default ({ initData }) => {
       ...dynamicStates
     };
   }, [states]);
-  
+
   const dateStates = useMemo(() => ({
     startdate: { value: startDate, set: setStartDate },
     enddate: { value: endDate, set: setEndDate },
@@ -63,23 +63,15 @@ export default ({ initData }) => {
     timefilter: { value: timeFilter, set: setTimeFilter }
   }), [startDate, endDate, allDates, month, timeFilter]);
 
-  const { chartData } = generatePowerData(allDataStates, readings, temps, dateStates, devices);
+  const { chartData, filterStr, filterData } = generatePowerData(allDataStates, readings, temps, dateStates, devices);
 
-  return (
-    <Container className="mt-4 container-fluid power pt-5 pb-5 mainContainer">
+  return (<>
+    <Container className="mt-4 container-fluid power pt-xl-5 pt-lg-3 pt-md-2 pt-0 pb-5 mainContainer d-block px-0 mx-0">
       <Row className="justify-content-center">
-        <Col xl={8} lg={8} md={10} className="p-0">
-          <Container className="p-0 justify-content-center">
-            <Container className="container-fluid d-flex justify-content-center">
-              <Col xl={12} lg={12} md={12} sm={8} xs={8} className="text-center text-lg-start">
-                <h3 className="mt-3">Power Consumption & Temperature</h3>
-              </Col>
-            </Container>
-            <PowerOptionChild allDataStates={allDataStates} dateStates={dateStates} devices={devices} />
-            <LineChild lineDataProp={chartData} /> 
-          </Container>
-        </Col>
+        <PowerOptionChild allDataStates={allDataStates} dateStates={dateStates} devices={devices} filterStr={filterStr} filterData={filterData} />
+        {/*          <LineChild lineDataProp={chartData} /> */}
       </Row>
     </Container>
+  </>
   );
 };

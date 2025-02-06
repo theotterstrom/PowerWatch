@@ -1,9 +1,7 @@
-import { Container, Row, Col, Form, Button, Tabs, Tab } from "react-bootstrap";
+import { Container, Row, Col, Form, Button, Tabs, Tab, Carousel } from "react-bootstrap";
 import React, { useState, useEffect, useContext, useMemo } from "react";
 import MakeRequest from "../Helpers/MakeRequest";
 export default ({ currentPage }) => {
-
-
 
 
     const [login1, setLogin1] = useState('');
@@ -38,65 +36,120 @@ export default ({ currentPage }) => {
     };
 
     return (<>
-        {currentPage === "Home" ? <>
-            <Container className=" m-0 p-0">
-                <Row className="d-flex justify-content-start text-start pt-4 pb-4 px-5" style={{ fontSize: "30px" }}>
-                    <p>Welcome to Powerwatch</p>
-                    <Container>
-                        <div className="lineItem"></div><br></br>
-                        <Row>
-                            <Col xl={10} lg={12} className="">
-                                <div className="text-start homeText" style={{ fontSize: "14px" }}>
-                                    <p><b>What is Powerwatch?</b></p>
-                                    Powerwatch is the simple application of monitoring your smart devices in your home or workplace. It allows you to control and monitor your costs and energyconsumption in real time! Not only this, Powerwatch allows you to set up schedules for your devices and only uses these devices when the powerprices are as cheapest.
-                                </div>
-                                <div className="text-start mt-3" style={{ fontSize: "14px" }}>
-                                    <p><b>Why Powerwatch?</b></p>
-                                    As we see it, there are two types of ways of using electricity: the way it's been done since Benjamin Franklins time, and the way of the 21st century.
-                                    <p className="mt-2">The new way of using electricity includes smart-devices, wireless control and smart-consumption. If this fits your vision of how your home or workplace should look like, look no further!</p>
-                                    <p className="mt-2">By including Powerwatch in your solution of smart-devices, you take the next step into the future!</p>
-                                </div>
-                            </Col>
-                        </Row>
+        {currentPage === "Start" ? <>
 
-                        {/*                         <div className="text-start mt-3" style={{ fontSize: "14px", width: "60%" }}>
-                            <p><b>Ok i'm sold, what's next?</b></p>
-                            Send us an email in the form down below to get a quota, or contact us via <email>info@powerwatch.se</email>
-                            
-                        </div> */}
-                    </Container>
-                </Row>
+            <Container style={{ color: "white", marginTop: "20vh" }}>
+                <Carousel>
+                    <Carousel.Item interval={5000}>
+                        <Container style={{ fontSize: "40px" }}>
+                            Spara pengar med smart-styrning
+                        </Container>
+                        <Container className="mt-4">
+                            <Row>
+                                <Col xl={7}>
+                                    <p>Powerwatch låter dig styra dina enheter efter dygnets billigaste elpristimmar.</p><br></br>
+                                    <p>Genom att schemabelägga dina enheter efter ditt valda schema, säkerställer Powerwatch att dina enheter bara är påslagna de billigaste timmarna på dygnet.</p>
+                                    <p>På detta sättet kan du spara pengar och få en överblick över ditt hem eller din arbetsplats energiförbrukning.</p>
+                                </Col>
+                            </Row>
+                        </Container>
+                    </Carousel.Item>
+                    <Carousel.Item interval={5000}>
+                        <Container style={{ fontSize: "40px" }}>
+                            Övervaka i realtid
+                        </Container>
+                        <Container className="mt-4">
+                            <Row>
+                                <Col xl={7}>
+                                    <p>Genom Powerwatch övervakningssystem kan du övervaka alla dina enheter i realtid.</p><br></br>
+                                    <p>Se till exempel elförbrukning & kostnad per enhet, hus, rum...</p>
+                                    <p>Många olika filter baserat på tidsintervaller och grupperingar sorterar dina enheter och gör det enkelt för analys och bevakning.</p>
+
+                                </Col>
+                            </Row>
+                        </Container>
+                    </Carousel.Item>
+                    <Carousel.Item interval={5000}>
+                        <Container style={{ fontSize: "40px" }}>
+                            Centraliserad styrning
+                        </Container>
+                        <Container className="mt-4">
+                            <Row>
+                                <Col xl={7}>
+                                    <p>Powerwatch tillåter även direktstyrning av alla dina enheter.</p><br></br>
+                                    <p>Kontrollpanelens många funktioner låter dig kontrollera dina enheter live.</p>
+                                </Col>
+                            </Row>
+                        </Container>
+                    </Carousel.Item>
+                    <Carousel.Item interval={5000}>
+                        <Container style={{ fontSize: "40px" }}>
+                            Enkel installation
+                        </Container>
+                        <Container className="mt-4">
+                            <Row>
+                                <Col xl={7}>
+                                    <p>Powerwatch stödjer många olika smarta enheter.</p><br></br>
+                                    <p>Detta gör installationen enkel, och du behöver inte ändra elavtal eller göra något större ingrepp på hemmet för att dra igång.</p>
+                                </Col>
+                            </Row>
+                        </Container>
+                    </Carousel.Item>
+                </Carousel>
 
             </Container>
         </> : <></>}
-        {currentPage === "Log In" ? <>
-            <Container className="homeContainer">
-                <Row className="d-flex justify-content-start text-start pt-4 pb-4 px-5" style={{ fontSize: "16px" }}>
-                    <p>If your already registered with Powerwatch, please log in below</p>
-                    <Row>
-                        <Col xl={6} md={8} xs={12}>
-                            <Form className="mt-4" onSubmit={handleLoginSubmit} >
-                                <Form.Group controlId="formBasicEmail">
-                                    <Form.Label>Email address</Form.Label>
-                                    <Form.Control type="email" placeholder="Enter email" required onChange={(e) => setLogin1(e.target.value)} />
-                                </Form.Group>
-                                <Form.Group controlId="formBasicPassword" className="mt-2">
-                                    <Form.Label>Password</Form.Label>
-                                    <Form.Control type="password" placeholder="Password" required onChange={(e) => setLogin2(e.target.value)} />
-                                </Form.Group>
-                                <Container className="p-0 mx-0 my-3">
-                                    <a onClick={() => console.log("HEJ")} className="my-3 p-0" style={{ cursor: "pointer" }}>I forgot my password</a><br></br>
-                                </Container>
-                                <Button variant="primary" type="submit" className="submit-btn">
-                                    Log In
-                                </Button>
-                            </Form>
-                        </Col>
-                    </Row>
-                </Row>
+        {currentPage === "Logga in" ? <>
+            <Container style={{ color: "white", marginTop: "15vh" }} className="mx-0 px-0">
+                <h1 className="py-5">Logga in</h1>
+                <Col xl={5} md={7} sm={10} xs={12} style={{ backgroundColor: "var(--newBlue2)", borderRadius: "var(--bodyRadius)" }} className="px-4 py-2 pb-4">
+                    <Form className="mt-4" onSubmit={handleLoginSubmit} >
+                        <Form.Group controlId="formBasicEmail">
+                            <Form.Label>Email address</Form.Label>
+                            <Form.Control type="email" placeholder="Enter email" required onChange={(e) => setLogin1(e.target.value)} />
+                        </Form.Group>
+                        <Form.Group controlId="formBasicPassword" className="mt-2">
+                            <Form.Label>Password</Form.Label>
+                            <Form.Control type="password" placeholder="Password" required onChange={(e) => setLogin2(e.target.value)} />
+                        </Form.Group>
+                        <Container className="p-0 mx-0 my-3">
+                            <a onClick={() => console.log("HEJ")} className="my-3 p-0 text-light" style={{ cursor: "pointer" }}>I forgot my password</a><br></br>
+                        </Container>
+                        <Button variant="dark" type="submit" className="submit-btn">
+                            Log In
+                        </Button>
+                    </Form>
+                </Col>
             </Container>
         </> : <></>}
-        {currentPage === "Create Account" ? <>
+        {currentPage === "Registrera" ? <>
+
+            <Container style={{ color: "white", marginTop: "15vh" }} className="mx-0 px-0">
+            <h1 className="py-5">Registrera</h1>
+                <Col xl={5} md={7} sm={10} xs={12} style={{ backgroundColor: "var(--newBlue2)", borderRadius: "var(--bodyRadius)" }} className="px-4 py-2 pb-4">
+                    <Form className="mt-4" onSubmit={handleUserCreate}>
+
+                        <Form.Group controlId="formBasicEmailReg">
+                            <Form.Label>Email address</Form.Label>
+                            <Form.Control type="email" placeholder="Enter email" required onChange={(e) => setCreate1(e.target.value)} />
+                        </Form.Group>
+                        <Form.Group controlId="formCustomerIdReg" className="mt-2">
+                            <Form.Label>Customer Id</Form.Label>
+                            <Form.Control type="string" placeholder="Enter customer id" required onChange={(e) => setCreate3(e.target.value)} />
+                        </Form.Group>
+
+                        <Form.Group controlId="formBasicPasswordReg" className="mt-2">
+                            <Form.Label>Password</Form.Label>
+                            <Form.Control type="password" placeholder="Password" required onChange={(e) => setCreate2(e.target.value)} />
+                        </Form.Group>
+
+                        <Button variant="dark" type="submit" className="submit-btn mt-4">
+                            Register
+                        </Button>
+                    </Form>
+                </Col>
+            </Container>
+            {/* 
             <Container className="homeContainer">
                 <Row className="d-flex justify-content-start text-start pt-4 pb-4 px-5" style={{ fontSize: "16px" }}>
                     <p>If you have your customer-id ready, you can register new accounts below</p>
@@ -125,7 +178,7 @@ export default ({ currentPage }) => {
                         </Col>
                     </Row>
                 </Row>
-            </Container>
+            </Container> */}
         </> : <></>}
         {currentPage === "Help" ? <></> : <></>}
         {currentPage === "FAQ" ? <></> : <></>}

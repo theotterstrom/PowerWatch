@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext, useMemo } from "react";
 import { Container, Row, Col, Form, Button, Tabs, Tab } from "react-bootstrap";
-import '../Styles/Home.css';
 import requestMaker from "../Components/Helpers/MakeRequest";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -27,7 +26,7 @@ const Home = () => {
   const [create2, setCreate2] = useState('');
   const [create3, setCreate3] = useState('');
 
-  const [currentPage, setCurrentHomePage] = useState("Home");
+  const [currentPage, setCurrentHomePage] = useState("Start");
 
   const navigate = useNavigate();
 
@@ -94,39 +93,25 @@ const Home = () => {
     <>
 
       <NavBarChild isAuthenticated={isAuthenticated} setCurrentHomePage={setCurrentHomePage} />
-      <Row>
-        <Col xl={8} lg={8} md={10} xs={12} className="p-0 d-flex container-fluid">
-          <Container className="homeContainer p-0" style={{ maxWidth: "100%" }}>
-            <div className="backgroundBlockHome"></div>
 
-            <div style={{ width: "100%", minHeight: "200px", overflow: "hidden" }}>
-              <img
-                src="/images/home.jpg"
-                style={{
-                  width: "100%",
-                  minHeight: "200px",
-                  height: "auto",
-                  display: "block",
-                  objectFit: "cover"
-                }}
-                alt="Home"
-              />
-            </div>
+      <div className="backGroundHolder">
+        <div className="backgroundBlock m-0 p-0">
+        </div>
+           <img src="/images/power.jpg" className="backgroundImg" alt="Home" /> 
+      </div>
 
-            <Container className="justify-content-start d-flex mx-5 my-xl-5 my-4 homeTitle">
-              <p style={{whiteSpace: "nowrap"}}>{currentPage}</p>
-            </Container>
-            <main>
-              {currentPage === "Home" && <HomePage currentPage={currentPage} />}
-              {currentPage === "Log In" && <HomePage currentPage={currentPage} />}
-              {currentPage === "Create Account" && <HomePage currentPage={currentPage} />}
-              {currentPage === "Help" && <HomePage currentPage={currentPage} />}
-              {currentPage === "FAQ" && <HomePage currentPage={currentPage} />}
-              {currentPage === "Powerwatch" && <HomePage currentPage={currentPage} />}
-            </main>
-          </Container>
+      <div className="d-flex justify-content-center">
+        <Col xl={8} md={10} xs={11} className="m-0 p-0">
+          <main>
+            {currentPage === "Start" && <HomePage currentPage={currentPage} />}
+            {currentPage === "Logga in" && <HomePage currentPage={currentPage} />}
+            {currentPage === "Registrera" && <HomePage currentPage={currentPage} />}
+            {currentPage === "Help" && <HomePage currentPage={currentPage} />}
+            {currentPage === "FAQ" && <HomePage currentPage={currentPage} />}
+            {currentPage === "Powerwatch" && <HomePage currentPage={currentPage} />}
+          </main>
         </Col>
-      </Row>
+      </div>
     </>
   );
 };
