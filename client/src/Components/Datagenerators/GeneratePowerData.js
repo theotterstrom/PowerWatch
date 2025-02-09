@@ -118,7 +118,6 @@ const generatePowerData = (allDataStates, readings, temps, dateStates, devices) 
             return obj.date.split(" ")[0] === startdate.value
         }
     }));
-    console.log(readings.value.length)
 
     let dateList = [];
     let startingDate = new Date("2024-12-22");
@@ -196,19 +195,18 @@ const generatePowerData = (allDataStates, readings, temps, dateStates, devices) 
     };
 
     const intervalStr = `${new Date(wattAndDate[1].startDate).toISOString().split("T")[0]} - ${new Date(wattAndDate[1].endDate).toISOString().split("T")[0]}`
-    const dayString = formatDate(startdate.value);
 
     const summedWatts = Object.values(wattAndDate[0]).length > 0 ? Object.values(wattAndDate[0]).reduce((sum, cur) => {
        return sum += cur
     }) : 0;
-    console.log(chartData)
+
     return {
         chartData,
         filterStr: {
             timeStr: {
                 interval: intervalStr,
                 month: month.value,
-                day: dayString
+                day: formatDate(startdate.value)
             },
             deviceNo: chartData.datasets.length,
             watt: `${summedWatts.toFixed(2)} kwH` 

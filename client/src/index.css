@@ -328,10 +328,14 @@ body {
 .powerOptionPanel{
   border: 2px solid var(--newBlue2);
   border-radius: var(--bodyRadius);
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0,0,0,0.9);
   position: absolute;
   transition: max-height 0.7s ease;
   overflow: hidden;
+}
+.altButton:hover{
+  color: black !important;
+  background-color: white !important;
 }
 
 /* Spin animation */
@@ -370,9 +374,7 @@ body {
     background-color: transparent;
     color: white;
   }
-  .chartText{
-    font-size: 25px;
-  }
+
   .backgroundBlockHome {
     background-color: rgba(0, 14, 43, 1);
   }
@@ -456,27 +458,11 @@ body {
 
 }
 
-@media (max-width: 600px) {
-  .chartText{
-    font-size: 20px;
-  }
-}
 
-@media (max-width: 525px) {
-  .chartContainer {
-
-  }
-  .chartText{
-    font-size: 18px;
-  }
-}
 
 @media (max-width: 424px) {
   .nav-item:not(.menumore) {
     font-size: 13px;
-  }
-  .chartText{
-    font-size: 16px;
   }
 }
 

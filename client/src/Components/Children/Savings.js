@@ -4,8 +4,8 @@ import SavingsOptions from "../Options/SavingsOptions";
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import LineGenerator from './LineGenerator';
 
-const SavingsOptionsChild = React.memo(({ allDataStates, dateStates, devices, savingsData }) => {
-  const initData = useMemo(() => ({ allDataStates, dateStates, devices, savingsData }), [allDataStates, dateStates, devices, savingsData]);
+const SavingsOptionsChild = React.memo(({ allDataStates, dateStates, devices, savingsData, filterStr, filterData }) => {
+  const initData = useMemo(() => ({ allDataStates, dateStates, devices, savingsData, filterStr, filterData }), [allDataStates, dateStates, devices, filterStr, filterData, savingsData]);
   return <SavingsOptions initData={initData} />
 });
 
@@ -24,12 +24,17 @@ export default ({ initData }) => {
   const today = new Date();
   const oneWeekAgoDate = new Date();
   oneWeekAgoDate.setDate(today.getDate() - 7);
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
 
   // States for date filtering savings
   const [savingStartDate, setSavingStartDate] = useState(oneWeekAgoDate.toISOString().split("T")[0]);
   const [savingEndDate, setSavingEndDate] = useState(new Date().toISOString().split("T")[0]);
   const [allsavingsDate, setAllSavingsDates] = useState(false);
-  const [savingsMonth, setSavingsMonth] = useState('None');
+  const [savingsMonth, setSavingsMonth] = useState(`${today.getFullYear()} ${monthNames[today.getMonth()]}`);
+  const [timeFilter, setTimeFilter] = useState("dates");
 
   const allDataStates = useMemo(() => {
     const dynamicStates = Object.fromEntries(
@@ -56,25 +61,30 @@ export default ({ initData }) => {
     savingsenddate: { value: savingEndDate, set: setSavingEndDate },
     allsavingsdate: { value: allsavingsDate, set: setAllSavingsDates },
     savingsmonth: { value: savingsMonth, set: setSavingsMonth },
-  }), [savingStartDate, savingEndDate, allsavingsDate, savingsMonth]);
+    timefilter: { value: timeFilter, set: setTimeFilter }
+  }), [savingStartDate, savingEndDate, allsavingsDate, savingsMonth, timeFilter]);
 
-  const { savingsData, totalSpending, totalSaved } = generateSavingsData(allDataStates, savings, dateStates, devices);
+  const { savingsData, totalSpending, totalSaved, filterStr, filterData } = generateSavingsData(allDataStates, savings, dateStates, devices);
 
   return (
-    <Container className="mt-4 container-fluid power pt-5 pb-5 mainContainer">
-      <Row className="justify-content-center">
-        <Col xl={8} lg={8} md={10} className="p-0">
-          <Container className="p-0 justify-content-center">
-            <Container className="container-fluid d-flex justify-content-center">
-              <Col xl={12} lg={12} md={12} sm={8} xs={8} className="text-center text-lg-start">
-                <h3 className="mt-3">Savings</h3>
-              </Col>
-            </Container>
-            <SavingsOptionsChild allDataStates={allDataStates} dateStates={dateStates} devices={devices} savingsData={{ totalSpending, totalSaved }} />
-            <LineChild lineDataProp={savingsData} />
-          </Container>
-        </Col>
-      </Row>
-    </Container>
+    <div className="mx-0 my-5 p-0">
+      <SavingsOptionsChild allDataStates={allDataStates} dateStates={dateStates} devices={devices} filterStr={filterStr} filterData={filterData} savingsData={{ totalSpending, totalSaved }} />
+      <LineChild lineDataProp={savingsData} />
+    </div>
+    /*     <Container className="mt-4 container-fluid power pt-5 pb-5 mainContainer">
+          <Row className="justify-content-center">
+            <Col xl={8} lg={8} md={10} className="p-0">
+              <Container className="p-0 justify-content-center">
+                <Container className="container-fluid d-flex justify-content-center">
+                  <Col xl={12} lg={12} md={12} sm={8} xs={8} className="text-center text-lg-start">
+                    <h3 className="mt-3">Savings</h3>
+                  </Col>
+                </Container>
+                <SavingsOptionsChild allDataStates={allDataStates} dateStates={dateStates} devices={devices} filterStr={filterStr} filterData={filterData} savingsData={{ totalSpending, totalSaved }} />
+                <LineChild lineDataProp={savingsData} />
+              </Container>
+            </Col>
+          </Row>
+        </Container> */
   );
 };

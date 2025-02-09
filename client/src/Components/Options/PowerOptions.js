@@ -13,14 +13,12 @@ export default ({ initData }) => {
     } = dateStates;
 
     const [expanded, setExpanded] = useState(false);
-
+    const [groupExpanded, setGroupExpanded] = useState(false);
     const [currentGroup, setGroup] = useState("Alla");
     const [currentPanel, setCurrentPanel] = useState("empty");
-
     const [currentFilter, setCurrentFilter] = useState("Mellan datum");
-    const filterArr = ["Mellan datum", "Månad", "Timmar per dag"];
-
     const [spanTitle, setSpanTitle] = useState(filterStr.timeStr.interval)
+    const filterArr = ["Mellan datum", "Månad", "Timmar per dag"];
 
     useEffect(() => {
         if (currentFilter === "Mellan datum") {
@@ -98,62 +96,6 @@ export default ({ initData }) => {
         };
     };
 
-    const splitFormChecks = () => {
-        const totalDevices = devices.value.length;
-        const firstHalfSize = Math.ceil(totalDevices / 2);
-        const secondHalfSize = Math.floor(totalDevices / 2);
-
-        const firstHalf = devices.value.slice(0, firstHalfSize);
-        const secondHalf = devices.value.slice(firstHalfSize, firstHalfSize + secondHalfSize);
-
-        const firstHalfForms = firstHalf.map((obj, index) =>
-            <Form.Check
-                type="checkbox"
-                key={index}
-                label={obj.displayName}
-                checked={allDataStates[obj.deviceName].value}
-                onChange={() => allDataStates[obj.deviceName].set(!allDataStates[obj.deviceName].value)}
-            />
-        );
-
-        const secondHalfForms = secondHalf.map((obj, index) =>
-            <Form.Check
-                type="checkbox"
-                key={index + 100}
-                label={obj.displayName}
-                checked={allDataStates[obj.deviceName].value}
-                onChange={() => allDataStates[obj.deviceName].set(!allDataStates[obj.deviceName].value)}
-            />
-        );
-
-        const firstGroupSize = Math.ceil(totalDevices / 3);
-        const secondGroupSize = Math.ceil((totalDevices - firstGroupSize) / 2);
-        const thirdGroupSize = totalDevices - firstGroupSize - secondGroupSize;
-
-        const firstGroup = devices.value.slice(0, firstGroupSize);
-        const secondGroup = devices.value.slice(firstGroupSize, firstGroupSize + secondGroupSize);
-        const thirdGroup = devices.value.slice(firstGroupSize + secondGroupSize);
-
-        const createFormChecks = (group, offset) =>
-            group.map((obj, index) => (
-                <Form.Check
-                    type="checkbox"
-                    key={index + offset}
-                    label={obj.displayName}
-                    checked={allDataStates[obj.deviceName].value}
-                    onChange={() => allDataStates[obj.deviceName].set(!allDataStates[obj.deviceName].value)}
-                />
-            ));
-
-        return {
-            firstHalfForms,
-            secondHalfForms,
-            firstThirdForms: createFormChecks(firstGroup, 200),
-            secondThirdForms: createFormChecks(secondGroup, 300),
-            thirdThirdForms: createFormChecks(thirdGroup, 400)
-        };
-    };
-
     const groups = devices.value.reduce((acc, cur) => {
         if (cur.group) {
             for (const group of cur.group) {
@@ -187,23 +129,27 @@ export default ({ initData }) => {
         const powerOptionPanel = document.getElementsByClassName("powerOptionPanel")[0];
         const chartTextVals = Array.from(document.getElementsByClassName("chartTextVals"));
         const excludeArrow = Array.from(document.getElementsByClassName("exludeArrow"));
-
-        const excludeElements = [powerOptionPanel, ...chartTextVals, ...excludeArrow];
+        const altButtons = Array.from(document.getElementsByClassName("altButton"))
+        const excludeElements = [powerOptionPanel, ...chartTextVals, ...excludeArrow, ...altButtons];
 
         // Check if event target is inside any of the excluded elements
-        if (!excludeElements.some(el => el.contains(event.target))) {
+        if (!excludeElements.some(el => el.contains(event.target) || el === event.target)) {
             setExpanded(false);
             setCurrentPanel("empty");
         } else {
-            setExpanded(true);
+            // setExpanded(true);
         }
     });
 
+    console.log(month)
     return (
         <>
             <Row className="my-5 mx-0 p-0 justify-content-center justify-content-lg-between text-lg-start text-center">
                 <Col xl={6} lg={6} md={9} sm={10} className="m-0 p-0 mt-lg-0 mt-2 ">
-                    <Container className="chartText">
+                <div style={{fontSize: "18px", fontWeight:"bold"}}>
+                <i className="fa-solid fa-bolt"></i>&nbsp; Energi & Temperatur
+                </div>
+                    <Container className="chartText mt-3">
                         {`Du konsumerade `}
                         <span className="chartTextVals p-1" onClick={() => {
                             setCurrentPanel("power")
@@ -221,120 +167,122 @@ export default ({ initData }) => {
                         }}>{filterStr.deviceNo} enheter.</span>
                     </Container>
                 </Col>
-                <Col xl={4} lg={6} md={9} sm={10} className="m-0 p-0 mt-lg-0 mt-2 position-relative">
+                <Col xl={4} lg={4} md={5} sm={10} className="m-0 p-0 mt-lg-0 mt-2 position-relative">
                     <Container className="powerOptionPanel py-4 " style={{ maxHeight: expanded ? "300px" : "0", overflow: expanded && currentPanel == "time" && currentFilter === "Månad" ? "visible" : "hidden" }}>
                         <div onClick={() => {
                             setCurrentPanel(expanded ? "empty" : "time");
                             setExpanded(!expanded);
-                        }} className="position-absolute" style={{ right: "20px", top: "10px", cursor: "pointer" }}>
+                        }} className="position-absolute text-end" style={{ right: "20px", top: "10px", cursor: "pointer", width: "90%" }}>
                             <i className={expanded ? "fa fa-arrow-up exludeArrow" : "fa fa-arrow-down exludeArrow"} ></i>
                         </div>
-                        {currentPanel === "empty" ? <>
-                            <p className="text-center" style={{ marginTop: "-12px", height: "200px", pointerEvents: "none" }}>Alternativ</p>
-                        </> : <></>}
-                        {currentPanel === "time" ? <>
-                            <div className="d-flex justify-content-center" style={{ marginTop: "-12px" }}>
-                                <Button className="" variant="transparent" style={{ color: "white", marginTop: "-12px" }} onClick={prevFilter}><i class="fa-solid fa-arrow-left"></i></Button>
-                                <p className="text-center" style={{ width: "150px" }}>{currentFilter}</p>
-                                <Button className="" variant="transparent" style={{ color: "white", marginTop: "-12px" }} onClick={nextFilter}><i class="fa-solid fa-arrow-right"></i></Button>
-                            </div>
-                            <Row className="d-flex justify-content-center">
-                                <Col xl={12}>
-                                    {currentFilter === "Mellan datum" && <>
-                                        <Form.Label>Start Datum</Form.Label>
-                                        <Form.Control type="date" value={startdate.value} onChange={(e) => setStartDateFunc(e.target.value)} />
-                                        <Form.Label className="mt-3">Slut Datum</Form.Label>
-                                        <Form.Control type="date" value={enddate.value} onChange={(e) => setEndDateFunc(e.target.value)} />
-                                    </>}
-                                    {currentFilter === "Månad" && <>
-                                        <Dropdown onSelect={(eventKey) => month.set(eventKey)} className="mt-2" style={{ width: "100%" }}>
-                                            <Dropdown.Toggle variant="light" id="dropdown-basic" style={{ width: "100%", textAlign: "start", height: "35px", padding: "0 0 0 20px" }}>
-                                                {generateMonthOptions().firstMonth}
-                                            </Dropdown.Toggle>
-                                            <Dropdown.Menu>
-                                                {generateMonthOptions().months}
-                                            </Dropdown.Menu>
-                                        </Dropdown>
-                                    </>}
-                                    {currentFilter === "Timmar per dag" && <>
-                                        <Form.Label>Date</Form.Label>
-                                        <Form.Control type="date" value={startdate.value} onChange={(e) => setStartDateFunc(e.target.value)} />
-                                    </>}
-                                </Col>
-                            </Row>
-                        </> : <></>}
-                        {currentPanel === "devices" ? <>
-                            <p className="text-center" style={{ marginTop: "-12px", height: "200px", pointerEvents: "none" }}>Enheter</p>
-                            <Row className="m-0 p-0 mt-3 d-flex justify-content-start" style={{ height: "100%" }}>
-                                <Col xxl={4} xl={6} lg={6} md={4} >
-                                    {splitFormChecks().firstHalfForms}
-                                </Col>
-                                <Col xxl={4} xl={6} lg={6} md={4}>
-                                    {splitFormChecks().secondHalfForms}
-                                </Col>
-                                <Col xxl={4} xl={12} lg={12} md={4} className="p-2 mt-xxl-0 mt-lg-4 mt-md-0" style={{ border: "1px solid white", borderRadius: "5px", color: "white" }}>
-                                    <Col sm={12} xs={12} className="text-center"><b>Groups</b></Col>
-                                    <Row className="text-center mt-2">
-                                        <Col>
-                                            {Object.entries(groups)
-                                                .filter((_, index) => index % 2 === 0)
-                                                .map(([groupName]) => (
-                                                    <div
-                                                        key={groupName}
-                                                        className="mt-1"
-                                                        style={{
-                                                            cursor: "pointer",
-                                                            borderRadius: "4px",
-                                                            background: currentGroup === groupName ? "white" : "transparent",
-                                                            color: currentGroup === groupName ? "black" : "inherit"
-                                                        }}
-                                                        onClick={() => handleSelect(groupName, groups)}
-                                                    >
-                                                        {groupName}
-                                                    </div>
-                                                ))}
-                                        </Col>
-                                        <Col>
-                                            {Object.entries(groups)
-                                                .filter((_, index) => index % 2 !== 0)
-                                                .map(([groupName]) => (
-                                                    <div
-                                                        key={groupName}
-                                                        className="mt-1"
-                                                        style={{
-                                                            cursor: "pointer",
-                                                            borderRadius: "4px",
-                                                            background: currentGroup === groupName ? "white" : "transparent",
-                                                            color: currentGroup === groupName ? "black" : "inherit"
-                                                        }}
-                                                        onClick={() => handleSelect(groupName, groups)}
-                                                    >
-                                                        {groupName}
-                                                    </div>
-                                                ))}
-                                            <div className="mt-1" style={{ cursor: "pointer", borderRadius: "4px", background: currentGroup === "Alla" ? "white" : "transparent", color: currentGroup === "Alla" ? "black" : "inherit" }} onClick={() => handleSelect("Alla", groups)}>
-                                                Alla
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                </Col>
-                            </Row>
-                        </> : <></>}
-                        {currentPanel === "power" ? <>
-                            <p className="text-center" style={{ marginTop: "-12px", height: "200px", pointerEvents: "none" }}>Förbrukning per enhet</p>
-                            <Container className="mt-3">
-                                {Object.entries(filterData.consumption).map(([deviceName, consumption]) => (
-                                    <Row className="justify-content-center">
-                                        <Col xl={4}>
-                                            {devices.value.find(device => device.deviceName === deviceName)?.displayName}:
-                                        </Col>
-                                        <Col xl={4} className="text-end">
-                                            {consumption.toFixed(2)} kwH
-                                        </Col>
-                                    </Row>
-                                ))}
-                            </Container>
-                        </> : <></>}
+                        <Container className="mt-4">
+                            {currentPanel === "empty" ? <>
+                                <p className="text-center" style={{ marginTop: "-38px", height: "200px", pointerEvents: "none" }}>Alternativ</p>
+                            </> : <></>}
+                            {currentPanel === "time" ? <>
+                                <div className="d-flex justify-content-center" style={{ marginTop: "-12px" }}>
+                                    <Button className="" variant="transparent" style={{ color: "white", marginTop: "-12px" }} onClick={prevFilter}><i className="fa-solid fa-arrow-left"></i></Button>
+                                    <p className="text-center" style={{ width: "150px" }}>{currentFilter}</p>
+                                    <Button className="" variant="transparent" style={{ color: "white", marginTop: "-12px" }} onClick={nextFilter}><i className="fa-solid fa-arrow-right"></i></Button>
+                                </div>
+                                <Row className="d-flex justify-content-center">
+                                    <Col xl={12}>
+                                        {currentFilter === "Mellan datum" && <>
+                                            <Form.Label>Start Datum</Form.Label>
+                                            <Form.Control type="date" value={startdate.value} onChange={(e) => setStartDateFunc(e.target.value)} />
+                                            <Form.Label className="mt-3">Slut Datum</Form.Label>
+                                            <Form.Control type="date" value={enddate.value} onChange={(e) => setEndDateFunc(e.target.value)} />
+                                        </>}
+                                        {currentFilter === "Månad" && <>
+                                            <Dropdown onSelect={(eventKey) => month.set(eventKey)} className="mt-2" style={{ width: "100%" }}>
+                                                <Dropdown.Toggle variant="light" id="dropdown-basic" style={{ width: "100%", textAlign: "start", height: "35px", padding: "0 0 0 20px" }}>
+                                                    {generateMonthOptions().firstMonth}
+                                                </Dropdown.Toggle>
+                                                <Dropdown.Menu>
+                                                    {generateMonthOptions().months}
+                                                </Dropdown.Menu>
+                                            </Dropdown>
+                                        </>}
+                                        {currentFilter === "Timmar per dag" && <>
+                                            <Form.Label>Date</Form.Label>
+                                            <Form.Control type="date" value={startdate.value} onChange={(e) => setStartDateFunc(e.target.value)} />
+                                        </>}
+                                    </Col>
+                                </Row>
+                            </> : <></>}
+                            {currentPanel === "devices" ? <>
+                                <p className="text-center" style={{ marginTop: "-12px", height: "10px", pointerEvents: "none" }}>Grupper</p>
+                                <Row className="m-0 p-0 mt-3 d-flex justify-content-start" style={{ height: "100%" }}>
+                                    <Col xxl={6} xl={12} sm={6}>
+                                        {Object.entries(groups).filter((_, index) => index % 2 === 0).map(([groupName]) => (
+                                            <>
+                                                <div key={groupName} className="mt-1 p-1"
+                                                    style={{ cursor: "pointer", borderRadius: "4px", background: currentGroup === groupName ? "white" : "transparent", color: currentGroup === groupName ? "black" : "inherit" }}
+                                                    onClick={() => {
+                                                        handleSelect(groupName, groups)
+                                                        setGroupExpanded(!groupExpanded)
+                                                    }}>
+                                                    {groupName}
+                                                </div>
+                                                <div className="p-2 text-start" style={{ border: "1px solid white", fontSize: "12px", display: currentGroup === groupName && groupExpanded ? "block" : "none" }}>
+                                                    {groups[groupName].map((member, index) => {
+                                                        const deviceName = devices.value.find(device => device.displayName === member)?.deviceName;
+                                                        return (<>
+                                                            <Form.Check type="checkbox" key={index} label={member} checked={allDataStates[deviceName].value} onChange={() => allDataStates[deviceName].set(!allDataStates[deviceName].value)} />
+                                                        </>)
+                                                    })}
+                                                </div>
+                                            </>
+                                        ))}
+                                    </Col>
+                                    <Col xxl={6} xl={12} sm={6}>
+                                        {Object.entries(groups).filter((_, index) => index % 2 !== 0).map(([groupName]) => (
+                                            <>
+                                                <div key={groupName} className="mt-1 p-1"
+                                                    style={{
+                                                        cursor: "pointer",
+                                                        borderRadius: "4px",
+                                                        background: currentGroup === groupName ? "white" : "transparent",
+                                                        color: currentGroup === groupName ? "black" : "inherit"
+                                                    }}
+                                                    onClick={() => {
+                                                        handleSelect(groupName, groups)
+                                                        setGroupExpanded(!groupExpanded)
+                                                    }}>
+                                                    {groupName}
+                                                </div>
+                                                <div className="p-2 text-start" style={{ border: "1px solid white", fontSize: "12px", display: currentGroup === groupName && groupExpanded ? "block" : "none" }}>
+                                                    {groups[groupName].map((member, index) => {
+                                                        const deviceName = devices.value.find(device => device.displayName === member)?.deviceName;
+                                                        return (<>
+                                                            <Form.Check type="checkbox" key={index} label={member} checked={allDataStates[deviceName].value} onChange={() => allDataStates[deviceName].set(!allDataStates[deviceName].value)} />
+                                                        </>)
+                                                    })}
+                                                </div>
+                                            </>
+                                        ))}
+                                        <div className="mt-1 p-1" style={{ cursor: "pointer", borderRadius: "4px", background: currentGroup === "Alla" ? "white" : "transparent", color: currentGroup === "Alla" ? "black" : "inherit" }} onClick={() => handleSelect("Alla", groups)}>
+                                            Alla
+                                        </div>
+                                    </Col>
+                                </Row>
+                            </> : <></>}
+                            {currentPanel === "power" ? <>
+                                <p className="text-center" style={{ marginTop: "-12px", height: "10px", pointerEvents: "none" }}>Förbrukning per enhet</p>
+                                <Container className="mt-4">
+                                    {Object.entries(filterData.consumption).map(([deviceName, consumption]) => (
+                                        <Row className="justify-content-center" style={{ fontSize: "12px" }}>
+                                            <Col xxl={5} xl={6} md={6} sm={6} xs={6} className="text-start">
+                                                {devices.value.find(device => device.deviceName === deviceName)?.displayName}:
+                                            </Col>
+                                            <Col xxl={5} xl={6} md={6} sm={6} xs={6} className="text-end">
+                                                {consumption.toFixed(2)} kwH
+                                            </Col>
+                                        </Row>
+                                    ))}
+                                </Container>
+                            </> : <></>}
+                        </Container>
                     </Container>
                 </Col>
             </Row>

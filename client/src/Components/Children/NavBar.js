@@ -161,12 +161,12 @@ export default ({ states }) => {
                                                 Dashboards {showDashDropdown ? <i className="fa-solid fa-caret-up"></i> : <i className="fa-solid fa-caret-down"></i>}
                                             </Dropdown.Toggle>
                                             <Dropdown.Menu className="mt-3 p-3" style={{ width: "300px", background: "var(--newBlue2)", color: "white" }}>
-                                                <Row style={{ fontWeight: "bold", fontSize: "20px" }}>
+                                                <Row style={{ fontWeight: "bold", fontSize: "16px" }}>
                                                     <Button onClick={() => showPage("power")} className="text-start menuButton" variant="transparent" style={{ fontWeight: "bold", letterSpacing: "4px", color: "white" }}>
                                                         <i className="fa-solid fa-bolt"></i>&nbsp; Energi & Temperatur
                                                     </Button>
                                                     <Button onClick={() => showPage("savings")} className="text-start menuButton m-1" variant="transparent" style={{ fontWeight: "bold", letterSpacing: "4px", color: "white" }}>
-                                                        <i className="fa-solid fa-dollar-sign"></i>&nbsp; Kostnader
+                                                        <i className="fa-solid fa-dollar-sign"></i>&nbsp; Ekonomi
                                                     </Button>
                                                     <Button onClick={() => showPage("scheduele")} className=" text-start menuButton" variant="transparent" style={{ fontWeight: "bold", letterSpacing: "4px", color: "white" }}>
                                                         <i className="fa-solid fa-calendar-days"></i>&nbsp; Scheman & Dagspriser
@@ -182,7 +182,7 @@ export default ({ states }) => {
                                                 Kontroller {showControl ? <i className="fa-solid fa-caret-up"></i> : <i className="fa-solid fa-caret-down"></i>}
                                             </Dropdown.Toggle>
                                             <Dropdown.Menu className="mt-3 p-3" style={{ width: "250px", background: "var(--newBlue2)", color: "white" }}>
-                                                <Row style={{ fontWeight: "bold", fontSize: "20px" }}>
+                                                <Row style={{ fontWeight: "bold", fontSize: "16px" }}>
                                                     <Button onClick={() => showPowerHourFunc()} className="text-start menuButton" variant="transparent" style={{ fontWeight: "bold", letterSpacing: "4px", color: "white" }}>
                                                         <i className="fa-solid fa-hourglass-start"></i>&nbsp; Sätt scheman
                                                     </Button>
@@ -219,7 +219,7 @@ export default ({ states }) => {
                                             <i className="fa-solid fa-bolt"></i>&nbsp; <b>Energi & Temperatur</b>
                                         </NavDropdown.Item>
                                         <NavDropdown.Item style={{ backgroundColor: "#004786", color: "white" }} onClick={() => showPage("savings")} className="my-2">
-                                            <i className="fa-solid fa-dollar-sign"></i>&nbsp; <b>Kostnader</b>
+                                            <i className="fa-solid fa-dollar-sign"></i>&nbsp; <b>Ekonomi</b>
                                         </NavDropdown.Item>
                                         <NavDropdown.Item className="mt-2" style={{ backgroundColor: "#004786", color: "white" }} onClick={() => showPage("schedueles")}>
                                             <i className="fa-solid fa-calendar-days"></i>&nbsp; <b>Scheman & Dagspriser</b>
@@ -247,12 +247,12 @@ export default ({ states }) => {
                             <Container className="d-lg-block d-none">
                                 <Row>
                                     <Col xl={3}>
-                                        <Dropdown className="mt-2" show={showDropdown} onToggle={(isOpen) => setShowDropdown(isOpen)} style={{ width: "100%", overflow: "visible" }}>
-                                            <Dropdown.Toggle variant="transparent" id="dropdown-basic" style={{ fontWeight: "bold", letterSpacing: "4px", fontSize: "22px", color: "white" }} className="startToggle">
+                                        <Dropdown show={showDropdown} onToggle={(isOpen) => setShowDropdown(isOpen)} style={{ width: "100%", overflow: "visible" }}>
+                                            <Dropdown.Toggle variant="transparent" id="dropdown-basic" style={{ fontWeight: "bold", letterSpacing: "4px", fontSize: "18px", color: "white" }} className="startToggle">
                                                 Kom igång
                                             </Dropdown.Toggle>
-                                            <Dropdown.Menu className="mt-4 p-3" style={{ width: "350px", background: "var(--newBlue2)", color: "white" }}>
-                                                <Row style={{ fontWeight: "bold", fontSize: "20px" }}>
+                                            <Dropdown.Menu className="mt-3 p-3" style={{ width: "350px", background: "var(--newBlue2)", color: "white" }}>
+                                                <Row style={{ fontWeight: "bold", fontSize: "18px" }}>
                                                     <Col>
                                                         <p>Allmänt</p>
                                                         <Row>
@@ -293,12 +293,12 @@ export default ({ states }) => {
                                         </Dropdown>
                                     </Col>
                                     <Col xl={3}>
-                                        <Dropdown className="mt-2" show={showContactDropdown} onToggle={(isOpen) => setShowContactDropdown(isOpen)} style={{ width: "100%", overflow: "visible" }}>
-                                            <Dropdown.Toggle variant="transparent" id="dropdown-basic" style={{ fontWeight: "bold", letterSpacing: "4px", fontSize: "22px", color: "white" }} className="startToggle">
+                                        <Dropdown show={showContactDropdown} onToggle={(isOpen) => setShowContactDropdown(isOpen)} style={{ width: "100%", overflow: "visible" }}>
+                                            <Dropdown.Toggle variant="transparent" id="dropdown-basic" style={{ fontWeight: "bold", letterSpacing: "4px", fontSize: "18px", color: "white" }} className="startToggle">
                                                 Kontakt
                                             </Dropdown.Toggle>
-                                            <Dropdown.Menu className="mt-4 p-3" style={{ width: "320px", background: "var(--newBlue2)", color: "white", cursor: "pointer" }} onClick={() => console.log("Hej")}>
-                                                <Row style={{ fontWeight: "bold", fontSize: "20px" }}>
+                                            <Dropdown.Menu className="mt-3 p-3" style={{ width: "320px", background: "var(--newBlue2)", color: "white", cursor: "pointer" }} onClick={() => console.log("Hej")}>
+                                                <Row style={{ fontWeight: "bold", fontSize: "18px" }}>
                                                     <Col xl={12}>
                                                         <i className="fa fa-envelope" aria-hidden="true"></i>&nbsp;info@powerwatch.se
                                                     </Col>

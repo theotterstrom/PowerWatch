@@ -96,22 +96,22 @@ const PowerWatch = () => {
     run();
   }, []);
 
-  // if (Object.keys(readings).length === 0 || Object.keys(savings).length === 0) {
-  //   setTimeout(async () => {
+  if (Object.keys(readings).length === 0 || Object.keys(savings).length === 0) {
+    setTimeout(async () => {
 
-  //   }, 30000);
+    }, 30000);
 
-  //   return <>
-  //     <div className="loading-container">
-  //       <div className="loading-circle"></div>
-  //       <div className="backGroundHolder">
-  //         <div className="backgroundBlock m-0 p-0">
-  //         </div>
-  //         <img src="/images/power.jpg" className="backgroundImg" alt="Home" />
-  //       </div>
-  //     </div>
-  //   </>;
-  // };
+    return <>
+      <div className="loading-container">
+        <div className="loading-circle"></div>
+        <div className="backGroundHolder">
+          <div className="backgroundBlock m-0 p-0">
+          </div>
+          <img src="/images/power.jpg" className="backgroundImg" alt="Home" />
+        </div>
+      </div>
+    </>;
+  };
 
   const verticalLinePlugin = {
     id: 'verticalLinePlugin',

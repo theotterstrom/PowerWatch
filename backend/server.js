@@ -23,7 +23,7 @@ const initializeDatabase = async () => {
 const app = express();
 if(process.env.NODE_ENV === "development"){
   const corsOptions = {
-    origin: 'https://localhost:9000',
+    origin: 'https://localhost:9001',
     credentials: true,
   };
   app.use(cors(corsOptions));
