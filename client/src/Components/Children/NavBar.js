@@ -103,11 +103,12 @@ export default ({ states }) => {
     return (<>
         <div className="d-flex justify-content-center m-0 p-0 position-fixed" style={{ zIndex: 100, width: "100vw" }}>
             <Col xl={8} md={10} xs={11} className="m-0 p-0">
-                <Navbar className="headerBar px-3" expand="lg" expanded={expanded} onToggle={() => setExpanded(!expanded)}>
+                <Navbar className="headerBar px-3 p-0" expand="lg" expanded={expanded} onToggle={() => setExpanded(!expanded)}>
                     <Navbar.Brand onClick={() => navigate("/")} style={{ cursor: "pointer" }}>
                         <div className="titleHolder d-sm-block d-none">
                             <img style={{ height: "40px" }} src="/images/PW 1.png" alt="EnergyWatch Logo" />
                         </div>
+                        
                         <div className="titleHolder d-sm-none d-block">
                             <img style={{ height: "40px" }} src="/images/p.png" alt="EnergyWatch Logo" />
                         </div>
@@ -121,12 +122,12 @@ export default ({ states }) => {
                                 <Row className="justify-content-start">
                                     {/* Start */}
                                     <div style={{ width: "100px" }} className="mx-3 p-0 m-0">
-                                        <Dropdown className="mt-2" show={showDropdown} onToggle={(isOpen) => setShowDropdown(isOpen)} style={{ width: "100%", overflow: "visible" }}>
-                                            <Dropdown.Toggle variant="transparent" id="dropdown-basic" style={{ fontWeight: "bold", letterSpacing: "4px", fontSize: "22px", color: "white" }} className="startToggle">
+                                        <Dropdown show={showDropdown} onToggle={(isOpen) => setShowDropdown(isOpen)} style={{ width: "100%", overflow: "visible" }}>
+                                            <Dropdown.Toggle variant="transparent" id="dropdown-basic" style={{ fontWeight: "bold", letterSpacing: "4px", fontSize: "16px", color: "white" }} className="startToggle ">
                                                 Start {showDropdown ? <i className="fa-solid fa-caret-up"></i> : <i className="fa-solid fa-caret-down"></i>}
                                             </Dropdown.Toggle>
-                                            <Dropdown.Menu className="mt-4 p-3" style={{ width: "350px", background: "var(--newBlue2)", color: "white" }} >
-                                                <Row style={{ fontWeight: "bold", fontSize: "20px" }}>
+                                            <Dropdown.Menu className="mt-3 p-3" style={{ width: "350px", background: "var(--newBlue2)", color: "white" }} >
+                                                <Row style={{ fontWeight: "bold", fontSize: "16px" }}>
                                                     <Col>
                                                         <p>Allmänt</p>
                                                         <Row>
@@ -155,11 +156,11 @@ export default ({ states }) => {
                                     </div>
                                     {/* Dashboards */}
                                     <div style={{ width: "170px" }} className="mx-3 p-0 m-0">
-                                        <Dropdown className="mt-2" show={showDashDropdown} onToggle={(isOpen) => setShowDashDropdown(isOpen)} style={{ width: "100%", overflow: "visible" }}>
-                                            <Dropdown.Toggle variant="transparent" id="dropdown-basic" style={{ fontWeight: "bold", letterSpacing: "4px", fontSize: "22px", color: "white" }} className="startToggle">
+                                        <Dropdown show={showDashDropdown} onToggle={(isOpen) => setShowDashDropdown(isOpen)} style={{ width: "100%", overflow: "visible" }}>
+                                            <Dropdown.Toggle variant="transparent" id="dropdown-basic" style={{ fontWeight: "bold", letterSpacing: "4px", fontSize: "16px", color: "white" }} className="startToggle">
                                                 Dashboards {showDashDropdown ? <i className="fa-solid fa-caret-up"></i> : <i className="fa-solid fa-caret-down"></i>}
                                             </Dropdown.Toggle>
-                                            <Dropdown.Menu className="mt-4 p-3" style={{ width: "300px", background: "var(--newBlue2)", color: "white" }}>
+                                            <Dropdown.Menu className="mt-3 p-3" style={{ width: "300px", background: "var(--newBlue2)", color: "white" }}>
                                                 <Row style={{ fontWeight: "bold", fontSize: "20px" }}>
                                                     <Button onClick={() => showPage("power")} className="text-start menuButton" variant="transparent" style={{ fontWeight: "bold", letterSpacing: "4px", color: "white" }}>
                                                         <i className="fa-solid fa-bolt"></i>&nbsp; Energi & Temperatur
@@ -176,11 +177,11 @@ export default ({ states }) => {
                                     </div>
                                     {/* Kontroller */}
                                     <div style={{ width: "120px" }} className="mx-1 p-0 m-0">
-                                        <Dropdown className="mt-2" show={showControl} onToggle={(isOpen) => setShowControl(isOpen)} style={{ width: "100%", overflow: "visible" }}>
-                                            <Dropdown.Toggle variant="transparent" id="dropdown-basic" style={{ fontWeight: "bold", letterSpacing: "4px", fontSize: "22px", color: "white" }} className="startToggle">
+                                        <Dropdown show={showControl} onToggle={(isOpen) => setShowControl(isOpen)} style={{ width: "100%", overflow: "visible" }}>
+                                            <Dropdown.Toggle variant="transparent" id="dropdown-basic" style={{ fontWeight: "bold", letterSpacing: "4px", fontSize: "16px", color: "white" }} className="startToggle">
                                                 Kontroller {showControl ? <i className="fa-solid fa-caret-up"></i> : <i className="fa-solid fa-caret-down"></i>}
                                             </Dropdown.Toggle>
-                                            <Dropdown.Menu className="mt-4 p-3" style={{ width: "250px", background: "var(--newBlue2)", color: "white" }}>
+                                            <Dropdown.Menu className="mt-3 p-3" style={{ width: "250px", background: "var(--newBlue2)", color: "white" }}>
                                                 <Row style={{ fontWeight: "bold", fontSize: "20px" }}>
                                                     <Button onClick={() => showPowerHourFunc()} className="text-start menuButton" variant="transparent" style={{ fontWeight: "bold", letterSpacing: "4px", color: "white" }}>
                                                         <i className="fa-solid fa-hourglass-start"></i>&nbsp; Sätt scheman

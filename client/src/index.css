@@ -14,6 +14,7 @@
   letter-spacing: 1.5px;
 }
 
+
 :root{
   --newGray: #f2f6f9;
   --newDarkGray:#666768;
@@ -171,7 +172,7 @@ body {
   border-radius: 20px;
   top: 10vh;
   z-index: 100;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .powerHourInput {
@@ -321,7 +322,7 @@ body {
   color: white;
 }
 .chartText{
-  font-size: 24px;
+  font-size: 16px;
 }
 
 .powerOptionPanel{
@@ -329,9 +330,7 @@ body {
   border-radius: var(--bodyRadius);
   background-color: rgba(0,0,0,0.5);
   position: absolute;
-  width: 100%;
   transition: max-height 0.7s ease;
-
   overflow: hidden;
 }
 

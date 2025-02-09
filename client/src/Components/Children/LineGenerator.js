@@ -124,7 +124,7 @@ const LineChart = ({ lineData }) => {
                     maxRotation: window.innerWidth <= 767 ? 90 : 45,
                     minRotation: window.innerWidth <= 767 ? 90 : 0,
                     font: {
-                        size: 12,
+                        size: 10,
                     },
                 },
                 title: {
@@ -146,7 +146,7 @@ const LineChart = ({ lineData }) => {
                     color: "white",
 
                     font: {
-                        size: 12,
+                        size: 10,
                     },
                 }
             },

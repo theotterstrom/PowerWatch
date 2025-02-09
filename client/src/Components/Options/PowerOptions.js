@@ -201,8 +201,8 @@ export default ({ initData }) => {
 
     return (
         <>
-            <Row className="my-5 mx-0 p-0 justify-content-center justify-content-lg-start text-lg-start text-center">
-                <Col xl={6} lg={6} md={9} sm={10} className="m-0 p-0 mt-lg-3 mt-2 ">
+            <Row className="my-5 mx-0 p-0 justify-content-center justify-content-lg-between text-lg-start text-center">
+                <Col xl={6} lg={6} md={9} sm={10} className="m-0 p-0 mt-lg-0 mt-2 ">
                     <Container className="chartText">
                         {`Du konsumerade `}
                         <span className="chartTextVals p-1" onClick={() => {
@@ -221,8 +221,8 @@ export default ({ initData }) => {
                         }}>{filterStr.deviceNo} enheter.</span>
                     </Container>
                 </Col>
-                <Col xl={6} lg={6} md={9} sm={10} className="m-0 p-0 mt-lg-3 mt-4  position-relative">
-                    <Container className="powerOptionPanel py-4" style={{ maxHeight: expanded ? "300px" : "0" }}>
+                <Col xl={4} lg={6} md={9} sm={10} className="m-0 p-0 mt-lg-0 mt-2 position-relative">
+                    <Container className="powerOptionPanel py-4 " style={{ maxHeight: expanded ? "300px" : "0", overflow: expanded && currentPanel == "time" && currentFilter === "Månad" ? "visible" : "hidden" }}>
                         <div onClick={() => {
                             setCurrentPanel(expanded ? "empty" : "time");
                             setExpanded(!expanded);
@@ -239,7 +239,7 @@ export default ({ initData }) => {
                                 <Button className="" variant="transparent" style={{ color: "white", marginTop: "-12px" }} onClick={nextFilter}><i class="fa-solid fa-arrow-right"></i></Button>
                             </div>
                             <Row className="d-flex justify-content-center">
-                                <Col xl={8}>
+                                <Col xl={12}>
                                     {currentFilter === "Mellan datum" && <>
                                         <Form.Label>Start Datum</Form.Label>
                                         <Form.Control type="date" value={startdate.value} onChange={(e) => setStartDateFunc(e.target.value)} />
@@ -247,7 +247,7 @@ export default ({ initData }) => {
                                         <Form.Control type="date" value={enddate.value} onChange={(e) => setEndDateFunc(e.target.value)} />
                                     </>}
                                     {currentFilter === "Månad" && <>
-                                        <Dropdown onSelect={(eventKey) => month.set(eventKey)} className="mt-2" style={{ width: "100%", overflow: "visible" }}>
+                                        <Dropdown onSelect={(eventKey) => month.set(eventKey)} className="mt-2" style={{ width: "100%" }}>
                                             <Dropdown.Toggle variant="light" id="dropdown-basic" style={{ width: "100%", textAlign: "start", height: "35px", padding: "0 0 0 20px" }}>
                                                 {generateMonthOptions().firstMonth}
                                             </Dropdown.Toggle>

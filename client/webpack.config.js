@@ -42,7 +42,7 @@ module.exports = {
       }
     },
     compress: true,
-    port: 9000,
+    port: 9001,
     historyApiFallback: true, // Support client-side routing (React Router)
     open: true, // Automatically open the browser
   },
