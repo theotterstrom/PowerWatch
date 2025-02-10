@@ -33,6 +33,12 @@ export default ({ initData }) => {
         }
     }, [currentFilter])
 
+    useEffect(() => {
+        if (currentPanel === "devices") {
+            setGroupExpanded(true)
+        }
+    }, [currentGroup]);
+
     const setStartDateFunc = date => {
         if (date > new Date().toISOString()) {
             alert("Date cannot be greater than todays date")
@@ -133,7 +139,7 @@ export default ({ initData }) => {
         const excludeElements = [powerOptionPanel, ...chartTextVals, ...excludeArrow, ...altButtons];
 
         // Check if event target is inside any of the excluded elements
-        if (!excludeElements.some(el => el.contains(event.target) || el === event.target)) {
+        if (!excludeElements.some(el => el && el.contains(event.target) || el === event.target)) {
             setExpanded(false);
             setCurrentPanel("empty");
         } else {
@@ -144,11 +150,11 @@ export default ({ initData }) => {
     console.log(month)
     return (
         <>
-            <Row className="my-5 mx-0 p-0 justify-content-center justify-content-lg-between text-lg-start text-center">
-                <Col xl={6} lg={6} md={9} sm={10} className="m-0 p-0 mt-lg-0 mt-2 ">
-                <div style={{fontSize: "18px", fontWeight:"bold"}}>
-                <i className="fa-solid fa-bolt"></i>&nbsp; Energi & Temperatur
-                </div>
+            <Row className="my-5 mx-0 p-0 justify-content-center justify-content-lg-start text-lg-start text-center">
+                <Col xxl={4} xl={4} lg={4} md={9} sm={10} className="m-0 p-0 mt-lg-0 mt-2">
+                    <div style={{ fontSize: "18px", fontWeight: "bold" }}>
+                        <i className="fa-solid fa-bolt"></i>&nbsp; Energi & Temperatur
+                    </div>
                     <Container className="chartText mt-3">
                         {`Du konsumerade `}
                         <span className="chartTextVals p-1" onClick={() => {
@@ -167,20 +173,19 @@ export default ({ initData }) => {
                         }}>{filterStr.deviceNo} enheter.</span>
                     </Container>
                 </Col>
-                <Col xl={4} lg={4} md={5} sm={10} className="m-0 p-0 mt-lg-0 mt-2 position-relative">
-                    <Container className="powerOptionPanel py-4 " style={{ maxHeight: expanded ? "300px" : "0", overflow: expanded && currentPanel == "time" && currentFilter === "Månad" ? "visible" : "hidden" }}>
-                        <div onClick={() => {
-                            setCurrentPanel(expanded ? "empty" : "time");
-                            setExpanded(!expanded);
-                        }} className="position-absolute text-end" style={{ right: "20px", top: "10px", cursor: "pointer", width: "90%" }}>
-                            <i className={expanded ? "fa fa-arrow-up exludeArrow" : "fa fa-arrow-down exludeArrow"} ></i>
-                        </div>
-                        <Container className="mt-4">
+                <Col xxl={expanded ? 6 : 2} xl={expanded ? 6 : 2} lg={expanded ? 8 : 2} md={8} sm={10} className="m-0 p-0 mt-lg-0 mt-2 position-relative" style={{maxWidth: "500px"}}>
+                    <Container className="powerOptionPanel py-4" style={{ maxHeight: expanded ? currentPanel === "devices" ? "400px" : "200px" : "0", overflow: expanded && currentPanel == "time" && currentFilter === "Månad" ? "visible" : "hidden" }}>
+                        <Container className="mt-4" onClick={() => {
+                            if (currentPanel === "empty") {
+                                setCurrentPanel(expanded ? "empty" : "time");
+                                setExpanded(!expanded);
+                            };
+                        }} style={{ cursor: currentPanel === "empty" ? "pointer" : "unset" }}>
                             {currentPanel === "empty" ? <>
-                                <p className="text-center" style={{ marginTop: "-38px", height: "200px", pointerEvents: "none" }}>Alternativ</p>
+                                <p className="text-center" style={{ marginTop: "-38px", height: "100px", pointerEvents: "none" }}>Alternativ</p>
                             </> : <></>}
                             {currentPanel === "time" ? <>
-                                <div className="d-flex justify-content-center" style={{ marginTop: "-12px" }}>
+                                <div className="d-flex justify-content-center" style={{ marginTop: "-38px" }}>
                                     <Button className="" variant="transparent" style={{ color: "white", marginTop: "-12px" }} onClick={prevFilter}><i className="fa-solid fa-arrow-left"></i></Button>
                                     <p className="text-center" style={{ width: "150px" }}>{currentFilter}</p>
                                     <Button className="" variant="transparent" style={{ color: "white", marginTop: "-12px" }} onClick={nextFilter}><i className="fa-solid fa-arrow-right"></i></Button>
@@ -188,30 +193,47 @@ export default ({ initData }) => {
                                 <Row className="d-flex justify-content-center">
                                     <Col xl={12}>
                                         {currentFilter === "Mellan datum" && <>
-                                            <Form.Label>Start Datum</Form.Label>
-                                            <Form.Control type="date" value={startdate.value} onChange={(e) => setStartDateFunc(e.target.value)} />
-                                            <Form.Label className="mt-3">Slut Datum</Form.Label>
-                                            <Form.Control type="date" value={enddate.value} onChange={(e) => setEndDateFunc(e.target.value)} />
+                                            <Row className="justify-content-around mt-1">
+                                                <Col xxl={5} lg={5} md={8}>
+                                                    <Form.Control type="date" value={startdate.value} onChange={(e) => setStartDateFunc(e.target.value)} />
+                                                </Col>
+                                                <Col xxl={2} lg={2} md={12} className="d-flex justify-content-center mt-3">
+                                                <div style={{ height: "5px", width: "30px", background: "white" }}></div>
+
+                                                </Col>
+                                                <Col xxl={5} lg={5} md={8} className="mt-lg-0 mt-3">
+
+                                                    <Form.Control type="date" value={enddate.value} onChange={(e) => setEndDateFunc(e.target.value)} />
+                                                </Col>
+                                            </Row>
                                         </>}
                                         {currentFilter === "Månad" && <>
-                                            <Dropdown onSelect={(eventKey) => month.set(eventKey)} className="mt-2" style={{ width: "100%" }}>
-                                                <Dropdown.Toggle variant="light" id="dropdown-basic" style={{ width: "100%", textAlign: "start", height: "35px", padding: "0 0 0 20px" }}>
-                                                    {generateMonthOptions().firstMonth}
-                                                </Dropdown.Toggle>
-                                                <Dropdown.Menu>
-                                                    {generateMonthOptions().months}
-                                                </Dropdown.Menu>
-                                            </Dropdown>
+                                            <Row className="justify-content-center mt-1" >
+                                                <Col xxl={8} className="mt-2" >
+                                                    <Dropdown onSelect={(eventKey) => month.set(eventKey)} style={{ width: "100%" }}>
+                                                        <Dropdown.Toggle variant="light" id="dropdown-basic" style={{ width: "100%", textAlign: "start", height: "35px", padding: "0 0 0 20px" }}>
+                                                            {generateMonthOptions().firstMonth}
+                                                        </Dropdown.Toggle>
+                                                        <Dropdown.Menu>
+                                                            {generateMonthOptions().months}
+                                                        </Dropdown.Menu>
+                                                    </Dropdown>
+                                                </Col>
+                                            </Row>
+
                                         </>}
                                         {currentFilter === "Timmar per dag" && <>
-                                            <Form.Label>Date</Form.Label>
-                                            <Form.Control type="date" value={startdate.value} onChange={(e) => setStartDateFunc(e.target.value)} />
+                                            <Row className="justify-content-center mt-1">
+                                                <Col xxl={8} className="mt-2" >
+                                                    <Form.Control type="date" value={startdate.value} onChange={(e) => setStartDateFunc(e.target.value)} />
+                                                </Col>
+                                            </Row>
                                         </>}
                                     </Col>
                                 </Row>
                             </> : <></>}
                             {currentPanel === "devices" ? <>
-                                <p className="text-center" style={{ marginTop: "-12px", height: "10px", pointerEvents: "none" }}>Grupper</p>
+                                <p className="text-center" style={{ marginTop: "-38px", height: "10px", pointerEvents: "none" }}>Grupper</p>
                                 <Row className="m-0 p-0 mt-3 d-flex justify-content-start" style={{ height: "100%" }}>
                                     <Col xxl={6} xl={12} sm={6}>
                                         {Object.entries(groups).filter((_, index) => index % 2 === 0).map(([groupName]) => (
@@ -268,7 +290,7 @@ export default ({ initData }) => {
                                 </Row>
                             </> : <></>}
                             {currentPanel === "power" ? <>
-                                <p className="text-center" style={{ marginTop: "-12px", height: "10px", pointerEvents: "none" }}>Förbrukning per enhet</p>
+                                <p className="text-center" style={{ marginTop: "-38px", height: "10px", pointerEvents: "none" }}>Förbrukning per enhet</p>
                                 <Container className="mt-4">
                                     {Object.entries(filterData.consumption).map(([deviceName, consumption]) => (
                                         <Row className="justify-content-center" style={{ fontSize: "12px" }}>

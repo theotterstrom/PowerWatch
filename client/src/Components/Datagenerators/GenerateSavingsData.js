@@ -40,12 +40,18 @@ const generateSavingsData = (allDataStates, savings, dateStates, devices) => {
             names.forEach(name => acc[name] = []);
         }
 
-
         names.forEach(name => {
-            const realCost = cur.values[name]?.realCost || null;
-            const averageCost = cur.values[name]?.averageCost || null;
+            let realCost = cur.values[name]?.realCost || null;
+            let averageCost = cur.values[name]?.averageCost || null;
+            if(realCost < 0){
+                realCost = 0
+            };
+            if(averageCost < 0){
+                averageCost = 0
+            };
             sum1 += allDataStates[name]?.value ? realCost : 0;
             sum2 += allDataStates[name]?.value ? averageCost : 0;
+
 
             if (acc[name]) {
                 const date = timefilter.value === "day" ? cur.date : cur.date.split(" ")[0];
@@ -62,7 +68,7 @@ const generateSavingsData = (allDataStates, savings, dateStates, devices) => {
 
         return [[totals[0] + sum1, totals[1] + sum2], acc];
     }, [[0, 0], {}]);
-    console.log(savingsDataSource)
+
     Object.values(savingsDataSource).forEach(array => array.sort((a, b) => new Date(a.date) - new Date(b.date)))
     let dateList = [];
     let startingDate = new Date("2024-12-24");
@@ -110,7 +116,7 @@ const generateSavingsData = (allDataStates, savings, dateStates, devices) => {
         acc.push(cur.averageCost);
         return acc
     }, []);
-    console.log(chartDataSets.filter(Boolean),)
+ 
     const hourArr = Array.from({ length: 24 }, (_, i) => i);
 
     const savingsData = {
@@ -148,6 +154,14 @@ const generateSavingsData = (allDataStates, savings, dateStates, devices) => {
         return `${parseInt(day, 10)} ${months[parseInt(month, 10) - 1]} ${year}`;
     };
     const intervalStr = `${new Date(intervalValue.startDate).toISOString().split("T")[0]} - ${new Date(intervalValue.endDate).toISOString().split("T")[0]}`
+
+    const spendingDetailed = Object.entries(savingsDataSource).reduce((acc, [device, values]) => {
+        acc[device] = { 
+            realCost: values.reduce((sum, cur) => sum + cur.realCost, 0) / 100,
+            averageCost: values.reduce((sum, cur) => sum + cur.averageCost, 0) / 100
+        };
+        return acc;
+    }, {});
     return {
         savingsData,
         filterStr: {
@@ -159,7 +173,7 @@ const generateSavingsData = (allDataStates, savings, dateStates, devices) => {
             deviceNo: savingsData.datasets.length,
         },
         filterData: {
-            devices: Object.keys(savingsDataSource),
+            devices: spendingDetailed,
         },
         totalSpending,
         totalSaved: totalSpending[1] - totalSpending[0]

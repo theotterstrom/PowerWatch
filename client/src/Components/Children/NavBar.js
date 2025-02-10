@@ -20,8 +20,8 @@ export default ({ states }) => {
     const navigate = useNavigate();
     const location = useLocation();
     let setCurrentPage = states?.setCurrentPage;
+    let setCurrentHomePage = states?.setCurrentHomePage;
     const isAuthenticated = states?.isAuthenticated;
-    const setCurrentHomePage = states?.setCurrentHomePage;
 
     const [showPowerHour, setShowPowerHour] = useState(false);
     const [powerHour, setPowerHour] = useState([]);
@@ -35,9 +35,16 @@ export default ({ states }) => {
 
     if (!setCurrentPage) {
         setCurrentPage = (page) => {
-            navigate('/monitor', { state: { pageSet: page } });
+            navigate('/dashboards', { state: { pageSet: page } });
         };
     };
+ 
+    if(!setCurrentHomePage){
+        setCurrentHomePage = (page) => {
+            navigate('/', { state: { pageSet: page } });
+        };
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             const urlList = ["getcurrenthour", "devices"];
@@ -79,6 +86,7 @@ export default ({ states }) => {
             window.removeEventListener("click", handleClickOutside);
         };
     }, [expanded]);
+
     const showPage = (page) => {
         if (page === "control") {
             if (location.pathname.split("/").pop() !== "controlpanel") {
@@ -87,13 +95,16 @@ export default ({ states }) => {
                 setExpanded(false);
             }
         } else {
+            setShowDashDropdown(false)
             setExpanded(false);
             setCurrentPage(page);
         };
     };
+
     const showPowerHourFunc = () => {
         setExpanded(false);
         setShowPowerHour(true);
+        setShowControl(false)
     };
     const handleLogout = () => {
         setExpanded(false);
@@ -126,7 +137,7 @@ export default ({ states }) => {
                                             <Dropdown.Toggle variant="transparent" id="dropdown-basic" style={{ fontWeight: "bold", letterSpacing: "4px", fontSize: "16px", color: "white" }} className="startToggle ">
                                                 Start {showDropdown ? <i className="fa-solid fa-caret-up"></i> : <i className="fa-solid fa-caret-down"></i>}
                                             </Dropdown.Toggle>
-                                            <Dropdown.Menu className="mt-3 p-3" style={{ width: "350px", background: "var(--newBlue2)", color: "white" }} >
+                                            <Dropdown.Menu className="mt-3 px-3" style={{ width: "350px", background: "var(--newBlue2)", color: "white" }} >
                                                 <Row style={{ fontWeight: "bold", fontSize: "16px" }}>
                                                     <Col>
                                                         <p>Allmänt</p>
@@ -160,7 +171,7 @@ export default ({ states }) => {
                                             <Dropdown.Toggle variant="transparent" id="dropdown-basic" style={{ fontWeight: "bold", letterSpacing: "4px", fontSize: "16px", color: "white" }} className="startToggle">
                                                 Dashboards {showDashDropdown ? <i className="fa-solid fa-caret-up"></i> : <i className="fa-solid fa-caret-down"></i>}
                                             </Dropdown.Toggle>
-                                            <Dropdown.Menu className="mt-3 p-3" style={{ width: "300px", background: "var(--newBlue2)", color: "white" }}>
+                                            <Dropdown.Menu className="mt-3 px-3" style={{ width: "300px", background: "var(--newBlue2)", color: "white" }}>
                                                 <Row style={{ fontWeight: "bold", fontSize: "16px" }}>
                                                     <Button onClick={() => showPage("power")} className="text-start menuButton" variant="transparent" style={{ fontWeight: "bold", letterSpacing: "4px", color: "white" }}>
                                                         <i className="fa-solid fa-bolt"></i>&nbsp; Energi & Temperatur
@@ -181,7 +192,7 @@ export default ({ states }) => {
                                             <Dropdown.Toggle variant="transparent" id="dropdown-basic" style={{ fontWeight: "bold", letterSpacing: "4px", fontSize: "16px", color: "white" }} className="startToggle">
                                                 Kontroller {showControl ? <i className="fa-solid fa-caret-up"></i> : <i className="fa-solid fa-caret-down"></i>}
                                             </Dropdown.Toggle>
-                                            <Dropdown.Menu className="mt-3 p-3" style={{ width: "250px", background: "var(--newBlue2)", color: "white" }}>
+                                            <Dropdown.Menu className="mt-3 px-3" style={{ width: "250px", background: "var(--newBlue2)", color: "white" }}>
                                                 <Row style={{ fontWeight: "bold", fontSize: "16px" }}>
                                                     <Button onClick={() => showPowerHourFunc()} className="text-start menuButton" variant="transparent" style={{ fontWeight: "bold", letterSpacing: "4px", color: "white" }}>
                                                         <i className="fa-solid fa-hourglass-start"></i>&nbsp; Sätt scheman
@@ -235,6 +246,7 @@ export default ({ states }) => {
                                         <i className="fa-solid fa-gear"></i>&nbsp; <b>Kontrollpanel</b>
                                         </NavDropdown.Item>
                                     </NavDropdown>
+                                    <div style={{ height: "1px", width: "100%"}} className="my-2"></div>
 
                                 </Nav>
                             </div>

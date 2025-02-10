@@ -2,7 +2,7 @@ import { Container, Row, Col, Form, Dropdown, Button } from "react-bootstrap";
 import React, { useState, useEffect } from "react";
 
 export default ({ initData }) => {
-    const { allDataStates, dateStates, devices, savingsData, filterStr, filterData  } = initData;
+    const { allDataStates, dateStates, devices, savingsData, filterStr, filterData } = initData;
     const { totalSpending, totalSaved } = savingsData;
 
     const savingsDevices = JSON.parse(JSON.stringify(devices))
@@ -35,7 +35,13 @@ export default ({ initData }) => {
             timefilter.set("day")
             setSpanTitle(filterStr.timeStr.day)
         }
-    }, [currentFilter])
+    }, [currentFilter]);
+
+    useEffect(() => {
+        if (currentPanel === "devices") {
+            setGroupExpanded(true)
+        }
+    }, [currentGroup]);
 
 
     const setSavingStartDateFunc = date => {
@@ -142,25 +148,25 @@ export default ({ initData }) => {
         const excludeElements = [powerOptionPanel, ...chartTextVals, ...excludeArrow, ...altButtons];
 
         // Check if event target is inside any of the excluded elements
-        if (!excludeElements.some(el => el.contains(event.target) || el === event.target)) {
+        if (!excludeElements.some(el => el && el.contains(event.target) || el === event.target)) {
             setExpanded(false);
             setCurrentPanel("empty");
         } else {
             // setExpanded(true);
         }
     });
-    console.log(savingsmonth)
+
     return (
         <>
-            <Row className="my-5 mx-0 p-0 justify-content-center justify-content-lg-between text-lg-start text-center">
-                <Col xl={6} lg={6} md={9} sm={10} className="m-0 p-0 mt-lg-0 mt-2 ">
-                <div style={{fontSize: "18px", fontWeight:"bold"}}>
-                <i className="fa-solid fa-dollar-sign"></i>&nbsp; Ekonomi
-                </div>
+            <Row className="my-5 mx-0 p-0 justify-content-center justify-content-lg-start text-lg-start text-center">
+                <Col xxl={4} xl={4} lg={4} md={9} sm={10} className="m-0 p-0 mt-lg-0 mt-2">
+                    <div style={{ fontSize: "18px", fontWeight: "bold" }}>
+                        <i className="fa-solid fa-dollar-sign"></i>&nbsp; Ekonomi
+                    </div>
                     <Container className="chartText mt-3">
                         {`Du har sparat `}
                         <span className="chartTextVals p-1" onClick={() => {
-                            setCurrentPanel("power")
+                            setCurrentPanel("savings")
                             setExpanded(true)
                         }}>{(totalSaved / 100).toFixed(2)} SEK</span><br></br>
                         {` ${currentFilter === "Timmar per dag" ? "den" : currentFilter === "Månad" ? "under" : "mellan"} `}
@@ -174,22 +180,21 @@ export default ({ initData }) => {
                             setExpanded(true)
                         }}>{filterStr.deviceNo} enheter.</span>
                     </Container>
-                    
+
                 </Col>
-                <Col xl={4} lg={4} md={5} sm={10} className="m-0 p-0 mt-lg-0 mt-2 position-relative">
+                <Col xxl={expanded ? 6 : 2} xl={expanded ? 6 : 2} lg={expanded ? 8 : 2} md={8} sm={10} className="m-0 p-0 mt-lg-0 mt-2 position-relative" style={{ maxWidth: "500px" }}>
                     <Container className="powerOptionPanel py-4 " style={{ maxHeight: expanded ? "300px" : "0", overflow: expanded && currentPanel == "time" && currentFilter === "Månad" ? "visible" : "hidden" }}>
-                        <div onClick={() => {
-                            setCurrentPanel(expanded ? "empty" : "time");
-                            setExpanded(!expanded);
-                        }} className="position-absolute text-end" style={{ right: "20px", top: "10px", cursor: "pointer", width: "90%" }}>
-                            <i className={expanded ? "fa fa-arrow-up exludeArrow" : "fa fa-arrow-down exludeArrow"} ></i>
-                        </div>
-                        <Container className="mt-4">
+                        <Container className="mt-4" onClick={() => {
+                            if (currentPanel === "empty") {
+                                setCurrentPanel(expanded ? "empty" : "time");
+                                setExpanded(!expanded);
+                            };
+                        }} style={{ cursor: currentPanel === "empty" ? "pointer" : "unset" }}>
                             {currentPanel === "empty" ? <>
-                                <p className="text-center" style={{ marginTop: "-38px", height: "200px", pointerEvents: "none" }}>Alternativ</p>
+                                <p className="text-center" style={{ marginTop: "-38px", height: "100px", pointerEvents: "none" }}>Alternativ</p>
                             </> : <></>}
                             {currentPanel === "time" ? <>
-                                <div className="d-flex justify-content-center" style={{ marginTop: "-12px" }}>
+                                <div className="d-flex justify-content-center" style={{ marginTop: "-38px" }}>
                                     <Button className="" variant="transparent" style={{ color: "white", marginTop: "-12px" }} onClick={prevFilter}><i className="fa-solid fa-arrow-left"></i></Button>
                                     <p className="text-center" style={{ width: "150px" }}>{currentFilter}</p>
                                     <Button className="" variant="transparent" style={{ color: "white", marginTop: "-12px" }} onClick={nextFilter}><i className="fa-solid fa-arrow-right"></i></Button>
@@ -197,30 +202,46 @@ export default ({ initData }) => {
                                 <Row className="d-flex justify-content-center">
                                     <Col xl={12}>
                                         {currentFilter === "Mellan datum" && <>
-                                            <Form.Label>Start Datum</Form.Label>
-                                            <Form.Control type="date" value={savingsstartdate.value} onChange={(e) => setSavingStartDateFunc(e.target.value)} />
-                                            <Form.Label className="mt-3">Slut Datum</Form.Label>
-                                            <Form.Control type="date" value={savingsenddate.value} onChange={(e) => setSavingEndDateFunc(e.target.value)} />
+                                            <Row className="justify-content-around mt-1">
+                                                <Col xxl={5} lg={5} md={8}>
+                                                    <Form.Control type="date" value={savingsstartdate.value} onChange={(e) => setSavingStartDateFunc(e.target.value)} />
+                                                </Col>
+                                                <Col xxl={2} lg={2} md={12} className="d-flex justify-content-center mt-3">
+                                                    <div style={{ height: "5px", width: "30px", background: "white" }}></div>
+
+                                                </Col>
+                                                <Col xxl={5} lg={5} md={8} className="mt-lg-0 mt-3">
+
+                                                    <Form.Control type="date" value={savingsenddate.value} onChange={(e) => setSavingEndDateFunc(e.target.value)} />
+                                                </Col>
+                                            </Row>
                                         </>}
                                         {currentFilter === "Månad" && <>
-                                            <Dropdown onSelect={(eventKey) => savingsmonth.set(eventKey)} className="mt-2" style={{ width: "100%" }}>
-                                                <Dropdown.Toggle variant="light" id="dropdown-basic" style={{ width: "100%", textAlign: "start", height: "35px", padding: "0 0 0 20px" }}>
-                                                    {generateMonthOptions().firstMonth}
-                                                </Dropdown.Toggle>
-                                                <Dropdown.Menu>
-                                                    {generateMonthOptions().months}
-                                                </Dropdown.Menu>
-                                            </Dropdown>
+                                            <Row className="justify-content-center mt-1" >
+                                                <Col xxl={8} className="mt-2" >
+                                                    <Dropdown onSelect={(eventKey) => savingsmonth.set(eventKey)} style={{ width: "100%" }}>
+                                                        <Dropdown.Toggle variant="light" id="dropdown-basic" style={{ width: "100%", textAlign: "start", height: "35px", padding: "0 0 0 20px" }}>
+                                                            {generateMonthOptions().firstMonth}
+                                                        </Dropdown.Toggle>
+                                                        <Dropdown.Menu>
+                                                            {generateMonthOptions().months}
+                                                        </Dropdown.Menu>
+                                                    </Dropdown>
+                                                </Col>
+                                            </Row>
                                         </>}
                                         {currentFilter === "Timmar per dag" && <>
-                                            <Form.Label>Date</Form.Label>
-                                            <Form.Control type="date" value={savingsstartdate.value} onChange={(e) => setSavingStartDateFunc(e.target.value)} />
+                                            <Row className="justify-content-center mt-1">
+                                                <Col xxl={8} className="mt-2" >
+                                                    <Form.Control type="date" value={savingsstartdate.value} onChange={(e) => setSavingStartDateFunc(e.target.value)} />
+                                                </Col>
+                                            </Row>
                                         </>}
                                     </Col>
                                 </Row>
                             </> : <></>}
                             {currentPanel === "devices" ? <>
-                                <p className="text-center" style={{ marginTop: "-12px", height: "10px", pointerEvents: "none" }}>Grupper</p>
+                                <p className="text-center" style={{ marginTop: "-38px", height: "10px", pointerEvents: "none" }}>Grupper</p>
                                 <Row className="m-0 p-0 mt-3 d-flex justify-content-start" style={{ height: "100%" }}>
                                     <Col xxl={6} xl={12} sm={6}>
                                         {Object.entries(groups).filter((_, index) => index % 2 === 0).map(([groupName]) => (
@@ -276,16 +297,28 @@ export default ({ initData }) => {
                                     </Col>
                                 </Row>
                             </> : <></>}
-                            {currentPanel === "power" ? <>
-                                <p className="text-center" style={{ marginTop: "-12px", height: "10px", pointerEvents: "none" }}>Förbrukning per enhet</p>
+                            {currentPanel === "savings" ? <>
+                                <p className="text-center" style={{ marginTop: "-38px", height: "10px", pointerEvents: "none" }}>Besparingar</p>
                                 <Container className="mt-4">
-                                    {Object.entries(filterData.consumption).map(([deviceName, consumption]) => (
-                                        <Row className="justify-content-center" style={{ fontSize: "12px" }}>
-                                            <Col xxl={5} xl={6} md={6} sm={6} xs={6} className="text-start">
+                                    <Row>
+                                        <Col xxl={6} xl={4} md={4} sm={4} xs={4}></Col>
+                                        <Col xxl={3} xl={4} md={4} sm={4} xs={4} className="text-end">
+                                            Verklig
+                                        </Col>
+                                        <Col xxl={3} xl={4} md={4} sm={4} xs={4} className="text-end">
+                                            Snitt
+                                        </Col>
+                                    </Row>
+                                    {Object.entries(filterData.devices).map(([deviceName, { realCost, averageCost }]) => (
+                                        <Row className="justify-content-center" style={{ fontSize: "12px", whiteSpace: "nowrap" }}>
+                                            <Col xxl={6} xl={4} md={4} sm={4} xs={4} className="text-start">
                                                 {devices.value.find(device => device.deviceName === deviceName)?.displayName}:
                                             </Col>
-                                            <Col xxl={5} xl={6} md={6} sm={6} xs={6} className="text-end">
-                                                {consumption.toFixed(2)} kwH
+                                            <Col xxl={3} xl={4} md={4} sm={4} xs={4} className="text-end">
+                                                {realCost.toFixed(2)} SEK
+                                            </Col>
+                                            <Col xxl={3} xl={4} md={4} sm={4} xs={4} className="text-end">
+                                                {averageCost.toFixed(2)} SEK
                                             </Col>
                                         </Row>
                                     ))}
@@ -295,105 +328,6 @@ export default ({ initData }) => {
                     </Container>
                 </Col>
             </Row>
-
-            {/*             <Row className="justify-content-center  m-0 p-0 mt-sm-2 mt-md-2 mt-lg-3" style={{ maxWidth: "98vw"}}>
-                 <Container className="d-lg-none d-md-block p-0 m-0">
-                    <Row>
-                        <Col className="savingsText" >
-                            <b>Total spending:</b><br></br>
-                            <b>Average price:</b><br></br>
-                            <div></div>
-                            <b>Total saved:</b>
-                        </Col>
-                        <Col>
-                            {(totalSpending[0] / 100).toFixed(2)} SEK<br></br>
-                            {(totalSpending[1] / 100).toFixed(2)} SEK
-                            <div></div>
-                            {(totalSaved / 100).toFixed(2)} SEK
-                        </Col>
-                    </Row>
-                </Container> 
-                <Col xl={8} lg={7} md={12} sm={10} xs={11} className="p-0 d-lg-block d-none">
-                    <Row className="m-2 mt-0 mb-0 mr-0">
-                        <Col className="savingsText" >
-                            <b>Total spending:</b><br></br>
-                            <b>Average price:</b><br></br>
-                            <div></div>
-                            <b>Total saved:</b>
-                        </Col>
-                        <Col>
-                            {(totalSpending[0] / 100).toFixed(2)} SEK<br></br>
-                            {(totalSpending[1] / 100).toFixed(2)} SEK
-                            <div></div>
-                            {(totalSaved / 100).toFixed(2)} SEK
-                        </Col>
-                    </Row>
-                    <Row className="p-0 m-0 mt-5" style={{ height: "100%" }}>
-                        <Col className="d-flex flex-column">
-                            {splitFormChecks()[0]}
-
-                            <Container className="mt-5 m-0 p-0 d-flex flex-column-reverse">
-                                <Container className="m-0 p-0 d-flex mt-4">
-                                    <Dropdown onSelect={(eventKey) => handleSelect(eventKey, groups)}>
-                                        <Dropdown.Toggle variant="primary" id="dropdown-basic">
-                                            {dropdownText}
-                                        </Dropdown.Toggle>
-                                        <Dropdown.Menu>
-                                            {Object.entries(groups).map(([groupName, members]) => (<Dropdown.Item key={groupName} eventKey={groupName} >{groupName}</Dropdown.Item>))}
-                                            <Dropdown.Item eventKey="Alla">Alla</Dropdown.Item>
-                                        </Dropdown.Menu>
-                                    </Dropdown>
-                                    &nbsp;<p className="mt-1">Group</p>
-                                </Container>
-                            </Container>
-                        </Col>
-                        <Col>
-                            {splitFormChecks()[1]}
-                        </Col>
-                    </Row>
-                </Col> 
-                
-                 <Col xl={4} lg={5} md={12} sm={10} xs={11} className="d-flex flex-column justify-content-between mt-4 mt-lg-0">
-                    <Form.Label>Start Date</Form.Label>
-                    <Form.Control type="date" value={savingsstartdate.value} onChange={(e) => setSavingStartDateFunc(e.target.value)} />
-                    <Form.Label className="mt-3">End Date</Form.Label>
-                    <Form.Control type="date" value={savingsenddate.value} onChange={(e) => setSavingEndDateFunc(e.target.value)} />
-                    <Form.Label className="mt-3">Month filter</Form.Label>
-                    <Container className="d-flex p-0 m-0">
-                        <Dropdown onSelect={handleMonthSelect} className="mt-2" style={{ width: "85%" }}>
-                            <Dropdown.Toggle variant="light" id="dropdown-basic" style={{ width: "100%", textAlign: "start", height: "35px", padding: "0 0 0 20px" }}>
-                                {monthText}
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu>
-                                {generateMonthOptions()}
-                            </Dropdown.Menu>
-                        </Dropdown>
-                        &nbsp;&nbsp;<i onClick={() => handleMonthSelect()} className="fa-solid fa-xmark mt-2" style={{ color: "white", fontSize: "40px", cursor: "pointer" }}></i>
-                    </Container>
-                    <Container className="justify-content-between d-sm-flex d-block ">
-                        <Container className="m-0 p-0 mt-4 d-lg-none d-flex">
-                            <Dropdown onSelect={(eventKey) => handleSelect(eventKey, groups)}>
-                                <Dropdown.Toggle variant="primary" id="dropdown-basic">
-                                    {dropdownText}
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu>
-                                    {Object.entries(groups).map(([groupName, members]) => (
-                                        <Dropdown.Item key={groupName} eventKey={groupName}>
-                                            {groupName}
-                                        </Dropdown.Item>
-                                    ))}
-                                    <Dropdown.Item eventKey="Alla">Alla</Dropdown.Item>
-                                </Dropdown.Menu>
-                            </Dropdown>
-                            &nbsp;<p className="mt-1">Group</p>
-                        </Container>
-                        <Container className="m-0 p-0 d-flex mt-4" style={{whiteSpace: "nowrap"}}>
-                            <Form.Check onChange={() => allsavingsdate.set(!allsavingsdate.value)} />
-                            &nbsp;<p>Show all dates</p>
-                        </Container>
-                    </Container>
-                </Col> 
-            </Row> */}
         </>
     );
 }

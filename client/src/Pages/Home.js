@@ -82,7 +82,7 @@ const Home = () => {
 
   const redirect = (e) => {
     e.preventDefault();
-    navigate("/monitor");
+    navigate("/dashboards");
   };
 
   useEffect(() => {

@@ -185,7 +185,7 @@ const LineChart = ({ lineData }) => {
 
     const { lineDataProp } = lineData;
     return (
-        <div className="p-4 shadow-lg rounded-xl chartContainer" >
+        <div className="shadow-lg rounded-xl chartContainer" >
             <div style={{ height: "100%" }}>
                 <Line data={lineDataProp} options={chartOptions} />
             </div>

@@ -106,14 +106,14 @@ body {
   background-color: #004786;
   padding: 30px;
   border-radius: 0 20px 20px 20px;
-  box-shadow: 5px 5px 5px rgb(0, 0, 0);
+
 }
 
 .controlPanelContainer {
   background-color: #004786;
   padding: 30px;
   border-radius: 0 20px 20px 20px;
-  box-shadow: 5px 5px 5px rgb(0, 0, 0);
+
 }
 
 .backgroundBlock {
@@ -400,7 +400,7 @@ body {
   .ctrlContainer {
     background-color: transparent;
     border: 1px solid white;
-    box-shadow: 0 0 0 0;
+
     border-top-right-radius: 0;
   }
 
@@ -419,7 +419,7 @@ body {
 
   .controlPanelContainer {
     background-color: transparent;
-    box-shadow: 0 0 0 0;
+
     padding: 30px;
     border-radius: 0;
     width: 100vw;

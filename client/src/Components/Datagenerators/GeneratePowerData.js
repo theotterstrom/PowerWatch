@@ -51,6 +51,9 @@ const generatePowerData = (allDataStates, readings, temps, dateStates, devices) 
                 };
                 names.forEach(name => {
                     let value = firstObject?.values[name] - lastObject?.values[name];
+                    if(value < 0){
+                        value = 0;
+                    }
                     acc[name].push({
                         date: cur.date,
                         value: isNaN(value) ? 0 : value
@@ -68,11 +71,21 @@ const generatePowerData = (allDataStates, readings, temps, dateStates, devices) 
             if (!lastObject) {
                 lastObject = firstObjectList.reverse()[0];
             };
+            console.log("LASTOBJ", lastObject)
+            console.log("FIRSTOBJ ", firstObject)
 
+            
             names.forEach(name => {
+                let value = lastObject.values[name] - firstObject.values[name];
+                if(firstObject.values[name] > lastObject.values[name]){
+                    value = lastObject.values[name]
+                };
+                if(value < 0){
+                    value = 0;
+                }
                 acc[name].push({
                     date: cur.date.split(" ")[0],
-                    value: lastObject.values[name] - firstObject.values[name],
+                    value,
                     firstDate: firstObject.date,
                     lastDate: lastObject.date
                 })
@@ -81,6 +94,7 @@ const generatePowerData = (allDataStates, readings, temps, dateStates, devices) 
             return acc;
         }, {}) : {};
 
+    console.log(readingsDataSource)
     Object.values(readingsDataSource).forEach(array => array.sort((a, b) => new Date(a.date) - new Date(b.date)))
 
     const tranformTemp = data => {

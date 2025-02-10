@@ -60,7 +60,7 @@ export default ({ initData }) => {
                     <Row
                         key={groupName} // Unique key for each group
                         className="py-3 mt-3 border bg-light text-start align-items-center"
-                        style={{ color: "black", border: "1px solid black", boxShadow: "5px 5px 5px", borderRadius: "5px" }}
+                        style={{ color: "black", border: "1px solid black", borderRadius: "5px" }}
                     >
                         <Col xs={3} className="text-center">{groupName}</Col>
                         <Col>

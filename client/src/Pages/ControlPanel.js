@@ -27,7 +27,7 @@ const CloudSettings = React.memo(() => {
 });
 
 const NewNavBar = React.memo(() => {
-  return <Header states={{ isAuthenticated: true }}/>
+  return <Header states={{ isAuthenticated: true }} />
 })
 
 const ControlPanel = () => {
@@ -80,37 +80,33 @@ const ControlPanel = () => {
   return (<>
     {/* Header */}
     <NewNavBar />
-    <img className="backgroundBlock" src="/images/power.jpg" />
-    <div className="backgroundBlock"></div>
-    <Container className="mt-4 container-fluid power pt-5 pb-5 mainContainer">
-      <Row className="justify-content-center">
-        <Col xl={8} lg={10} md={12} className="p-0">
-          <Container className="p-0 justify-content-center">
-            <Container className="container-fluid d-flex justify-content-center">
-              <Col xl={12} lg={12} md={12} sm={8} xs={8} className="text-center text-lg-start">
-                <h3 className="mt-3">Control Panel</h3>
-              </Col>
-            </Container>
-            <Container className="mt-md-5 mt-4">
-              <Tabs defaultActiveKey="devices" id="devices-tabs" style={{ borderBottom: "0" }} className="tabHolder" fill={fill}>
-                <Tab eventKey="devices" title="Devices" className="ctrlContainer p-md-4 p-2">
-                  <DeviceSettings devices={devices} showPopUp={showPopUp} />
-                </Tab>
-                <Tab eventKey="deviceGroups" title="Device Groups" className="ctrlContainer p-md-4 p-2">
-                  <GroupSettings groups={groups} showPopUp={showPopUp} />
-                </Tab>
-                <Tab eventKey="cloudSettings" title="Cloud Settings" className="ctrlContainer p-md-4 p-2">
-                  <CloudSettings />
-                </Tab>
-              </Tabs>
-            </Container>
-          </Container>
-        </Col>
-      </Row>
-    </Container>
-    <main>
-      {showWindow && <PopUp showWindow={setShowWindow} method={method} devices={devices} setDevices={setDevices} identifier={identifier} />}
-    </main>
+    <div className="backGroundHolder">
+      <div className="backgroundBlock m-0 p-0">
+      </div>
+      <img src="/images/power.jpg" className="backgroundImg" alt="Home" />
+    </div>
+    <div className="d-flex justify-content-center m-0 p-0" style={{ zIndex: 100, width: "100vw", color: "white" }}>
+      <Col xxl={6} xl={6} md={10} xs={11} className="mx-0 my-5 p-0">
+        <Container className="mt-md-5 mt-4">
+          <Tabs defaultActiveKey="devices" id="devices-tabs" style={{ borderBottom: "0" }} className="tabHolder" fill={fill}>
+            <Tab eventKey="devices" title="Devices" className="ctrlContainer p-md-4 p-2">
+              <DeviceSettings devices={devices} showPopUp={showPopUp} />
+            </Tab>
+            <Tab eventKey="deviceGroups" title="Device Groups" className="ctrlContainer p-md-4 p-2">
+              <GroupSettings groups={groups} showPopUp={showPopUp} />
+            </Tab>
+            <Tab eventKey="cloudSettings" title="Cloud Settings" className="ctrlContainer p-md-4 p-2">
+              <CloudSettings />
+            </Tab>
+          </Tabs>
+        </Container>
+      </Col>
+    </div>
+
+    {showWindow && <PopUp showWindow={setShowWindow} method={method} devices={devices} setDevices={setDevices} identifier={identifier} />}
+
+
+
   </>
   );
 };

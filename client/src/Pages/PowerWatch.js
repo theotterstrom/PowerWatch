@@ -67,7 +67,7 @@ const PowerWatch = () => {
   }), [savings, prices, schedueles, temps, readings, deviceStatuses, devices]);
 
   useEffect(() => {
-    navigate('/monitor', { state: { pageSet: currentPage } });
+    navigate('/dashboards', { state: { pageSet: currentPage } });
   }, [currentPage]);
 
   useEffect(() => {

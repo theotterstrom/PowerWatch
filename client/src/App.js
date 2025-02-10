@@ -13,12 +13,12 @@ const App = () => {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        {/* <Route path="/monitor" element={
+        {/* <Route path="/dashboards" element={
           <ProtectedRoute>
             <PowerWatch />
           </ProtectedRoute>
         } /> */}
-        <Route path="/monitor" element={<PowerWatch/>}></Route>
+        <Route path="/dashboards" element={<PowerWatch/>}></Route>
         <Route path="/controlpanel" element={
           <ProtectedRoute>
             <ControlPanel />

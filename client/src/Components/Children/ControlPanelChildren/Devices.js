@@ -58,7 +58,7 @@ export default ({ initData }) => {
 
                 </Row>
                 {devices.map((device, index) => (
-                    <Row key={index} className="py-3 mt-3 border bg-light text-center align-items-center" style={{ color: "black", border: "1px solid black", boxShadow: "5px 5px 5px", borderRadius: "5px" }}>
+                    <Row key={index} className="py-3 mt-3 border bg-light text-center align-items-center" style={{ color: "black", border: "1px solid black", borderRadius: "5px" }}>
                         <Col xs={2}>{device.deviceName}</Col>
                         <Col xs={3}>{device.displayName}</Col>
                         <Col xs={2}>{device.id}</Col>
