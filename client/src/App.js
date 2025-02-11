@@ -6,25 +6,23 @@ import PowerWatch from './Pages/PowerWatch';
 import ControlPanel from "./Pages/ControlPanel";
 import NotFound from './Pages/NotFound';
 import ProtectedRoute from "./Components/Helpers/ProtectedRoute";
-import ChartPage from './Pages/ChartPage';
 
 const App = () => {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        {/* <Route path="/dashboards" element={
+         <Route path="/dashboards" element={
           <ProtectedRoute>
             <PowerWatch />
           </ProtectedRoute>
-        } /> */}
-        <Route path="/dashboards" element={<PowerWatch/>}></Route>
+        } /> 
+
         <Route path="/controlpanel" element={
           <ProtectedRoute>
             <ControlPanel />
           </ProtectedRoute>
         } />
-        <Route path="/chartex" element={<ChartPage/>} />
         <Route path="*" element={<NotFound />} /> {/* Handle 404s */}
       </Routes>
     </Router>

@@ -1,7 +1,6 @@
 require('dotenv').config();
 const express = require('express');
 const { MongoClient } = require('mongodb');
-const cors = require('cors');
 const routes = require('./backend/routes');
 const PORT = process.env.PORT || 3001;
 const cookieParser = require('cookie-parser');
@@ -23,13 +22,6 @@ const initializeDatabase = async () => {
 };
 
 const app = express();
-if(process.env.NODE_ENV === "development"){
-  const corsOptions = {
-    origin: 'https://localhost:9000',
-    credentials: true,
-  };
-  app.use(cors(corsOptions));
-};
 
 app.use(express.json());
 app.use(cookieParser());

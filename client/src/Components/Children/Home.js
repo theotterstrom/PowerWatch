@@ -101,7 +101,7 @@ export default ({ currentPage }) => {
         </> : <></>}
         {currentPage === "Logga in" ? <>
             <Container style={{ color: "white", marginTop: "15vh" }} className="mx-0 px-0">
-                <h1 className="py-5">Logga in</h1>
+                <h1>Logga in</h1>
                 <Col xl={5} md={7} sm={10} xs={12} style={{ backgroundColor: "var(--newBlue2)", borderRadius: "var(--bodyRadius)" }} className="px-4 py-2 pb-4">
                     <Form className="mt-4" onSubmit={handleLoginSubmit} >
                         <Form.Group controlId="formBasicEmail">
@@ -125,7 +125,7 @@ export default ({ currentPage }) => {
         {currentPage === "Registrera" ? <>
 
             <Container style={{ color: "white", marginTop: "15vh" }} className="mx-0 px-0">
-            <h1 className="py-5">Registrera</h1>
+            <h1>Registrera</h1>
                 <Col xl={5} md={7} sm={10} xs={12} style={{ backgroundColor: "var(--newBlue2)", borderRadius: "var(--bodyRadius)" }} className="px-4 py-2 pb-4">
                     <Form className="mt-4" onSubmit={handleUserCreate}>
 

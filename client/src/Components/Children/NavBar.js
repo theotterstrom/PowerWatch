@@ -29,6 +29,7 @@ export default ({ states }) => {
     const [expanded, setExpanded] = useState(false);
     const [showLogOut, setShowLogOut] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
+    const [showUserDropDown, setShowUserDropDown] = useState(false);
     const [showContactDropdown, setShowContactDropdown] = useState(false);
     const [showDashDropdown, setShowDashDropdown] = useState(false);
     const [showControl, setShowControl] = useState(false);
@@ -38,8 +39,8 @@ export default ({ states }) => {
             navigate('/dashboards', { state: { pageSet: page } });
         };
     };
- 
-    if(!setCurrentHomePage){
+
+    if (!setCurrentHomePage) {
         setCurrentHomePage = (page) => {
             navigate('/', { state: { pageSet: page } });
         };
@@ -119,7 +120,7 @@ export default ({ states }) => {
                         <div className="titleHolder d-sm-block d-none">
                             <img style={{ height: "40px" }} src="/images/PW 1.png" alt="EnergyWatch Logo" />
                         </div>
-                        
+
                         <div className="titleHolder d-sm-none d-block">
                             <img style={{ height: "40px" }} src="/images/p.png" alt="EnergyWatch Logo" />
                         </div>
@@ -132,7 +133,7 @@ export default ({ states }) => {
                             <Container className="d-lg-block d-none">
                                 <Row className="justify-content-start">
                                     {/* Start */}
-                                    <div style={{ width: "100px" }} className="mx-3 p-0 m-0">
+                                    <div style={{ width: "100px" }} className="mx-3 mt-1 p-0 m-0">
                                         <Dropdown show={showDropdown} onToggle={(isOpen) => setShowDropdown(isOpen)} style={{ width: "100%", overflow: "visible" }}>
                                             <Dropdown.Toggle variant="transparent" id="dropdown-basic" style={{ fontWeight: "bold", letterSpacing: "4px", fontSize: "16px", color: "white" }} className="startToggle ">
                                                 Start {showDropdown ? <i className="fa-solid fa-caret-up"></i> : <i className="fa-solid fa-caret-down"></i>}
@@ -166,7 +167,7 @@ export default ({ states }) => {
                                         </Dropdown>
                                     </div>
                                     {/* Dashboards */}
-                                    <div style={{ width: "170px" }} className="mx-3 p-0 m-0">
+                                    <div style={{ width: "170px" }} className="mx-3 mt-1 p-0 m-0">
                                         <Dropdown show={showDashDropdown} onToggle={(isOpen) => setShowDashDropdown(isOpen)} style={{ width: "100%", overflow: "visible" }}>
                                             <Dropdown.Toggle variant="transparent" id="dropdown-basic" style={{ fontWeight: "bold", letterSpacing: "4px", fontSize: "16px", color: "white" }} className="startToggle">
                                                 Dashboards {showDashDropdown ? <i className="fa-solid fa-caret-up"></i> : <i className="fa-solid fa-caret-down"></i>}
@@ -187,7 +188,7 @@ export default ({ states }) => {
                                         </Dropdown>
                                     </div>
                                     {/* Kontroller */}
-                                    <div style={{ width: "120px" }} className="mx-1 p-0 m-0">
+                                    <div style={{ width: "120px" }} className="mx-1 mt-1 p-0 m-0">
                                         <Dropdown show={showControl} onToggle={(isOpen) => setShowControl(isOpen)} style={{ width: "100%", overflow: "visible" }}>
                                             <Dropdown.Toggle variant="transparent" id="dropdown-basic" style={{ fontWeight: "bold", letterSpacing: "4px", fontSize: "16px", color: "white" }} className="startToggle">
                                                 Kontroller {showControl ? <i className="fa-solid fa-caret-up"></i> : <i className="fa-solid fa-caret-down"></i>}
@@ -204,6 +205,21 @@ export default ({ states }) => {
                                             </Dropdown.Menu>
                                         </Dropdown>
                                     </div>
+                                    {/* User */}
+                                    <Col>
+                                        <Dropdown className="d-flex justify-content-end" show={showUserDropDown} onToggle={(isOpen) => setShowUserDropDown(isOpen)} style={{ width: "100%", overflow: "visible" }}>
+                                            <Dropdown.Toggle variant="transparent" id="dropdown-basic" style={{ fontWeight: "bold", letterSpacing: "4px", fontSize: "16px", color: "white" }} className="startToggle">
+                                                <i className="fa fa-user" style={{ fontSize: "30px" }}></i>
+                                            </Dropdown.Toggle>
+                                            <Dropdown.Menu className="mt-2 px-3 dropdown-menu-end" style={{ width: "250px", background: "var(--newBlue2)", color: "white" }}>
+                                                <Row style={{ fontWeight: "bold", fontSize: "16px" }}>
+                                                    <Button onClick={handleLogout} className="m-0 text-start menuButton" variant="transparent" style={{ fontWeight: "bold", letterSpacing: "4px", color: "white" }}>
+                                                        <i class="fa-solid fa-right-from-bracket"></i>&nbsp; Logga ut
+                                                    </Button>
+                                                </Row>
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                    </Col>
                                 </Row>
                             </Container>
 
@@ -216,16 +232,21 @@ export default ({ states }) => {
                                         setCurrentHomePage("Start")
                                     }} style={{ color: "white" }} >
                                         &nbsp;Info
-                                        
+
                                     </Nav.Link>
-                                    <div style={{borderBottom: "1px solid rgba(255, 255, 255, 0.45)", height: "1px", width: "100%"}} className="my-2"></div>
+                                    <div style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.45)", height: "1px", width: "100%" }} className="my-2"></div>
 
                                     <Nav.Link onClick={() => showPage("myaccount")} style={{ color: "white" }}>
-                                    &nbsp;Mitt konto
+                                        &nbsp;Mitt konto
                                     </Nav.Link>
-                                    <div style={{borderBottom: "1px solid rgba(255, 255, 255, 0.45)", height: "1px", width: "100%"}} className="my-2"></div>
+                                    <div style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.45)", height: "1px", width: "100%" }} className="my-2"></div>
 
-                                    <NavDropdown onClick={()=> setShowDashDropdown(!showDashDropdown)}  className="custom-dropdown menumore" title={<span style={{ color: "white", fontWeight: "bold" }}> &nbsp;Dashboards {showDashDropdown ? <i className="fa-solid fa-caret-up"></i> : <i className="fa-solid fa-caret-down"></i>}</span>}>
+                                    <Nav.Link onClick={handleLogout} style={{ color: "white" }}>
+                                        &nbsp;Logga ut
+                                    </Nav.Link>
+                                    <div style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.45)", height: "1px", width: "100%" }} className="my-2"></div>
+
+                                    <NavDropdown onClick={() => setShowDashDropdown(!showDashDropdown)} className="custom-dropdown menumore" title={<span style={{ color: "white", fontWeight: "bold" }}> &nbsp;Dashboards {showDashDropdown ? <i className="fa-solid fa-caret-up"></i> : <i className="fa-solid fa-caret-down"></i>}</span>}>
                                         <NavDropdown.Item style={{ backgroundColor: "#004786", color: "white" }} onClick={() => showPage("power")}>
                                             <i className="fa-solid fa-bolt"></i>&nbsp; <b>Energi & Temperatur</b>
                                         </NavDropdown.Item>
@@ -236,17 +257,17 @@ export default ({ states }) => {
                                             <i className="fa-solid fa-calendar-days"></i>&nbsp; <b>Scheman & Dagspriser</b>
                                         </NavDropdown.Item>
                                     </NavDropdown>
-                                    <div style={{borderBottom: "1px solid rgba(255, 255, 255, 0.45)", height: "1px", width: "100%"}} className="my-2"></div>
+                                    <div style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.45)", height: "1px", width: "100%" }} className="my-2"></div>
 
-                                    <NavDropdown onClick={()=> setShowControl(!showControl)}  className="custom-dropdown menumore" title={<span style={{ color: "white", fontWeight: "bold" }}> &nbsp;Kontroller {showControl ? <i className="fa-solid fa-caret-up"></i> : <i className="fa-solid fa-caret-down"></i>}</span>}>
+                                    <NavDropdown onClick={() => setShowControl(!showControl)} className="custom-dropdown menumore" title={<span style={{ color: "white", fontWeight: "bold" }}> &nbsp;Kontroller {showControl ? <i className="fa-solid fa-caret-up"></i> : <i className="fa-solid fa-caret-down"></i>}</span>}>
                                         <NavDropdown.Item style={{ backgroundColor: "#004786", color: "white" }} onClick={() => showPowerHourFunc()}>
-                                        <i className="fa-solid fa-hourglass-start"></i>&nbsp; <b>Sätt scheman</b>
+                                            <i className="fa-solid fa-hourglass-start"></i>&nbsp; <b>Sätt scheman</b>
                                         </NavDropdown.Item>
                                         <NavDropdown.Item style={{ backgroundColor: "#004786", color: "white" }} onClick={() => showPage("control")}>
-                                        <i className="fa-solid fa-gear"></i>&nbsp; <b>Kontrollpanel</b>
+                                            <i className="fa-solid fa-gear"></i>&nbsp; <b>Kontrollpanel</b>
                                         </NavDropdown.Item>
                                     </NavDropdown>
-                                    <div style={{ height: "1px", width: "100%"}} className="my-2"></div>
+                                    <div style={{ height: "1px", width: "100%" }} className="my-2"></div>
 
                                 </Nav>
                             </div>

@@ -51,7 +51,7 @@ const generatePowerData = (allDataStates, readings, temps, dateStates, devices) 
                 };
                 names.forEach(name => {
                     let value = firstObject?.values[name] - lastObject?.values[name];
-                    if(value < 0){
+                    if (value < 0) {
                         value = 0;
                     }
                     acc[name].push({
@@ -71,16 +71,16 @@ const generatePowerData = (allDataStates, readings, temps, dateStates, devices) 
             if (!lastObject) {
                 lastObject = firstObjectList.reverse()[0];
             };
-            console.log("LASTOBJ", lastObject)
-            console.log("FIRSTOBJ ", firstObject)
+            /*             console.log("LASTOBJ", lastObject)
+                        console.log("FIRSTOBJ ", firstObject) */
 
-            
+
             names.forEach(name => {
                 let value = lastObject.values[name] - firstObject.values[name];
-                if(firstObject.values[name] > lastObject.values[name]){
+                if (firstObject.values[name] > lastObject.values[name]) {
                     value = lastObject.values[name]
                 };
-                if(value < 0){
+                if (value < 0) {
                     value = 0;
                 }
                 acc[name].push({
@@ -94,8 +94,7 @@ const generatePowerData = (allDataStates, readings, temps, dateStates, devices) 
             return acc;
         }, {}) : {};
 
-    console.log(readingsDataSource)
-    Object.values(readingsDataSource).forEach(array => array.sort((a, b) => new Date(a.date) - new Date(b.date)))
+    Object.values(readingsDataSource).forEach(array => array.sort((a, b) => new Date(a.date) - new Date(b.date)));
 
     const tranformTemp = data => {
         const result = {};
@@ -124,7 +123,7 @@ const generatePowerData = (allDataStates, readings, temps, dateStates, devices) 
     };
 
     const tempDataSource = tranformTemp(temps.value.filter(obj => {
-        if (timefilter.value === "date") {
+        if (timefilter.value === "dates") {
             return (obj.date.split(" ")[0] >= startdate.value && obj.date.split(" ")[0] <= enddate.value)
         } else if (timefilter.value === "month") {
             return parseInt(obj.date.split("-")[1]) === monthFilter.month;
@@ -152,7 +151,6 @@ const generatePowerData = (allDataStates, readings, temps, dateStates, devices) 
     const chartDataSets = Object.entries(allDataStates).map(([deviceName, state], index) => {
         const currentDevice = devices.value.find(obj => obj.deviceName === deviceName);
         const [dataSource, unit] = currentDevice.deviceType === "Relay" ? [readingsDataSource, "value"] : [tempDataSource, "avgTemp"];
-
         return state.value && {
             label: currentDevice.displayName,
             data: dataSource[deviceName]?.map((d) => d[unit].toFixed(2)),
@@ -161,6 +159,7 @@ const generatePowerData = (allDataStates, readings, temps, dateStates, devices) 
             tension: 0.4
         }
     });
+
     const hourArr = Array.from({ length: 24 }, (_, i) => i);
 
     const chartData = {
@@ -174,33 +173,32 @@ const generatePowerData = (allDataStates, readings, temps, dateStates, devices) 
         datasets: chartDataSets.filter(Boolean),
     };
 
-
     const wattAndDate = Object.entries(readingsDataSource).reduce(([watt, dateObject], [deviceName, deviceValues], index) => {
-        if(index === 0){
+        if (index === 0) {
             Object.keys(readingsDataSource).map(deviceName => watt[deviceName] = 0);
         };
         const device = devices.value.find(obj => obj.deviceName === deviceName);
         if (!device) return [watt, dateObject]; // Handle missing devices
-        if(!chartData.datasets.map(obj => obj.label).includes(device.displayName)) return [watt, dateObject];
+        if (!chartData.datasets.map(obj => obj.label).includes(device.displayName)) return [watt, dateObject];
         for (const value of deviceValues) {
             const date = new Date(value.date);
-    
+
             if (device.wattFormat === "Watt") {
                 watt[deviceName] += isNaN(value.value) ? 0 : (value.value / 1000);
             } else if (device.wattFormat === "Kilowatt") {
                 watt[deviceName] += isNaN(value.value) ? 0 : value.value;
-            }
-            
+            };
+
             if (date < dateObject.startDate) {
                 dateObject.startDate = date;
-            }
+            };
             if (date > dateObject.endDate) {
                 dateObject.endDate = date;
-            }
-        }
-    
+            };
+        };
+
         return [watt, dateObject];
-    }, [{}, { startDate: new Date(), endDate: 0}]);
+    }, [{}, { startDate: new Date(), endDate: 0 }]);
 
     const formatDate = (dateStr) => {
         const months = ["Januari", "Februari", "Mars", "April", "Maj", "Juni", "Juli", "Augusti", "September", "Oktober", "November", "December"];
@@ -211,7 +209,7 @@ const generatePowerData = (allDataStates, readings, temps, dateStates, devices) 
     const intervalStr = `${new Date(wattAndDate[1].startDate).toISOString().split("T")[0]} - ${new Date(wattAndDate[1].endDate).toISOString().split("T")[0]}`
 
     const summedWatts = Object.values(wattAndDate[0]).length > 0 ? Object.values(wattAndDate[0]).reduce((sum, cur) => {
-       return sum += cur
+        return sum += cur
     }) : 0;
 
     return {
@@ -223,7 +221,7 @@ const generatePowerData = (allDataStates, readings, temps, dateStates, devices) 
                 day: formatDate(startdate.value)
             },
             deviceNo: chartData.datasets.length,
-            watt: `${summedWatts.toFixed(2)} kwH` 
+            watt: `${summedWatts.toFixed(2)} kwH`
         },
         filterData: {
             devices: Object.keys(readingsDataSource),

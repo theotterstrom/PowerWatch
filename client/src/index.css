@@ -252,7 +252,7 @@ body {
 }
 
 /* Add a solid background for inactive tabs */
-.nav-tabs .nav-link {
+.nav-tabs:not(.powerTab) .nav-link {
   background-color: transparent;
   /* Default background color for inactive tabs */
   border: 1px solid white !important;
@@ -263,19 +263,20 @@ body {
   /* Optional: Add a smooth hover effect */
 }
 
-/* Change the appearance of the active tab */
-.nav-tabs .nav-link.active {
-  background-color: #007bff;
-  /* Active tab background */
+.nav-tabs:not(.powerTab) .nav-link.active {
+  background-color: white;
   color: black !important;
-  /* Active tab text color */
   font-weight: bold;
-  /* Optional: Highlight active tab */
+}
+
+
+.popOptionButton {
+  font-size: 14px !important;
+  width: 33%;
 }
 
 .chartContainer {
   height: 70vh;
-
 }
 
 .lineItem {
@@ -324,6 +325,7 @@ body {
 .chartText{
   font-size: 16px;
 }
+
 
 .powerOptionPanel{
   border: 2px solid var(--newBlue2);
@@ -374,7 +376,9 @@ body {
     background-color: transparent;
     color: white;
   }
-
+  .popOptionButton {
+    width: auto;
+  }
   .backgroundBlockHome {
     background-color: rgba(0, 14, 43, 1);
   }

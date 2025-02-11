@@ -28,11 +28,11 @@ const databaseReplace = async (collectionName, masterDb, customerCookie, client,
         const databaseObject = await customerCollection.findOne({ customerCookie: customerCookie });
         const customerDb = client.db(databaseObject.name);
         const collection = customerDb.collection(collectionName);
-        const replaceOne = await collection.replaceOne(   
+        const replaceOne = await collection.replaceOne(
             { _id: object["_id"] },
             object
         );
-        
+
         return 'ok';
     } catch (err) {
         console.error(`Error fetching data from ${collectionName}:`, err);
@@ -94,7 +94,7 @@ const fetchReading = async (url, retries = 5) => {
 };
 
 const authMiddleware = (req, res, next) => {
-    const token = req.cookies.authToken;  // Retrieve the token from cookies
+    const token = req.cookies.authToken;
     if (!token) {
         return res.status(401).json({ message: 'Unauthorized, no token' });
     };
@@ -107,7 +107,7 @@ const authMiddleware = (req, res, next) => {
     };
 };
 
-const createPromise = ({url, turn, id, token}) => axios.post(url, 
+const createPromise = ({ url, turn, id, token }) => axios.post(url,
     new URLSearchParams({
         channel: 0,
         turn,
@@ -117,19 +117,20 @@ const createPromise = ({url, turn, id, token}) => axios.post(url,
     {
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
-        }    
-});
+        }
+    }
+);
 
-const switchRelays = async ({url, turn, id, token}, retries = 5) => {
+const switchRelays = async ({ url, turn, id, token }, retries = 5) => {
     try {
-        return await createPromise({url, turn, id, token});
-    } catch(e) {
+        return await createPromise({ url, turn, id, token });
+    } catch (e) {
         console.log("Failed to switch relay, trying again", retries, e)
         if (retries <= 1) {
             return null;
         }
         await sleep(2000);
-        return switchRelays({url, turn, id, token}, retries -1); 
+        return switchRelays({ url, turn, id, token }, retries - 1);
     };
 };
 
@@ -139,10 +140,10 @@ const createNewScheduele = async (customerDb, powerhours, scheduleCollection, cl
     const todaysPrices = await priceCollection.findOne({ date: today });
     const sortedHours = todaysPrices.values.sort((a, b) => a.price - b.price);
     let newScheduele = {};
-    for(const device of Object.keys(powerhours)){
+    for (const device of Object.keys(powerhours)) {
         const necessaryHours = powerhours[device];
         const xCheapestHours = sortedHours.filter((obj, index) => {
-            if(necessaryHours - 1 < index ){
+            if (necessaryHours - 1 < index) {
                 return false;
             };
             return true;
@@ -154,19 +155,19 @@ const createNewScheduele = async (customerDb, powerhours, scheduleCollection, cl
     const devices = await deviceCollection.find({}).toArray();
     const todayTimeDate = new Date().toLocaleString("sv-SE", { timeZone: "Europe/Stockholm" });
     const currentHour = new Date(todayTimeDate).getHours()
-    for(const device of Object.keys(newScheduele)){
+    for (const device of Object.keys(newScheduele)) {
         const deviceId = devices.find(obj => obj.deviceName === device)?.id;
-        if(!deviceId){
+        if (!deviceId) {
             continue;
         };
-        try{
+        try {
             await switchRelays({
-                url: `${customerDbName.shellyUrl}/device/relay/control`, 
-                turn: newScheduele[device].includes(currentHour) ? 'on' : 'off', 
+                url: `${customerDbName.shellyUrl}/device/relay/control`,
+                turn: newScheduele[device].includes(currentHour) ? 'on' : 'off',
                 id: deviceId,
                 token: customerDbName.shellyToken
             });
-        } catch(e){
+        } catch (e) {
             console.log("Failed to switch relay")
         }
         await sleep(2000)

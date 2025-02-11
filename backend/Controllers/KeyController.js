@@ -10,7 +10,7 @@ const generateRandomString = (length = 36) => {
     return randomString;
 };
 
-const getKey = async (db) => {
+const getKey = async db => {
     const collection = db.collection("keys");
     const allEntries = await collection.find({}).toArray();
     if (allEntries.length < 100) {
@@ -36,7 +36,7 @@ const unscramble = async (encryptedData, rawKey) => {
     return decrypted;
 };
 
-const hashTimestamp = (timestamp) => {
+const hashTimestamp = timestamp => {
     const secret = "545267c8893806c0871f533fdfd4c06b";
     const hash = crypto
         .createHmac('sha256', secret)
