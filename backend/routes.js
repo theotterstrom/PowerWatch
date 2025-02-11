@@ -235,7 +235,6 @@ module.exports = ({ client, masterDb }) => {
         try {
             const { customer } = req.cookies;
            const fsDriveControl = await databaseFetch("powerhour", masterDb, customer, client);
-           console.log(fsDriveControl)
             res.json(fsDriveControl)
         } catch (e) {
             console.log(e)

@@ -71,9 +71,6 @@ const generatePowerData = (allDataStates, readings, temps, dateStates, devices) 
             if (!lastObject) {
                 lastObject = firstObjectList.reverse()[0];
             };
-            /*             console.log("LASTOBJ", lastObject)
-                        console.log("FIRSTOBJ ", firstObject) */
-
 
             names.forEach(name => {
                 let value = lastObject.values[name] - firstObject.values[name];

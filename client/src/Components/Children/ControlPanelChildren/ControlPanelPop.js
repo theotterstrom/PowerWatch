@@ -48,7 +48,6 @@ export default ({ showWindow, method, devices, setDevices, identifier }) => {
                 newDeviceArray = devices.concat(newDevice);
             } else if (type === "remove") {
                 newDeviceArray = devices.filter(device => device.id !== removeId);
-                console.log(newDeviceArray)
             } else if (type === "update") {
                 newDeviceArray = devices.filter(device => device["_id"] !== updateDevice.mongoid);
                 newDeviceArray.push(updateDevice);
