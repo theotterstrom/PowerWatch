@@ -177,7 +177,7 @@ export default ({ initData }) => {
                 <Col xxl={5} xl={8} lg={8} md={8} sm={10} className="m-0 p-0 mt-lg-0 mt-2 position-relative" style={{ maxWidth: "400px" }}>
                     <Container className="powerOptionPanel" style={{ maxHeight: expanded ? "300px" : "70px", overflow: expanded && currentPanel == "time" && currentFilter === "Månad" ? "visible" : "hidden" }}>
                         <Container className="d-flex justify-content-between py-3">
-                            <Button onClick={() => setCurrentPanel("savings")} variant="none" className="popOptionButton" style={currentPanel === "power" ? toggledStyle : untoggledStyle}>Konsumption</Button>
+                            <Button onClick={() => setCurrentPanel("savings")} variant="none" className="popOptionButton" style={currentPanel === "savings" ? toggledStyle : untoggledStyle}>Kostnader</Button>
                             <Button onClick={() => setCurrentPanel("time")} variant="none" className="popOptionButton" style={currentPanel === "time" ? toggledStyle : untoggledStyle}>Tid</Button>
                             <Button onClick={() => setCurrentPanel("devices")} variant="none" className="popOptionButton" style={currentPanel === "devices" ? toggledStyle : untoggledStyle}>Enheter</Button>
                         </Container>
