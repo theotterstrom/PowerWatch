@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import generatePowerData from "../Datagenerators/GeneratePowerData";
-import { Container, Row, Col } from "react-bootstrap";
 import PowerOptions from "../Options/PowerOptions";
 import LineGenerator from './LineGenerator';
 
@@ -34,7 +33,7 @@ export default ({ initData }) => {
   const [allDates, setAllDates] = useState(false);
   const [month, setMonth] = useState(`${today.getFullYear()} ${monthNames[today.getMonth()]}`);
   const [timeFilter, setTimeFilter] = useState("dates");
-
+  
   const allDataStates = useMemo(() => {
     const dynamicStates = Object.fromEntries(
       Object.entries(states).map(([key, value]) => [

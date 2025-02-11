@@ -97,26 +97,30 @@ export default ({ initData }) => {
         return acc;
     }, {});
 
+    const filterMap = {
+        "Mellan datum": "dates",
+        "Månad": "month",
+        "Timmar per dag": "day"
+    };
+
     const nextFilter = () => {
-        let newFilter;
         setCurrentFilter((prev) => {
             const currentIndex = filterArr.indexOf(prev);
             const nextIndex = (currentIndex + 1) % filterArr.length;
-            newFilter = filterArr[nextIndex]
+            const newFilter = filterArr[nextIndex]
+            timefilter.set(filterMap[newFilter])
             return newFilter;
         });
-        return newFilter;
     };
 
     const prevFilter = () => {
-        let newFilter;
         setCurrentFilter((prev) => {
             const currentIndex = filterArr.indexOf(prev);
             const prevIndex = (currentIndex - 1 + filterArr.length) % filterArr.length;
-            newFilter = filterArr[prevIndex];
+            const newFilter = filterArr[prevIndex];
+            timefilter.set(filterMap[newFilter])
             return newFilter
         });
-        return newFilter;
     };
 
     window.addEventListener('click', (event) => {
@@ -143,11 +147,7 @@ export default ({ initData }) => {
         color: "white",
         border: "1px solid transparent"
     };
-    const filterMap = {
-        "Mellan datum": "dates",
-        "Månad": "month",
-        "Timmar per dag": "day"
-    };
+
 
     return (
         <>
@@ -186,9 +186,9 @@ export default ({ initData }) => {
                                 <Col xxl={12}>
                                     <Container className="d-flex justify-content-center">
                                         <div className="d-flex justify-content-center">
-                                            <Button className="" variant="transparent" style={{ color: "white", marginTop: "-12px" }} onClick={() => timefilter.set(filterMap[prevFilter()])}><i className="fa-solid fa-arrow-left"></i></Button>
+                                            <Button className="" variant="transparent" style={{ color: "white", marginTop: "-12px" }} onClick={prevFilter}><i className="fa-solid fa-arrow-left"></i></Button>
                                             <p className="text-center" style={{ width: "150px" }}>{currentFilter}</p>
-                                            <Button className="" variant="transparent" style={{ color: "white", marginTop: "-12px" }} onClick={() => timefilter.set(filterMap[nextFilter()])}><i className="fa-solid fa-arrow-right"></i></Button>
+                                            <Button className="" variant="transparent" style={{ color: "white", marginTop: "-12px" }} onClick={nextFilter}><i className="fa-solid fa-arrow-right"></i></Button>
                                         </div>
                                     </Container>
                                     {currentFilter === "Mellan datum" && <>
@@ -207,7 +207,7 @@ export default ({ initData }) => {
                                             <Col xxl={12} className="mt-2" >
                                                 <Dropdown onSelect={(eventKey) => savingsmonth.set(eventKey)} style={{ width: "100%" }}>
                                                     <Dropdown.Toggle variant="light" id="dropdown-basic" style={{ width: "100%", textAlign: "start", height: "35px", padding: "0 0 0 20px" }}>
-                                                        {generateMonthOptions().firstMonth}
+                                                        {savingsmonth.value}
                                                     </Dropdown.Toggle>
                                                     <Dropdown.Menu>
                                                         {generateMonthOptions().months}
@@ -312,151 +312,6 @@ export default ({ initData }) => {
                         </Container>
                     </Container>
                 </Col>
-                {/*                 <Col xxl={expanded ? 6 : 2} xl={expanded ? 6 : 2} lg={expanded ? 8 : 2} md={8} sm={10} className="m-0 p-0 mt-lg-0 mt-2 position-relative" style={{ maxWidth: "500px" }}>
-                    <Container className="powerOptionPanel py-4 " style={{ maxHeight: expanded ? "300px" : "0", overflow: expanded && currentPanel == "time" && currentFilter === "Månad" ? "visible" : "hidden" }}>
-                        <Container className="mt-4" onClick={() => {
-                            if (currentPanel === "empty") {
-                                setCurrentPanel(expanded ? "empty" : "time");
-                                setExpanded(!expanded);
-                            };
-                        }} style={{ cursor: currentPanel === "empty" ? "pointer" : "unset" }}>
-                            {currentPanel === "empty" ? <>
-                                <p className="text-center" style={{ marginTop: "-38px", height: "100px", pointerEvents: "none" }}>Alternativ</p>
-                            </> : <></>}
-                            {currentPanel === "time" ? <>
-                                <div className="d-flex justify-content-center" style={{ marginTop: "-38px" }}>
-                                    <Button className="" variant="transparent" style={{ color: "white", marginTop: "-12px" }} onClick={prevFilter}><i className="fa-solid fa-arrow-left"></i></Button>
-                                    <p className="text-center" style={{ width: "150px" }}>{currentFilter}</p>
-                                    <Button className="" variant="transparent" style={{ color: "white", marginTop: "-12px" }} onClick={nextFilter}><i className="fa-solid fa-arrow-right"></i></Button>
-                                </div>
-                                <Row className="d-flex justify-content-center">
-                                    <Col xl={12}>
-                                        {currentFilter === "Mellan datum" && <>
-                                            <Row className="justify-content-around mt-1">
-                                                <Col xxl={5} lg={5} md={8}>
-                                                    <Form.Control type="date" value={savingsstartdate.value} onChange={(e) => setSavingStartDateFunc(e.target.value)} />
-                                                </Col>
-                                                <Col xxl={2} lg={2} md={12} className="d-flex justify-content-center mt-3">
-                                                    <div style={{ height: "5px", width: "30px", background: "white" }}></div>
-
-                                                </Col>
-                                                <Col xxl={5} lg={5} md={8} className="mt-lg-0 mt-3">
-
-                                                    <Form.Control type="date" value={savingsenddate.value} onChange={(e) => setSavingEndDateFunc(e.target.value)} />
-                                                </Col>
-                                            </Row>
-                                        </>}
-                                        {currentFilter === "Månad" && <>
-                                            <Row className="justify-content-center mt-1" >
-                                                <Col xxl={8} className="mt-2" >
-                                                    <Dropdown onSelect={(eventKey) => savingsmonth.set(eventKey)} style={{ width: "100%" }}>
-                                                        <Dropdown.Toggle variant="light" id="dropdown-basic" style={{ width: "100%", textAlign: "start", height: "35px", padding: "0 0 0 20px" }}>
-                                                            {generateMonthOptions().firstMonth}
-                                                        </Dropdown.Toggle>
-                                                        <Dropdown.Menu>
-                                                            {generateMonthOptions().months}
-                                                        </Dropdown.Menu>
-                                                    </Dropdown>
-                                                </Col>
-                                            </Row>
-                                        </>}
-                                        {currentFilter === "Timmar per dag" && <>
-                                            <Row className="justify-content-center mt-1">
-                                                <Col xxl={8} className="mt-2" >
-                                                    <Form.Control type="date" value={savingsstartdate.value} onChange={(e) => setSavingStartDateFunc(e.target.value)} />
-                                                </Col>
-                                            </Row>
-                                        </>}
-                                    </Col>
-                                </Row>
-                            </> : <></>}
-                            {currentPanel === "devices" ? <>
-                                <p className="text-center" style={{ marginTop: "-38px", height: "10px", pointerEvents: "none" }}>Grupper</p>
-                                <Row className="m-0 p-0 mt-3 d-flex justify-content-start" style={{ height: "100%" }}>
-                                    <Col xxl={6} xl={12} sm={6}>
-                                        {Object.entries(groups).filter((_, index) => index % 2 === 0).map(([groupName]) => (
-                                            <>
-                                                <div key={groupName} className="mt-1 p-1"
-                                                    style={{ cursor: "pointer", borderRadius: "4px", background: currentGroup === groupName ? "white" : "transparent", color: currentGroup === groupName ? "black" : "inherit" }}
-                                                    onClick={() => {
-                                                        handleSelect(groupName, groups)
-                                                        setGroupExpanded(!groupExpanded)
-                                                    }}>
-                                                    {groupName}
-                                                </div>
-                                                <div className="p-2 text-start" style={{ border: "1px solid white", fontSize: "12px", display: currentGroup === groupName && groupExpanded ? "block" : "none" }}>
-                                                    {groups[groupName].map((member, index) => {
-                                                        const deviceName = devices.value.find(device => device.displayName === member)?.deviceName;
-                                                        return (<>
-                                                            <Form.Check type="checkbox" key={index} label={member} checked={allDataStates[deviceName].value} onChange={() => allDataStates[deviceName].set(!allDataStates[deviceName].value)} />
-                                                        </>)
-                                                    })}
-                                                </div>
-                                            </>
-                                        ))}
-                                    </Col>
-                                    <Col xxl={6} xl={12} sm={6}>
-                                        {Object.entries(groups).filter((_, index) => index % 2 !== 0).map(([groupName]) => (
-                                            <>
-                                                <div key={groupName} className="mt-1 p-1"
-                                                    style={{
-                                                        cursor: "pointer",
-                                                        borderRadius: "4px",
-                                                        background: currentGroup === groupName ? "white" : "transparent",
-                                                        color: currentGroup === groupName ? "black" : "inherit"
-                                                    }}
-                                                    onClick={() => {
-                                                        handleSelect(groupName, groups)
-                                                        setGroupExpanded(!groupExpanded)
-                                                    }}>
-                                                    {groupName}
-                                                </div>
-                                                <div className="p-2 text-start" style={{ border: "1px solid white", fontSize: "12px", display: currentGroup === groupName && groupExpanded ? "block" : "none" }}>
-                                                    {groups[groupName].map((member, index) => {
-                                                        const deviceName = devices.value.find(device => device.displayName === member)?.deviceName;
-                                                        return (<>
-                                                            <Form.Check type="checkbox" key={index} label={member} checked={allDataStates[deviceName].value} onChange={() => allDataStates[deviceName].set(!allDataStates[deviceName].value)} />
-                                                        </>)
-                                                    })}
-                                                </div>
-                                            </>
-                                        ))}
-                                        <div className="mt-1 p-1" style={{ cursor: "pointer", borderRadius: "4px", background: currentGroup === "Alla" ? "white" : "transparent", color: currentGroup === "Alla" ? "black" : "inherit" }} onClick={() => handleSelect("Alla", groups)}>
-                                            Alla
-                                        </div>
-                                    </Col>
-                                </Row>
-                            </> : <></>}
-                            {currentPanel === "savings" ? <>
-                                <p className="text-center" style={{ marginTop: "-38px", height: "10px", pointerEvents: "none" }}>Besparingar</p>
-                                <Container className="mt-4">
-                                    <Row>
-                                        <Col xxl={6} xl={4} md={4} sm={4} xs={4}></Col>
-                                        <Col xxl={3} xl={4} md={4} sm={4} xs={4} className="text-end">
-                                            Verklig
-                                        </Col>
-                                        <Col xxl={3} xl={4} md={4} sm={4} xs={4} className="text-end">
-                                            Snitt
-                                        </Col>
-                                    </Row>
-                                    {Object.entries(filterData.devices).map(([deviceName, { realCost, averageCost }]) => (
-                                        <Row className="justify-content-center" style={{ fontSize: "12px", whiteSpace: "nowrap" }}>
-                                            <Col xxl={6} xl={4} md={4} sm={4} xs={4} className="text-start">
-                                                {devices.value.find(device => device.deviceName === deviceName)?.displayName}:
-                                            </Col>
-                                            <Col xxl={3} xl={4} md={4} sm={4} xs={4} className="text-end">
-                                                {realCost.toFixed(2)} SEK
-                                            </Col>
-                                            <Col xxl={3} xl={4} md={4} sm={4} xs={4} className="text-end">
-                                                {averageCost.toFixed(2)} SEK
-                                            </Col>
-                                        </Row>
-                                    ))}
-                                </Container>
-                            </> : <></>}
-                        </Container>
-                    </Container>
-                </Col> */}
             </Row>
         </>
     );

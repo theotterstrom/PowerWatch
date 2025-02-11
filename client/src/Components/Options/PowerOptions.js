@@ -95,26 +95,30 @@ export default ({ initData }) => {
         return acc;
     }, {});
 
+    const filterMap = {
+        "Mellan datum": "dates",
+        "Månad": "month",
+        "Timmar per dag": "day"
+    };
+
     const nextFilter = () => {
-        let newFilter;
         setCurrentFilter((prev) => {
             const currentIndex = filterArr.indexOf(prev);
             const nextIndex = (currentIndex + 1) % filterArr.length;
-            newFilter = filterArr[nextIndex]
+            const newFilter = filterArr[nextIndex]
+            timefilter.set(filterMap[newFilter])
             return newFilter;
         });
-        return newFilter;
     };
 
     const prevFilter = () => {
-        let newFilter;
         setCurrentFilter((prev) => {
             const currentIndex = filterArr.indexOf(prev);
             const prevIndex = (currentIndex - 1 + filterArr.length) % filterArr.length;
-            newFilter = filterArr[prevIndex];
+            const newFilter = filterArr[prevIndex];
+            timefilter.set(filterMap[newFilter])
             return newFilter
         });
-        return newFilter;
     };
 
     window.addEventListener('click', (event) => {
@@ -141,11 +145,8 @@ export default ({ initData }) => {
         color: "white",
         border: "1px solid transparent"
     }
-    const filterMap = {
-        "Mellan datum": "dates",
-        "Månad": "month",
-        "Timmar per dag": "day"
-    };
+
+    
     return (
         <>
             <Row className="my-5 pb-lg-0 pb-4 mx-0 p-0 justify-content-center justify-content-lg-start text-lg-start text-center">
@@ -183,11 +184,11 @@ export default ({ initData }) => {
                                 <Col xxl={12}>
                                     <Container className="d-flex justify-content-center">
                                         <div className="d-flex justify-content-center">
-                                            <Button className="" variant="transparent" style={{ color: "white", marginTop: "-12px" }} onClick={() => timefilter.set(filterMap[prevFilter()])}>
+                                            <Button className="" variant="transparent" style={{ color: "white", marginTop: "-12px" }} onClick={prevFilter}>
                                                 <i className="fa-solid fa-arrow-left"></i>
                                             </Button>
                                             <p className="text-center" style={{ width: "150px" }}>{currentFilter}</p>
-                                            <Button className="" variant="transparent" style={{ color: "white", marginTop: "-12px" }} onClick={() => timefilter.set(filterMap[nextFilter()])}>
+                                            <Button className="" variant="transparent" style={{ color: "white", marginTop: "-12px" }} onClick={nextFilter}>
                                                 <i className="fa-solid fa-arrow-right"></i>
                                             </Button>
                                         </div>
@@ -208,7 +209,7 @@ export default ({ initData }) => {
                                             <Col xxl={12} className="mt-2" >
                                                 <Dropdown onSelect={(eventKey) => month.set(eventKey)} style={{ width: "100%" }}>
                                                     <Dropdown.Toggle variant="light" id="dropdown-basic" style={{ width: "100%", textAlign: "start", height: "35px", padding: "0 0 0 20px" }}>
-                                                        {generateMonthOptions().firstMonth}
+                                                        {month.value}
                                                     </Dropdown.Toggle>
                                                     <Dropdown.Menu>
                                                         {generateMonthOptions().months}
