@@ -20,7 +20,7 @@ const generatePowerData = (allDataStates, readings, temps, dateStates, devices) 
     };
 
     const monthFilter = monthFilterFunc();
-    console.log(timefilter)
+
     const readingsDataSource = readings.value.length > 0 ? readings.value
         .filter(obj => {
             if (timefilter.value === "dates") {

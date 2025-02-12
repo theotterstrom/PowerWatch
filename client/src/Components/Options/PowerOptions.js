@@ -120,6 +120,9 @@ export default ({ initData }) => {
             return newFilter
         });
     };
+    const setCurrentPanelFunc = (newPanel) => {
+        setCurrentPanel(newPanel.target.getAttribute("panel"))
+    };
 
     window.addEventListener('click', (event) => {
         const powerOptionPanel = document.getElementsByClassName("powerOptionPanel")[0];
@@ -146,7 +149,7 @@ export default ({ initData }) => {
         border: "1px solid transparent"
     }
 
-    
+    let ultTimeStr = currentFilter === "Månad" ? filterStr.timeStr.month : currentFilter === "Timmar per dag" ? filterStr.timeStr.day : filterStr.timeStr.interval;
     return (
         <>
             <Row className="my-5 pb-lg-0 pb-4 mx-0 p-0 justify-content-center justify-content-lg-start text-lg-start text-center">
@@ -164,7 +167,7 @@ export default ({ initData }) => {
                         <span className="chartTextVals p-1" onClick={() => {
                             setCurrentPanel("time")
                             setExpanded(true)
-                        }}>{filterStr.timeStr.interval}</span><br></br>
+                        }}>{ultTimeStr}</span><br></br>
                         {` fördelat på `}
                         <span className="chartTextVals p-1" onClick={() => {
                             setCurrentPanel("devices")
@@ -175,9 +178,9 @@ export default ({ initData }) => {
                 <Col xxl={5} xl={8} lg={8} md={8} sm={10} className="m-0 p-0 mt-lg-0 mt-2 position-relative" style={{ maxWidth: "400px" }}>
                     <Container className="powerOptionPanel" style={{ maxHeight: expanded ? "300px" : "70px", overflow: expanded && currentPanel == "time" && currentFilter === "Månad" ? "visible" : "hidden" }}>
                         <Container className="d-flex justify-content-between py-3">
-                            <Button onClick={() => setCurrentPanel("power")} variant="none" className="popOptionButton" style={currentPanel === "power" ? toggledStyle : untoggledStyle}>Konsumption</Button>
-                            <Button onClick={() => setCurrentPanel("time")} variant="none" className="popOptionButton" style={currentPanel === "time" ? toggledStyle : untoggledStyle}>Tid</Button>
-                            <Button onClick={() => setCurrentPanel("devices")} variant="none" className="popOptionButton" style={currentPanel === "devices" ? toggledStyle : untoggledStyle}>Enheter</Button>
+                            <Button panel="power" onClick={setCurrentPanelFunc} variant="none" className="popOptionButton" style={currentPanel === "power" ? toggledStyle : untoggledStyle}>Konsumption</Button>
+                            <Button panel="time" onClick={setCurrentPanelFunc} variant="none" className="popOptionButton" style={currentPanel === "time" ? toggledStyle : untoggledStyle}>Tid</Button>
+                            <Button panel="devices" onClick={setCurrentPanelFunc} variant="none" className="popOptionButton" style={currentPanel === "devices" ? toggledStyle : untoggledStyle}>Enheter</Button>
                         </Container>
                         <Container>
                             {currentPanel === "time" && <Row className="pb-3">
@@ -231,8 +234,8 @@ export default ({ initData }) => {
                             {currentPanel === "devices" && <Row className="pb-3">
                                 <Col>
                                     {Object.entries(groups).filter((_, index) => index % 2 === 0).map(([groupName]) => (
-                                        <>
-                                            <div key={groupName} className="mt-1 p-1 text-center"
+                                        <div key={groupName}>
+                                            <div className="mt-1 p-1 text-center"
                                                 style={{ cursor: "pointer", borderRadius: "4px", background: currentGroup === groupName ? "white" : "transparent", color: currentGroup === groupName ? "black" : "inherit" }}
                                                 onClick={() => {
                                                     handleSelect(groupName, groups)
@@ -248,7 +251,7 @@ export default ({ initData }) => {
                                                     )
                                                 })}
                                             </div>
-                                        </>
+                                        </div>
                                     ))}
                                     {Object.entries(groups).length % 2 !== 0 ? <></> :
                                         <div className="mt-1 p-1 text-center" style={{ cursor: "pointer", borderRadius: "4px", background: currentGroup === "Alla" ? "white" : "transparent", color: currentGroup === "Alla" ? "black" : "inherit" }} onClick={() => handleSelect("Alla", groups)}>
@@ -258,8 +261,8 @@ export default ({ initData }) => {
                                 </Col>
                                 <Col>
                                     {Object.entries(groups).filter((_, index) => index % 2 !== 0).map(([groupName]) => (
-                                        <>
-                                            <div key={groupName} className="mt-1 p-1 text-center"
+                                        <div key={groupName}>
+                                            <div className="mt-1 p-1 text-center"
                                                 style={{
                                                     cursor: "pointer",
                                                     borderRadius: "4px",
@@ -278,7 +281,7 @@ export default ({ initData }) => {
                                                     return (<Form.Check type="checkbox" key={index} label={member} checked={allDataStates[deviceName].value} onChange={() => allDataStates[deviceName].set(!allDataStates[deviceName].value)} />)
                                                 })}
                                             </div>
-                                        </>
+                                        </div>
                                     ))}
                                     {Object.entries(groups).length % 2 === 0 ? <></> :
                                         <div className="mt-1 p-1 text-center" style={{ cursor: "pointer", borderRadius: "4px", background: currentGroup === "Alla" ? "white" : "transparent", color: currentGroup === "Alla" ? "black" : "inherit" }} onClick={() => handleSelect("Alla", groups)}>
@@ -290,7 +293,7 @@ export default ({ initData }) => {
                             {currentPanel === "power" && <Row className="pb-3">
                                 <Col xxl={12} className="my-2 m-0 p-0">
                                     {Object.entries(filterData.consumption).map(([deviceName, consumption]) => (
-                                        <Row className="justify-content-between m-0 p-0" style={{ fontSize: "14px" }}>
+                                        <Row className="justify-content-between m-0 p-0" style={{ fontSize: "14px" }} key={deviceName}>
                                             <Col xxl={5} xl={6} md={6} sm={6} xs={6} className="text-start">
                                                 {devices.value.find(device => device.deviceName === deviceName)?.displayName}:
                                             </Col>

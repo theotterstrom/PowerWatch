@@ -33,6 +33,7 @@ export default ({ states }) => {
     const [showContactDropdown, setShowContactDropdown] = useState(false);
     const [showDashDropdown, setShowDashDropdown] = useState(false);
     const [showControl, setShowControl] = useState(false);
+    const [showAccDropDown, setShowAccDropdown] = useState(false);
 
     if (!setCurrentPage) {
         setCurrentPage = (page) => {
@@ -236,7 +237,7 @@ export default ({ states }) => {
                                     </Nav.Link>
                                     <div style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.45)", height: "1px", width: "100%" }} className="my-2"></div>
 
-                                    <Nav.Link onClick={() => showPage("myaccount")} style={{ color: "white" }}>
+{/*                                     <Nav.Link onClick={() => showPage("myaccount")} style={{ color: "white" }}>
                                         &nbsp;Mitt konto
                                     </Nav.Link>
                                     <div style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.45)", height: "1px", width: "100%" }} className="my-2"></div>
@@ -244,6 +245,16 @@ export default ({ states }) => {
                                     <Nav.Link onClick={handleLogout} style={{ color: "white" }}>
                                         &nbsp;Logga ut
                                     </Nav.Link>
+                                    <div style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.45)", height: "1px", width: "100%" }} className="my-2"></div> */}
+
+                                    <NavDropdown onClick={() => setShowAccDropdown(!showAccDropDown)} className="custom-dropdown menumore" title={<span style={{ color: "white", fontWeight: "bold" }}> &nbsp;Konto {showAccDropDown ? <i className="fa-solid fa-caret-up"></i> : <i className="fa-solid fa-caret-down"></i>}</span>}>
+                                        <NavDropdown.Item style={{ backgroundColor: "#004786", color: "white" }} onClick={() => showPage("myaccount")}>
+                                            <i className="fa fa-user"></i>&nbsp; <b className="mx-1">Mitt konto</b>
+                                        </NavDropdown.Item>
+                                        <NavDropdown.Item style={{ backgroundColor: "#004786", color: "white" }} onClick={handleLogout} className="my-2">
+                                            <i className="fa-solid fa-right-from-bracket"></i>&nbsp; <b className="mx-1">Logga ut</b>
+                                        </NavDropdown.Item>
+                                    </NavDropdown>
                                     <div style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.45)", height: "1px", width: "100%" }} className="my-2"></div>
 
                                     <NavDropdown onClick={() => setShowDashDropdown(!showDashDropdown)} className="custom-dropdown menumore" title={<span style={{ color: "white", fontWeight: "bold" }}> &nbsp;Dashboards {showDashDropdown ? <i className="fa-solid fa-caret-up"></i> : <i className="fa-solid fa-caret-down"></i>}</span>}>
@@ -251,7 +262,7 @@ export default ({ states }) => {
                                             <i className="fa-solid fa-bolt"></i>&nbsp; <b>Energi & Temperatur</b>
                                         </NavDropdown.Item>
                                         <NavDropdown.Item style={{ backgroundColor: "#004786", color: "white" }} onClick={() => showPage("savings")} className="my-2">
-                                            <i className="fa-solid fa-dollar-sign"></i>&nbsp; <b>Ekonomi</b>
+                                            <i className="fa-solid fa-dollar-sign"></i>&nbsp; <b className="mx-1">Ekonomi</b>
                                         </NavDropdown.Item>
                                         <NavDropdown.Item className="mt-2" style={{ backgroundColor: "#004786", color: "white" }} onClick={() => showPage("schedueles")}>
                                             <i className="fa-solid fa-calendar-days"></i>&nbsp; <b>Scheman & Dagspriser</b>
@@ -261,9 +272,9 @@ export default ({ states }) => {
 
                                     <NavDropdown onClick={() => setShowControl(!showControl)} className="custom-dropdown menumore" title={<span style={{ color: "white", fontWeight: "bold" }}> &nbsp;Kontroller {showControl ? <i className="fa-solid fa-caret-up"></i> : <i className="fa-solid fa-caret-down"></i>}</span>}>
                                         <NavDropdown.Item style={{ backgroundColor: "#004786", color: "white" }} onClick={() => showPowerHourFunc()}>
-                                            <i className="fa-solid fa-hourglass-start"></i>&nbsp; <b>Sätt scheman</b>
+                                            <i className="fa-solid fa-hourglass-start"></i>&nbsp; <b className="mx-1">Sätt scheman</b>
                                         </NavDropdown.Item>
-                                        <NavDropdown.Item style={{ backgroundColor: "#004786", color: "white" }} onClick={() => showPage("control")}>
+                                        <NavDropdown.Item className="mt-2" style={{ backgroundColor: "#004786", color: "white" }} onClick={() => showPage("control")}>
                                             <i className="fa-solid fa-gear"></i>&nbsp; <b>Kontrollpanel</b>
                                         </NavDropdown.Item>
                                     </NavDropdown>

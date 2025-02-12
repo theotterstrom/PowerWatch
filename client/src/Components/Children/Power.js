@@ -67,7 +67,7 @@ export default ({ initData }) => {
   return (<>
     <div className="mx-0 my-5 p-0">
       <PowerOptionChild allDataStates={allDataStates} dateStates={dateStates} devices={devices} filterStr={filterStr} filterData={filterData} />
-      <LineChild lineDataProp={chartData} /> 
+      <LineChild lineDataProp={chartData}  /> 
     </div>
   </>
   );

@@ -133,7 +133,6 @@ const generateSavingsData = (allDataStates, savings, dateStates, devices) => {
     const intervalValue = Object.entries(savingsDataSource).reduce((dateObject, [deviceName, deviceValues], index) => {
         const device = devices.value.find(obj => obj.deviceName === deviceName);
         if (!device) return dateObject; // Handle missing devices
-        if (!savingsData.datasets.map(obj => obj.label).includes(device.displayName)) return dateObject;
         for (const value of deviceValues) {
             const date = new Date(value.date);
 
