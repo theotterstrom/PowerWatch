@@ -181,7 +181,7 @@ export default ({ states }) => {
                                                     <Button onClick={() => showPage("savings")} className="text-start menuButton m-1" variant="transparent" style={{ fontWeight: "bold", letterSpacing: "4px", color: "white" }}>
                                                         <i className="fa-solid fa-dollar-sign"></i>&nbsp; Ekonomi
                                                     </Button>
-                                                    <Button onClick={() => showPage("scheduele")} className=" text-start menuButton" variant="transparent" style={{ fontWeight: "bold", letterSpacing: "4px", color: "white" }}>
+                                                    <Button onClick={() => showPage("schedueles")} className=" text-start menuButton" variant="transparent" style={{ fontWeight: "bold", letterSpacing: "4px", color: "white" }}>
                                                         <i className="fa-solid fa-calendar-days"></i>&nbsp; Scheman & Dagspriser
                                                     </Button>
                                                 </Row>

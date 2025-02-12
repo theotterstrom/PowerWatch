@@ -49,14 +49,12 @@ export default ({ initData }) => {
     };
 
     return (
-        <Row className="my-5 mx-0 p-0 justify-content-md-start justify-content-center">
-
+        <Row className="my-5 mx-0 p-0 justify-content-md-start justify-content-center text-lg-start text-center">
             <Col xxl={12} className="m-0 p-0 mt-lg-0 mt-2 ">
                 <div style={{ fontSize: "18px", fontWeight: "bold" }}>
                     <i className="fa-solid fa-calendar-days"></i>&nbsp; Scheman & Dagspriser
                 </div>
             </Col>
-
             <Col xl={3} lg={4} md={4} sm={6} xs={10} className="m-0 p-0 mt-4">
                 <Form.Label>Datum</Form.Label>
                 <Form.Control
@@ -65,7 +63,6 @@ export default ({ initData }) => {
                     onChange={(e) => setPriceDate(e.target.value)}
                 />
             </Col>
-
             <Col xl={3} lg={4} md={4} sm={6} xs={11} className="mt-4">
                 <Container className="d-flex">
                     <div className="d-block">
@@ -85,11 +82,6 @@ export default ({ initData }) => {
                     </div>
                 </Container>
             </Col>
-
-            {/*             <Col xl={3} lg={4} md={4} xs={12} className="mt-4">
-                Status<br />
-                {currentdevicestatus.value}
-            </Col> */}
         </Row>
     );
 };

@@ -86,7 +86,7 @@ const ControlPanel = () => {
       <img src="/images/power.jpg" className="backgroundImg" alt="Home" />
     </div>
     <div className="d-flex justify-content-center m-0 p-0" style={{ zIndex: 100, width: "100vw", color: "white" }}>
-      <Col xxl={6} xl={6} md={10} xs={11} className="mx-0 my-5 p-0">
+      <Col xxl={6} xl={6} md={10} xs={12} className="mx-0 my-5 p-0">
         <Container className="mt-md-5 mt-4">
           <Tabs defaultActiveKey="devices" id="devices-tabs" style={{ borderBottom: "0" }} className="tabHolder" fill={fill}>
             <Tab eventKey="devices" title="Devices" className="ctrlContainer p-md-4 p-2">

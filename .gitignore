@@ -4,3 +4,4 @@ node_modules
 ssl-dev
 ssl
 manualDrive.js
+syncdbs.js

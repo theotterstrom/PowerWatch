@@ -162,7 +162,7 @@ const PowerWatch = () => {
         <Col xl={8} md={10} xs={11} className="mx-0 my-5 p-0">
             {currentPage === "power" && <PowerChild readings={apiData.readingsState} temps={apiData.tempsState} devices={apiData.devices} />}
             {currentPage === "savings" && <SavingsChild savings={apiData.savingsState} devices={apiData.devices} />}
-            {currentPage === "scheduele" && <SchedueleChild schedueles={apiData.scheduelesState} prices={apiData.pricesState} devicestatuses={apiData.devicestatusesState} devices={apiData.devices} />}
+            {currentPage === "schedueles" && <SchedueleChild schedueles={apiData.scheduelesState} prices={apiData.pricesState} devicestatuses={apiData.devicestatusesState} devices={apiData.devices} />}
         </Col>
       </div>
 
