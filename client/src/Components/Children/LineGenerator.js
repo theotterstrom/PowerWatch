@@ -139,7 +139,7 @@ const LineChart = ({ lineData }) => {
                 },
                 title: {
                     display: window.innerWidth <= 767 ? false : true,
-                    text: lineData.lineDataProp.datasets[0]?.label.includes("real") ? "SEK" : "W",
+                    text: lineData.lineDataProp.datasets[0]?.label.includes("real") ? "SEK" : "kwH",
                     color: "white"
                 },
                 ticks: {

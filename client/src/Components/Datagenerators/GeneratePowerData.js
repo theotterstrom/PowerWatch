@@ -180,12 +180,7 @@ const generatePowerData = (allDataStates, readings, temps, dateStates, devices) 
         for (const value of deviceValues) {
             const date = new Date(value.date);
 
-            if (device.wattFormat === "Watt") {
-                watt[deviceName] += isNaN(value.value) ? 0 : (value.value / 1000);
-            } else if (device.wattFormat === "Kilowatt") {
-                watt[deviceName] += isNaN(value.value) ? 0 : value.value;
-            };
-
+            watt[deviceName] += isNaN(value.value) ? 0 : value.value;
             if (date < dateObject.startDate) {
                 dateObject.startDate = date;
             };
