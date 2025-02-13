@@ -405,7 +405,8 @@ module.exports = ({ client, masterDb }) => {
             const schedueles = await databaseFetch("schedueles", masterDb, "uj4SFc4XFMkeXXySI55gzG51", client);
             const tempreadings = await databaseFetch("temp_readings", masterDb,"uj4SFc4XFMkeXXySI55gzG51", client, 0, 5000);
             const powerhour = await databaseFetch("powerhour", masterDb,"uj4SFc4XFMkeXXySI55gzG51", client);
-            const allLists = [readings, savings, prices, schedueles, tempreadings, powerhour]
+            const devices = await databaseFetch("devices", masterDb, "uj4SFc4XFMkeXXySI55gzG51", client)
+            const allLists = [readings, savings, prices, schedueles, tempreadings, powerhour, devices]
             res.status(200).json( {array: allLists} );
         };  
     });
