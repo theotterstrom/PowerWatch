@@ -32,7 +32,7 @@ export default () => {
 
     return (<>
         <Container className="mt-2">
-            <h4>Cloud settings</h4>
+            <h4>Cloud inställningar</h4>
             <Form onSubmit={setSettings} className="mt-5" style={{ paddingBottom: "20px" }}>
                 <Form.Label>Shelly-url</Form.Label>
                 <Form.Control placeholder="Shelly-url" type="text" value={shellyCred.shellyUrl} name="shellyUrl" onChange={handleShellyChange}>
@@ -40,7 +40,7 @@ export default () => {
                 <Form.Label className="mt-3">Shelly-token</Form.Label>
                 <Form.Control placeholder="Shelly-token" type="text" value={shellyCred.shellyToken} name="shellyToken" onChange={handleShellyChange}>
                 </Form.Control>
-                <Form.Label className="mt-3">Power Area</Form.Label>
+                <Form.Label className="mt-3">Elområde</Form.Label>
 
                 <Dropdown
                     style={{ backgroundColor: "#f8f9fa", borderRadius: "5px" }}
@@ -59,7 +59,7 @@ export default () => {
                     </Dropdown.Menu>
                 </Dropdown>
 
-                <Button className="mt-4" type="submit">Save settings</Button>
+                <Button className="mt-4" type="submit">Spara inställningar</Button>
             </Form>
         </Container>
     </>);

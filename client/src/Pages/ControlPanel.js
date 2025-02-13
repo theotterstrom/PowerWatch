@@ -89,13 +89,13 @@ const ControlPanel = () => {
       <Col xxl={6} xl={6} md={10} xs={12} className="mx-0 my-5 p-0">
         <Container className="mt-md-5 mt-4">
           <Tabs defaultActiveKey="devices" id="devices-tabs" style={{ borderBottom: "0" }} className="tabHolder" fill={fill}>
-            <Tab eventKey="devices" title="Devices" className="ctrlContainer p-md-4 p-2">
+            <Tab eventKey="devices" title="Enheter" className="ctrlContainer p-md-4 p-2">
               <DeviceSettings devices={devices} showPopUp={showPopUp} />
             </Tab>
-            <Tab eventKey="deviceGroups" title="Device Groups" className="ctrlContainer p-md-4 p-2">
+            <Tab eventKey="deviceGroups" title="Groupper" className="ctrlContainer p-md-4 p-2">
               <GroupSettings groups={groups} showPopUp={showPopUp} />
             </Tab>
-            <Tab eventKey="cloudSettings" title="Cloud Settings" className="ctrlContainer p-md-4 p-2">
+            <Tab eventKey="cloudSettings" title="Cloud Inställningar" className="ctrlContainer p-md-4 p-2">
               <CloudSettings />
             </Tab>
           </Tabs>

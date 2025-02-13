@@ -82,7 +82,7 @@ const LineChart = ({ lineData }) => {
                     let tooltipText = `<div class="d-flex container-fluid text-center justify-content-center">${tooltipModel.title[0]}</div>`;
                     if (tooltipModel.dataPoints) {
                         tooltipModel.dataPoints.forEach(point => {
-                            const unit = ["real", "average"].some(word => point.dataset.label.includes(word)) ? "SEK" : point.dataset.label.toLowerCase().includes("temp") ? "C" : "W"
+                            const unit = ["real", "average"].some(word => point.dataset.label.includes(word)) ? "SEK" : point.dataset.label.toLowerCase().includes("temp") ? "C" : "kwH"
                             tooltipText += `
                             <div style="display: flex; align-items: center; gap: 5px; white-space: nowrap; " class="row">
                                 <div class="col">

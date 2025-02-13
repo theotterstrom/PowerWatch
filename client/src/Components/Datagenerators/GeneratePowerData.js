@@ -90,7 +90,9 @@ const generatePowerData = (allDataStates, readings, temps, dateStates, devices) 
 
             return acc;
         }, {}) : {};
-
+        if (timefilter.value === "day") {
+            Object.values(readingsDataSource).forEach(array => array.reverse());
+        }
     Object.values(readingsDataSource).forEach(array => array.sort((a, b) => new Date(a.date) - new Date(b.date)));
 
     const tranformTemp = data => {

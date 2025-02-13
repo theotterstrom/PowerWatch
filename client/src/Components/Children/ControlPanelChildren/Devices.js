@@ -12,7 +12,7 @@ export default ({ initData }) => {
                     className="mt-2"
                     onClick={() => showPopUp("add-device")}
                 >
-                    <i className="fa fa-plus"></i>&nbsp;&nbsp;Add device
+                    <i className="fa fa-plus"></i>&nbsp;&nbsp;Lägg till ny enhet
                 </h5>
             </Row>
             {/* Mobile */}
@@ -32,10 +32,10 @@ export default ({ initData }) => {
                             </Row>
                             <Row className="mt-3">
                                 <Col xs={7}>
-                                    <Row>Device name:</Row>
+                                    <Row>Enhetsnamn:</Row>
                                     <Row>Id:</Row>
                                     <Row>Wattformat:</Row>
-                                    <Row>Device type:</Row>
+                                    <Row>Enhetstyp:</Row>
                                 </Col>
                                 <Col>
                                     <Row>{device.deviceName}</Row>
@@ -50,11 +50,11 @@ export default ({ initData }) => {
             </Container>
             <Container fluid className="mt-4 d-md-block d-none">
                 <Row className="py-2 text-white text-center">
-                    <Col xs={2}><b>Device name</b></Col>
-                    <Col xs={3}><b>Display name</b></Col>
+                    <Col xs={2}><b>Databasnamn</b></Col>
+                    <Col xs={3}><b>Enhetsnamn</b></Col>
                     <Col xs={2}><b>Id</b></Col>
                     <Col xs={2}><b>Wattformat</b></Col>
-                    <Col xs={2}><b>Device type</b></Col>
+                    <Col xs={2}><b>Enhetstyp</b></Col>
 
                 </Row>
                 {devices.map((device, index) => (
