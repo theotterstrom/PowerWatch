@@ -10,7 +10,7 @@ const run = async () => {
   });
   const fetchdata = await axios.get("https://powerwatch.se/api/database?secret=Ix1Cxml>VC4/MP8v/vb}O*Uw4),DilACqMVf", { httpsAgent: agent })
   const [readings, savings, prices, schedueles, tempreadings, powerhour, devices] = fetchdata.data.array;
-  const [nreadings, nsavings, nprices, nschedueles, ntempreadings, npowerhour, ndevices] = [nreadings, nsavings, nprices, nschedueles, ntempreadings, npowerhour, ndevices].map(obj => []);
+  const [nreadings, nsavings, nschedueles, ntempreadings] = [[], [], [], [], [], [], []]
  
   for(const x of readings){
     nreadings.push({
