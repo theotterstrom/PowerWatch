@@ -46,9 +46,9 @@ const run = async () => {
     ntempreadings.push({
         ...x,
         value: {
-            temp1: x.values["lovetemp"],
-            temp2: x.values["nilletemp"],
-            temp3: x.values["ottetemp"],
+            temp1: x.value["lovetemp"],
+            temp2: x.value["nilletemp"],
+            temp3: x.value["ottetemp"],
         }
     });
   }
