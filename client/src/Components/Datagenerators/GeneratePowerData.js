@@ -134,10 +134,12 @@ const generatePowerData = (allDataStates, readings, temps, dateStates, devices) 
     let dateList = [];
     let startingDate = new Date("2024-12-22");
     let endingDate = new Date();
+    
     while (startingDate <= endingDate) {
         dateList.push(startingDate.toISOString().slice(0, 10));
-        startingDate.setDate(startingDate.getDate() + 1);
+        startingDate = new Date(startingDate.getFullYear(), startingDate.getMonth(), startingDate.getDate() + 1);
     };
+    dateList.push(endingDate.toISOString().slice(0, 10));
 
     const borderColors = [
         "red", "blue", "green", "grey", "purple", "brown", "orange", "cyan",

@@ -272,7 +272,10 @@ body {
 
 .popOptionButton {
   font-size: 14px !important;
-  width: 33%;
+/*   border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  border-right: 0 !important; */
+  
 }
 
 .chartContainer {
@@ -482,6 +485,7 @@ body {
 @media (max-width: 349px) {
   .nav-item:not(.menumore) {
     font-size: 10px;
+    
   }
   .chartText{
     font-size: 12px;

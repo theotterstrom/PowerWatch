@@ -1,5 +1,5 @@
 import { Container, Row, Col, Form, Dropdown, Button, Tabs, Tab } from "react-bootstrap";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export default ({ initData }) => {
     const { allDataStates, dateStates, devices, filterStr, filterData } = initData;
@@ -141,13 +141,43 @@ export default ({ initData }) => {
     const toggledStyle = {
         background: "var(--newBlue2)",
         color: "white",
-        border: "1px solid white"
     };
     const untoggledStyle = {
         background: "transparent",
         color: "white",
-        border: "1px solid transparent"
-    }
+    };
+
+    const desktopToggled = {
+        borderRadius: "5px",
+        borderTopRightRadius: 0,
+        borderBottomRightRadius: 0,
+        color: "white",
+        background: "rgba(171, 171, 171, 0.33)"
+    };
+
+    const filterWindowStyle = {
+        borderRadius: "5px",
+        borderTopLeftRadius: currentPanel === "power" ? 0 : "5px",
+        borderBottomLeftRadius: currentPanel === "devices" ? 0 : "5px",
+        direction: "ltr",
+        color: "white",
+        background: "rgba(171, 171, 171, 0.33)",
+        zIndex: "0",
+ 
+
+    };
+
+    const groupStyle = {
+        backgroundColor: "rgba(0,0,0,0.8)",
+        border: "1px solid white",
+        fontSize: "12px",
+        borderBottomLeftRadius: "5px",
+        borderBottomRightRadius: "5px",
+        position: "absolute",
+        width: "100%",
+        zIndex: "1000"
+    };
+
 
     let ultTimeStr = currentFilter === "Månad" ? filterStr.timeStr.month : currentFilter === "Timmar per dag" ? filterStr.timeStr.day : filterStr.timeStr.interval;
     return (
@@ -175,7 +205,9 @@ export default ({ initData }) => {
                         }}>{filterStr.deviceNo} enheter.</span>
                     </Container>
                 </Col>
-                <Col xxl={5} xl={8} lg={8} md={8} sm={10} className="m-0 p-0 mt-lg-0 mt-2 position-relative" style={{ maxWidth: "400px" }}>
+
+                {/* Mobile */}
+                <Col md={8} sm={10} className="m-0 p-0 mt-lg-0 mt-2 position-relative d-lg-none d-block" style={{ maxWidth: "400px" }}>
                     <Container className="powerOptionPanel" style={{ maxHeight: expanded ? "300px" : "70px", overflow: expanded && currentPanel == "time" && currentFilter === "Månad" ? "visible" : "hidden" }}>
                         <Container className="d-flex justify-content-between py-3">
                             <Button panel="power" onClick={setCurrentPanelFunc} variant="none" className="popOptionButton" style={currentPanel === "power" ? toggledStyle : untoggledStyle}>Konsumption</Button>
@@ -184,7 +216,7 @@ export default ({ initData }) => {
                         </Container>
                         <Container>
                             {currentPanel === "time" && <Row className="pb-3">
-                                <Col xxl={12}>
+                                <Col md={12}>
                                     <Container className="d-flex justify-content-center">
                                         <div className="d-flex justify-content-center">
                                             <Button className="" variant="transparent" style={{ color: "white", marginTop: "-12px" }} onClick={prevFilter}>
@@ -197,19 +229,19 @@ export default ({ initData }) => {
                                         </div>
                                     </Container>
                                     {currentFilter === "Mellan datum" && <>
-                                        <Col xxl={12}>
+                                        <Col md={12}>
                                             <Form.Control type="date" value={startdate.value} onChange={(e) => setStartDateFunc(e.target.value)} />
                                         </Col>
-                                        <Col xxl={12} className="d-flex justify-content-center my-3">
+                                        <Col md={12} className="d-flex justify-content-center my-3">
                                             <div style={{ height: "5px", width: "30px", background: "white" }}></div>
                                         </Col>
-                                        <Col xxl={12}>
+                                        <Col md={12}>
                                             <Form.Control type="date" value={enddate.value} onChange={(e) => setEndDateFunc(e.target.value)} />
                                         </Col>
                                     </>}
                                     {currentFilter === "Månad" && <>
                                         <Row className="justify-content-center mt-1" >
-                                            <Col xxl={12} className="mt-2" >
+                                            <Col md={12} className="mt-2" >
                                                 <Dropdown onSelect={(eventKey) => month.set(eventKey)} style={{ width: "100%" }}>
                                                     <Dropdown.Toggle variant="light" id="dropdown-basic" style={{ width: "100%", textAlign: "start", height: "35px", padding: "0 0 0 20px" }}>
                                                         {month.value}
@@ -224,7 +256,7 @@ export default ({ initData }) => {
                                     </>}
                                     {currentFilter === "Timmar per dag" && <>
                                         <Row className="justify-content-center mt-1">
-                                            <Col xxl={12} className="mt-2" >
+                                            <Col md={12} className="mt-2" >
                                                 <Form.Control type="date" value={startdate.value} onChange={(e) => setStartDateFunc(e.target.value)} />
                                             </Col>
                                         </Row>
@@ -239,7 +271,11 @@ export default ({ initData }) => {
                                                 style={{ cursor: "pointer", borderRadius: "4px", background: currentGroup === groupName ? "white" : "transparent", color: currentGroup === groupName ? "black" : "inherit" }}
                                                 onClick={() => {
                                                     handleSelect(groupName, groups)
-                                                    setGroupExpanded(!groupExpanded)
+                                                    if (currentGroup === groupName) {
+                                                        setGroupExpanded(!groupExpanded)
+                                                    } else {
+                                                        setGroupExpanded(true)
+                                                    };
                                                 }}>
                                                 {groupName}
                                             </div>
@@ -271,7 +307,11 @@ export default ({ initData }) => {
                                                 }}
                                                 onClick={() => {
                                                     handleSelect(groupName, groups)
-                                                    setGroupExpanded(!groupExpanded)
+                                                    if (currentGroup === groupName) {
+                                                        setGroupExpanded(!groupExpanded)
+                                                    } else {
+                                                        setGroupExpanded(true)
+                                                    };
                                                 }}>
                                                 {groupName}
                                             </div>
@@ -291,13 +331,13 @@ export default ({ initData }) => {
                                 </Col>
                             </Row>}
                             {currentPanel === "power" && <Row className="pb-3">
-                                <Col xxl={12} className="my-2 m-0 p-0">
+                                <Col md={12} className="my-2 m-0 p-0">
                                     {Object.entries(filterData.consumption).map(([deviceName, consumption]) => (
-                                        <Row className="justify-content-between m-0 p-0" style={{ fontSize: "14px" }} key={deviceName}>
-                                            <Col xxl={5} xl={6} md={6} sm={6} xs={6} className="text-start">
+                                        <Row className="justify-content-between m-0 p-0" style={{ fontSize: "10px" }} key={deviceName}>
+                                            <Col sm={6} xs={6} className="text-start">
                                                 {devices.value.find(device => device.deviceName === deviceName)?.displayName}:
                                             </Col>
-                                            <Col xxl={5} xl={6} md={6} sm={6} xs={6} className="text-end">
+                                            <Col sm={6} xs={6} className="text-end">
                                                 {consumption.toFixed(2)} kwH
                                             </Col>
                                         </Row>
@@ -306,6 +346,169 @@ export default ({ initData }) => {
                             </Row>}
                         </Container>
                     </Container>
+                </Col>
+
+
+                {/* Desktop */}
+                <Col className="d-lg-block d-none">
+                    <Row style={{ direction: "rtl" }}>
+                        <Col md={6} style={filterWindowStyle} className="pb-3" >
+
+                            {currentPanel === "time" &&
+                                <>
+                                    <Container className="d-flex justify-content-center mt-2">
+                                        <div className="d-flex justify-content-center">
+                                            <Button className="" variant="transparent" style={{ color: "white", marginTop: "-12px" }} onClick={prevFilter}>
+                                                <i className="fa-solid fa-arrow-left"></i>
+                                            </Button>
+                                            <p className="text-center" style={{ width: "150px" }}>{currentFilter}</p>
+                                            <Button className="" variant="transparent" style={{ color: "white", marginTop: "-12px" }} onClick={nextFilter}>
+                                                <i className="fa-solid fa-arrow-right"></i>
+                                            </Button>
+                                        </div>
+                                    </Container>
+                                    {currentFilter === "Mellan datum" && <>
+                                        <Col md={12}>
+                                            <Form.Control type="date" value={startdate.value} onChange={(e) => setStartDateFunc(e.target.value)} style={{ paddingTop: "2px", paddingBottom: "2px" }} />
+                                        </Col>
+                                        <Col md={12} className="mt-3">
+                                            <Form.Control type="date" value={enddate.value} onChange={(e) => setEndDateFunc(e.target.value)} style={{ paddingTop: "2px", paddingBottom: "2px" }} />
+                                        </Col>
+                                    </>}
+                                    {currentFilter === "Månad" && <>
+                                        <Row className="justify-content-center mt-1" >
+                                            <Col md={12} className="mt-2" >
+                                                <Dropdown onSelect={(eventKey) => month.set(eventKey)} style={{ width: "100%" }}>
+                                                    <Dropdown.Toggle variant="light" id="dropdown-basic" style={{ width: "100%", textAlign: "start", height: "35px", padding: "0 0 0 20px" }}>
+                                                        {month.value}
+                                                    </Dropdown.Toggle>
+                                                    <Dropdown.Menu>
+                                                        {generateMonthOptions().months}
+                                                    </Dropdown.Menu>
+                                                </Dropdown>
+                                            </Col>
+                                        </Row>
+
+                                    </>}
+                                    {currentFilter === "Timmar per dag" && <>
+                                        <Row className="justify-content-center mt-1">
+                                            <Col md={12} className="mt-2" >
+                                                <Form.Control type="date" value={startdate.value} onChange={(e) => setStartDateFunc(e.target.value)} />
+                                            </Col>
+                                        </Row>
+                                    </>}
+                                </>
+                            }
+                            {currentPanel === "devices" && <>
+                                <Row>
+                                    <Col>
+                                        {Object.entries(groups).filter((_, index) => index % 2 === 0).map(([groupName]) => (
+                                            <div key={groupName} className="position-relative">
+                                                <div className="mt-1 p-1 text-center"
+                                                    style={{
+                                                        cursor: "pointer",
+                                                        borderRadius: "4px",
+                                                        borderBottomLeftRadius: currentGroup === groupName && groupExpanded ? 0 : "4px",
+                                                        borderBottomRightRadius: currentGroup === groupName && groupExpanded ? 0 : "4px",
+                                                        background: currentGroup === groupName ? "white" : "transparent",
+                                                        color: currentGroup === groupName ? "black" : "inherit"
+                                                    }}
+                                                    onClick={() => {
+                                                        handleSelect(groupName, groups)
+                                                        if (currentGroup === groupName) {
+                                                            setGroupExpanded(!groupExpanded)
+                                                        } else {
+                                                            setGroupExpanded(true)
+                                                        };
+                                                    }}>
+                                                    {groupName}
+                                                </div>
+                                                <div className="p-2 text-start" style={{ ...groupStyle, display: currentGroup === groupName && groupExpanded ? "block" : "none" }}>
+                                                    {groups[groupName].map((member, index) => {
+                                                        const deviceName = devices.value.find(device => device.displayName === member)?.deviceName;
+                                                        return (
+                                                            <Form.Check type="checkbox" key={index} label={member} checked={allDataStates[deviceName].value} onChange={() => allDataStates[deviceName].set(!allDataStates[deviceName].value)} />
+                                                        )
+                                                    })}
+                                                </div>
+                                            </div>
+                                        ))}
+                                        {Object.entries(groups).length % 2 !== 0 ? <></> :
+                                            <div className="mt-1 p-1 text-center" style={{ cursor: "pointer", borderRadius: "4px", background: currentGroup === "Alla" ? "white" : "transparent", color: currentGroup === "Alla" ? "black" : "inherit" }} onClick={() => handleSelect("Alla", groups)}>
+                                                Alla
+                                            </div>
+                                        }
+                                    </Col>
+                                    <Col>
+                                        {Object.entries(groups).filter((_, index) => index % 2 !== 0).map(([groupName]) => (
+                                            <div key={groupName} className="position-relative">
+                                                <div className="mt-1 p-1 text-center"
+                                                    style={{
+                                                        cursor: "pointer",
+                                                        borderRadius: "4px",
+                                                        borderBottomLeftRadius: currentGroup === groupName && groupExpanded ? 0 : "4px",
+                                                        borderBottomRightRadius: currentGroup === groupName && groupExpanded ? 0 : "4px",
+                                                        background: currentGroup === groupName ? "white" : "transparent",
+                                                        color: currentGroup === groupName ? "black" : "inherit"
+                                                    }}
+                                                    onClick={() => {
+                                                        handleSelect(groupName, groups)
+                                                        if (currentGroup === groupName) {
+                                                            setGroupExpanded(!groupExpanded)
+                                                        } else {
+                                                            setGroupExpanded(true)
+                                                        };
+                                                    }}>
+                                                    {groupName}
+                                                </div>
+                                                <div className="p-2 text-start" style={{ ...groupStyle, display: currentGroup === groupName && groupExpanded ? "block" : "none" }}>
+                                                    {groups[groupName].map((member, index) => {
+                                                        const deviceName = devices.value.find(device => device.displayName === member)?.deviceName;
+                                                        return (<Form.Check type="checkbox" key={index} label={member} checked={allDataStates[deviceName].value} onChange={() => allDataStates[deviceName].set(!allDataStates[deviceName].value)} />)
+                                                    })}
+                                                </div>
+                                            </div>
+                                        ))}
+                                        {Object.entries(groups).length % 2 === 0 ? <></> :
+                                            <div className="mt-1 p-1 text-center" style={{ cursor: "pointer", borderRadius: "4px", background: currentGroup === "Alla" ? "white" : "transparent", color: currentGroup === "Alla" ? "black" : "inherit" }} onClick={() => handleSelect("Alla", groups)}>
+                                                Alla
+                                            </div>
+                                        }
+                                    </Col>
+                                </Row>
+                            </>}
+                            {currentPanel === "power" &&
+                                <Row className="m-0 p-0">
+                                    <Col md={12} className="my-2 m-0 p-0">
+                                        {Object.entries(filterData.consumption).map(([deviceName, consumption]) => (
+                                            <Row className="justify-content-between m-0 p-0" key={deviceName}>
+                                                <Col md={8} className="text-start" style={{ fontSize: "10px" }}>
+                                                    {devices.value.find(device => device.deviceName === deviceName)?.displayName}:
+                                                </Col>
+                                                <Col md={4} className="text-end" style={{ fontSize: "10px" }}>
+                                                    {consumption.toFixed(2)} kwH
+                                                </Col>
+                                            </Row>
+                                        ))}
+                                    </Col>
+                                </Row>
+                            }
+
+
+
+                        </Col>
+                        <Col md={4} className="flex-column justify-content-between d-flex" >
+                            <Row>
+                                <Button panel="power" className="popOptionButton" onClick={setCurrentPanelFunc} variant="none" style={currentPanel === "power" ? desktopToggled : { color: "white" }}>Konsumption</Button>
+                            </Row>
+                            <Row>
+                                <Button panel="time" className="popOptionButton" onClick={setCurrentPanelFunc} variant="none" style={currentPanel === "time" ? desktopToggled : { color: "white" }}>Tid</Button>
+                            </Row>
+                            <Row>
+                                <Button panel="devices" className="popOptionButton" onClick={setCurrentPanelFunc} variant="none" style={currentPanel === "devices" ? desktopToggled : { color: "white" }}>Enheter</Button>
+                            </Row>
+                        </Col>
+                    </Row>
                 </Col>
             </Row>
         </>
