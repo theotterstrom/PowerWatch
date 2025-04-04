@@ -101,8 +101,14 @@ module.exports = ({ client, masterDb }) => {
             
             if(data.deviceType === "Relay"){
                 const fsDriveControl = await databaseFetch("powerhour", masterDb, customer, client);
-                fsDriveControl[0][`device-${data.deviceName}`] = "0";
-                await databaseReplace("powerhour", masterDb, customer, client, fsDriveControl[0]);
+                if(fsDriveControl[0]){
+                    fsDriveControl[0][`device-${data.deviceName}`] = "0";
+                    await databaseReplace("powerhour", masterDb, customer, client, fsDriveControl[0]);
+                } else {
+                    const newPowerhourObj = {};;
+                    newPowerhourObj[`device-${data.deviceName}`] = 0;
+                    const newFsDriveControl = await databaseInsert("powerhour", masterDb, customer, client, newPowerhourObj);
+                };
             };
             await databaseInsert("devices", masterDb, customer, client, newDevice);
             return res.status(200).json({ message: "Device added"});
@@ -218,13 +224,17 @@ module.exports = ({ client, masterDb }) => {
             const customerRes = await collection.findOne({
                 customerCookie: customer
             });
-
-            const urls = devices.map(device => `${customerRes.shellyUrl}/device/status?id=${device.id}&auth_key=${customerRes.shellyToken}`);
-            let results = [];
-            for (const url of urls) {
-                results.push(await fetchReading(url));
-            };
-            res.json(results.map(obj => obj.data.data))
+            
+            if(customerRes.name === "demo"){
+                res.status(200).json({ message: "Demo account" });
+            } else {
+                const urls = devices.map(device => `${customerRes.shellyUrl}/device/status?id=${device.id}&auth_key=${customerRes.shellyToken}`);
+                let results = [];
+                for (const url of urls) {
+                    results.push(await fetchReading(url));
+                };
+                res.json(results.map(obj => obj.data.data))
+            }
         } catch (e) {
             console.log(e)
             res.status(500).json({ error: "Failed to fetch device statuses" });

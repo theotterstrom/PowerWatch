@@ -31,11 +31,14 @@ const ProtectedRoute = ({ children }) => {
         verifyAuth();
     }, []);
     if (isAuthenticated === null) {
-        return <div className="loading-container">
+        return (      <div className="loading-container">
             <div className="loading-circle"></div>
-            <img className="backgroundBlock" src="/images/power.jpg" />
-            <div className="backgroundBlock"></div>
-        </div>;
+            <div className="backGroundHolder">
+              <div className="backgroundBlock m-0 p-0">
+              </div>
+              <img src="/images/power.jpg" className="backgroundImg" alt="Home" />
+            </div>
+          </div>)
     };
     return isAuthenticated ? children : <Navigate to="/" />;
 };

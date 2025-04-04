@@ -64,7 +64,7 @@ const LineChart = ({ lineData }) => {
                         tooltipEl.style.padding = '20px';
                         tooltipEl.style.borderRadius = '8px';
                         tooltipEl.style.pointerEvents = 'none';
-                        tooltipEl.style.fontSize = "14px";
+                        tooltipEl.style.fontSize = "10px";
                         tooltipEl.style.whiteSpace = "nowrap"
                         tooltipEl.style.transform = 'translateX(-50%) translateY(-80%)';
                         tooltipEl.style.maxWidth = "350px"

@@ -47,7 +47,7 @@ const hashTimestamp = timestamp => {
 
 const checkKeyRouteCredentials = (timestamp, clientHash ) => {
     const now = Math.floor(Date.now() / 1000);
-    const oneMinute = 60;
+    const oneMinute = 90;
     if (Math.abs(now - timestamp) > oneMinute) {
         return false
     };

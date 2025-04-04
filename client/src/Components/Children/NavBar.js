@@ -30,6 +30,7 @@ export default ({ states }) => {
     const [showLogOut, setShowLogOut] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
     const [showUserDropDown, setShowUserDropDown] = useState(false);
+    const [showNotification, setShowNotification] = useState(false);
     const [showContactDropdown, setShowContactDropdown] = useState(false);
     const [showDashDropdown, setShowDashDropdown] = useState(false);
     const [showControl, setShowControl] = useState(false);
@@ -69,6 +70,8 @@ export default ({ states }) => {
         devices: { value: devices, set: setDevices }
     }), [powerHour, devices]);
 
+
+    const [marginX, setMarginX] = useState(3)
     useEffect(() => {
         const handleClickOutside = (e) => {
             const dropDownElement = document.getElementsByClassName("navBarButton")[0];
@@ -88,6 +91,22 @@ export default ({ states }) => {
             window.removeEventListener("click", handleClickOutside);
         };
     }, [expanded]);
+
+    useEffect(() => {
+        const handleResize = () => {
+            const range1 = window.innerWidth <= 1351 && 1200 <= window.innerWidth
+            const range2 = window.innerWidth <= 1085 && 991 <= window.innerWidth
+            if (range1 || range2) {
+                setMarginX(0)
+            } else  {
+                setMarginX(3)
+            };
+        };
+        handleResize()
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
 
     const showPage = (page) => {
         if (page === "control") {
@@ -134,7 +153,7 @@ export default ({ states }) => {
                             <Container className="d-lg-block d-none">
                                 <Row className="justify-content-start">
                                     {/* Start */}
-                                    <div style={{ width: "100px" }} className="mx-3 mt-1 p-0 m-0">
+                                    <div style={{ width: "100px" }} className={`mx-${marginX} mt-1 p-0 m-0`}>
                                         <Dropdown show={showDropdown} onToggle={(isOpen) => setShowDropdown(isOpen)} style={{ width: "100%", overflow: "visible" }}>
                                             <Dropdown.Toggle variant="transparent" id="dropdown-basic" style={{ fontWeight: "bold", letterSpacing: "4px", fontSize: "16px", color: "white" }} className="startToggle ">
                                                 Start {showDropdown ? <i className="fa-solid fa-caret-up"></i> : <i className="fa-solid fa-caret-down"></i>}
@@ -168,7 +187,7 @@ export default ({ states }) => {
                                         </Dropdown>
                                     </div>
                                     {/* Dashboards */}
-                                    <div style={{ width: "170px" }} className="mx-3 mt-1 p-0 m-0">
+                                    <div style={{ width: "170px" }} className={`mx-${marginX} mt-1 p-0 m-0`}>
                                         <Dropdown show={showDashDropdown} onToggle={(isOpen) => setShowDashDropdown(isOpen)} style={{ width: "100%", overflow: "visible" }}>
                                             <Dropdown.Toggle variant="transparent" id="dropdown-basic" style={{ fontWeight: "bold", letterSpacing: "4px", fontSize: "16px", color: "white" }} className="startToggle">
                                                 Dashboards {showDashDropdown ? <i className="fa-solid fa-caret-up"></i> : <i className="fa-solid fa-caret-down"></i>}
@@ -189,7 +208,7 @@ export default ({ states }) => {
                                         </Dropdown>
                                     </div>
                                     {/* Kontroller */}
-                                    <div style={{ width: "120px" }} className="mx-1 mt-1 p-0 m-0">
+                                    <div style={{ width: "120px" }} className={`mx-${marginX} mt-1 p-0 m-0`}>
                                         <Dropdown show={showControl} onToggle={(isOpen) => setShowControl(isOpen)} style={{ width: "100%", overflow: "visible" }}>
                                             <Dropdown.Toggle variant="transparent" id="dropdown-basic" style={{ fontWeight: "bold", letterSpacing: "4px", fontSize: "16px", color: "white" }} className="startToggle">
                                                 Kontroller {showControl ? <i className="fa-solid fa-caret-up"></i> : <i className="fa-solid fa-caret-down"></i>}
@@ -217,6 +236,9 @@ export default ({ states }) => {
                                                     <Button onClick={handleLogout} className="m-0 text-start menuButton" variant="transparent" style={{ fontWeight: "bold", letterSpacing: "4px", color: "white" }}>
                                                         <i class="fa-solid fa-right-from-bracket"></i>&nbsp; Logga ut
                                                     </Button>
+                                                    <Button onClick={handleLogout} className="m-0 text-start menuButton" variant="transparent" style={{ fontWeight: "bold", letterSpacing: "4px", color: "white" }}>
+                                                        <i class="fa-solid fa-right-from-bracket"></i>&nbsp; Mitt konro
+                                                    </Button>
                                                 </Row>
                                             </Dropdown.Menu>
                                         </Dropdown>
@@ -237,7 +259,7 @@ export default ({ states }) => {
                                     </Nav.Link>
                                     <div style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.45)", height: "1px", width: "100%" }} className="my-2"></div>
 
-{/*                                     <Nav.Link onClick={() => showPage("myaccount")} style={{ color: "white" }}>
+                                    {/*                                     <Nav.Link onClick={() => showPage("myaccount")} style={{ color: "white" }}>
                                         &nbsp;Mitt konto
                                     </Nav.Link>
                                     <div style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.45)", height: "1px", width: "100%" }} className="my-2"></div>
@@ -309,7 +331,7 @@ export default ({ states }) => {
                                                             <br />
                                                             <Button onClick={() => {
                                                                 setShowDropdown(false);
-                                                                setCurrentHomePage("Powerwatch");
+                                                                navigate("/demo");
                                                             }} className="m-0 my-3 text-start menuButton" variant="transparent" style={{ fontWeight: "bold", letterSpacing: "4px", color: "white" }}>
                                                                 <i className="fa fa-search" aria-hidden="true"></i>&nbsp; Demo
                                                             </Button>
@@ -378,7 +400,7 @@ export default ({ states }) => {
 
                                     <Nav.Link onClick={() => {
                                         setExpanded(false);
-                                        setCurrentHomePage("Powerwatch")
+                                        navigate("/demo");
                                     }} style={{ color: "white" }}>
                                         <i className="fa fa-search" aria-hidden="true"></i>&nbsp; Demo
                                     </Nav.Link>

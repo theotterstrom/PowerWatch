@@ -30,6 +30,36 @@ const generateSavingsData = (allDataStates, savings, dateStates, devices) => {
             return obj.date.split(" ")[0] === savingsstartdate.value;
         }
     });
+    
+    let dateList = [];
+    let startingDate = new Date("2024-12-22");
+    let endingDate = new Date();
+    
+    while (startingDate <= endingDate) {
+        dateList.push(startingDate.toISOString().slice(0, 10));
+        startingDate = new Date(startingDate.getFullYear(), startingDate.getMonth(), startingDate.getDate() + 1);
+    };
+    dateList.push(endingDate.toISOString().slice(0, 10));
+
+    const nullDatelist = [];
+    let currentDate = new Date(savingsstartdate.value);
+    let endDate = new Date(savingsenddate.value);
+    while (currentDate <= endDate) {
+        nullDatelist.push(currentDate.toISOString().slice(0, 10));
+        currentDate.setDate(currentDate.getDate() + 1);
+    };
+
+    for(const date of nullDatelist){
+        const firstSavingsObj = filteredSavings.find(saving => saving.date.split(" ")[0] === date);
+        if(!firstSavingsObj){
+            const values = Object.keys(filteredSavings[0]).reduce((acc, cur) => {
+                acc[cur] = { realCost: 0, averageCost: 0 };
+                return acc;
+            }, {});
+            filteredSavings.push({ values, date: `${date} 00-01`})
+        };
+    };
+
 
     const [totalSpending, savingsDataSource] = filteredSavings.reduce(([totals, acc], cur, index) => {
         let sum1 = 0;
@@ -70,13 +100,6 @@ const generateSavingsData = (allDataStates, savings, dateStates, devices) => {
     }, [[0, 0], {}]);
 
     Object.values(savingsDataSource).forEach(array => array.sort((a, b) => new Date(a.date) - new Date(b.date)))
-    let dateList = [];
-    let startingDate = new Date("2024-12-24");
-    let endingDate = new Date();
-    while (startingDate <= endingDate) {
-        dateList.push(startingDate.toISOString().slice(0, 10));
-        startingDate.setDate(startingDate.getDate() + 1);
-    };
 
     const borderColors = [
         "red", "blue", "green", "grey", "purple", "brown", "orange", "cyan",
@@ -87,6 +110,7 @@ const generateSavingsData = (allDataStates, savings, dateStates, devices) => {
     ];
 
     let colorIndex = 0;
+
     const unprocessedSets = Object.entries(allDataStates).map(([deviceName, state]) => {
         const currentDevice = devices.value.find(obj => obj.deviceName === deviceName);
         const realCost = state.value && {
@@ -111,12 +135,13 @@ const generateSavingsData = (allDataStates, savings, dateStates, devices) => {
         }
     });
 
+
     const chartDataSets = unprocessedSets.reduce((acc, cur) => {
         acc.push(cur.realCost);
         acc.push(cur.averageCost);
         return acc
     }, []);
- 
+
     const hourArr = Array.from({ length: 24 }, (_, i) => i);
 
     const savingsData = {

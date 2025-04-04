@@ -34,7 +34,6 @@ const ControlPanel = () => {
   const [devices, setDevices] = useState([]);
   const [showWindow, setShowWindow] = useState(false);
   const [method, setMethod] = useState(null);
-  const [mobileShow, setMobileShow] = useState("Device Settings");
   const [fill, setFill] = useState(window.innerWidth < 768);
   const [identifier, setIdentifier] = useState(null);
 
@@ -92,7 +91,7 @@ const ControlPanel = () => {
             <Tab eventKey="devices" title="Enheter" className="ctrlContainer p-md-4 p-2">
               <DeviceSettings devices={devices} showPopUp={showPopUp} />
             </Tab>
-            <Tab eventKey="deviceGroups" title="Groupper" className="ctrlContainer p-md-4 p-2">
+            <Tab eventKey="deviceGroups" title="Grupper" className="ctrlContainer p-md-4 p-2">
               <GroupSettings groups={groups} showPopUp={showPopUp} />
             </Tab>
             <Tab eventKey="cloudSettings" title="Cloud Inställningar" className="ctrlContainer p-md-4 p-2">
@@ -102,11 +101,7 @@ const ControlPanel = () => {
         </Container>
       </Col>
     </div>
-
     {showWindow && <PopUp showWindow={setShowWindow} method={method} devices={devices} setDevices={setDevices} identifier={identifier} />}
-
-
-
   </>
   );
 };

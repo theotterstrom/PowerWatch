@@ -97,11 +97,8 @@ const PowerWatch = () => {
   }, []);
 
   if (Object.keys(readings).length === 0 || Object.keys(savings).length === 0) {
-    setTimeout(async () => {
-
-    }, 30000);
-
     return <>
+    <NavBarChild setCurrentPage={setCurrentPage} />
       <div className="loading-container">
         <div className="loading-circle"></div>
         <div className="backGroundHolder">

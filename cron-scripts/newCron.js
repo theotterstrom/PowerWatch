@@ -79,7 +79,7 @@ const runCronForCustomer = (customer, client) => {
 const initializeCronJobs = async () => {
     const { allCustomers, client } = await getCustomers();
     allCustomers.forEach((customer) => {
-        if (!customers.includes(customer.customerId)) {
+        if (!customers.includes(customer.customerId) && customer.customerId !== "2") {
             customers.push(customer.customerId);
             runCronForCustomer(customer, client);
         }
